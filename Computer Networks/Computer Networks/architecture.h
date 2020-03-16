@@ -1,0 +1,1 @@
+int which_architecture();

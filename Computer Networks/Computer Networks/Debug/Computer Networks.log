@@ -1,0 +1,7 @@
+﻿  architecture.c
+D:\github\Computer-Networks\Computer Networks\Computer Networks\architecture.c(6,1): warning C4133: 'initializing': incompatible types - from 'int *' to 'char *'
+  main.c
+D:\github\Computer-Networks\Computer Networks\Computer Networks\main.c(6,9): warning C4013: 'printf' undefined; assuming extern returning int
+  Generating Code...
+main.obj : error LNK2019: unresolved external symbol _printf referenced in function _main
+D:\github\Computer-Networks\Computer Networks\Debug\Computer Networks.exe : fatal error LNK1120: 1 unresolved externals
