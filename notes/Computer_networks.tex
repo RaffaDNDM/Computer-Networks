@@ -1,0 +1,172 @@
+\documentclass[a4paper, 8pt, twoside, openright]{book}
+\usepackage[a4paper,top=4cm,bottom=2cm,left=2cm,right=2cm]{geometry}
+\usepackage[english,italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{siunitx} %per scrivere il simbolo °
+\usepackage{verbatim} %per i commenti1
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{6}
+\usepackage{multirow}
+\newcommand{\minitab}[2][l]{\begin{tabular}#1 #2\end{tabular}}
+\usepackage{rotating}
+\usepackage{xfrac}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+%\usepackage{booktabs,array}
+%\usepackage{tikz}
+
+%\usepackage{tabularx}
+
+%\usepackage{chngcntr}
+%\counterwithin{table}{section}
+
+%------------------------------ colors
+\usepackage[usenames,dvipsnames,table]{xcolor} % use colors on table and more
+\definecolor{333}{RGB}{51, 51, 51} % define custom color
+\definecolor{background}{RGB}{248, 248, 255}
+\definecolor{comment}{RGB}{17,167,5}
+\definecolor{keyword}{RGB}{195,47,8}
+\definecolor{string}{RGB}{142,195,0}
+\definecolor{number}{RGB}{90,84,84}
+\definecolor{identifier}{RGB}{0,90,201}
+
+%------------------------------ source code
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\footnotesize\sffamily,
+  commentstyle=\itshape\color{gray},
+  captionpos=b,
+  frame=shadowbox,
+  language=HTML,
+  rulesepcolor=\color{333},
+  tabsize=2
+}
+
+\lstdefinestyle{code}{
+  backgroundcolor=\color{background},
+  basicstyle=\footnotesize\sffamily,
+  commentstyle=\color{comment},
+  frame=L,
+  identifierstyle=\color{identifier},
+  keywordstyle=\color{keyword},
+  numbers=left,
+  numbersep=10pt,
+  numberstyle=\tiny\color{number},
+  stringstyle=\color{string},
+  showstringspaces=false,  
+  stepnumber=1,
+  tabsize=2
+}
+
+
+%------------------------------ define Abstract environment, missing in the 'book' class
+\newenvironment{abstract}{\cleardoublepage \null \vfill \begin{center}\bfseries\abstractname \end{center}}{\vfill\null}
+\addto\captionsenglish{\renewcommand*\abstractname{Abstract}} % change Abstract title
+
+%------------------------------ active url
+\usepackage{url}
+\renewcommand{\UrlFont}{\color{black}\small\ttfamily}
+\usepackage[colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black]{hyperref} % active ref
+%------------------------------ macros
+\newcommand{\sectionname}{Section} % define Section ref
+\newcommand{\subsectionname}{Sub-section} % define Sub-section ref
+\renewcommand*\arraystretch{1.4} % tables padding
+
+%acronimi
+\usepackage[printonlyused]{acronym}
+
+\begin{document}
+\frontmatter
+
+\begin{titlepage} %------------------------------ TITLE PAGE
+\begin{center}
+\vbox to0pt{\vbox to\textheight{\vfill \includegraphics[width=11.5cm]{./Images/Background} \vfill}\vss}
+
+\begin{center}
+\begin{minipage}{.20\textwidth}
+  \includegraphics[height=2.5cm]{./Images/Icon4}
+\end{minipage}\begin{minipage}{.55\textwidth}
+  \begin{table}[H]
+  \begin{tabular}{l}
+  \scshape{\Large{\bfseries{Padua University}}} \\
+  \hline \\
+  \scshape{\Large{Engineering Course}} \\
+  \end{tabular}
+  \end{table}
+\end{minipage}
+\end{center}
+
+
+\vspace{1cm}
+\emph{\Large{Master~of~Computer~Engineering}} \\
+\vspace{0.9cm}
+\scshape{\Large{\bfseries{Computer Networks}}} \\
+\vspace{0.2cm} \linespread{1} \scshape{\large{\bfseries{}}}
+\end{center}
+
+\vspace{12cm}
+\begin{center}
+Raffaele Di Nardo Di Maio
+\end{center}
+
+\vfill
+\begin{center}
+\hspace{-0.2cm}
+\line(1, 0){360}\\
+\textsc{Accademic Year 2019-2020}
+\end{center}
+\end{titlepage}
+
+
+\cleardoublepage % make left page blank
+\thispagestyle{empty} %------------------------------ DEDICA
+
+\begin{comment}
+\null
+\vspace{2cm}
+\begin{flushright}
+//DEDICA
+\end{flushright}
+\vfill
+\begin{quote}
+  \textit{}
+\end{quote}
+\vfill
+\null
+\end{comment}
+
+%\begin{abstract} %------------------------------ ABSTRACT
+%\addcontentsline{toc}{chapter}{Abstract}
+%\markboth{}{} % remove header
+%\thispagestyle{empty}
+%This is the abstract
+%\end{abstract}
+
+%\input{Chapters/Abstract.tex}
+\begingroup %------------------------------ CONTENTS
+  \makeatletter
+  \let\ps@plain\ps@empty
+  \makeatother
+  \tableofcontents  
+  \clearpage
+\endgroup
+
+\mainmatter
+\input{Chapters/OSI.tex}
+\input{Chapters/Application.tex}
+\input{Chapters/Programming.tex}
+\input{Chapters/NetworkC.tex}
+\input{Chapters/Shell.tex}
+\end{document}

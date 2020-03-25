@@ -1,0 +1,48 @@
+\chapter{Shell}
+
+\section{Commands}
+
+\begin{table}[h]
+\begin{tabular}{|l|l|l|}
+\hline
+\multicolumn{2}{|l|}{\textbf{strace} objFile} & {List all the system calls used in the program.}\\
+\hline
+\multicolumn{2}{|l|}{\textbf{gcc} -o objFile source \textbf{-v}} & {List all the path of libraries and headers used in creation of objFile.}\\
+\hline
+\multirow{3}{*}{\textbf{netstat}} & {-t} & {List all the active TCP connections showing domain names.}\\
+\cline{2-3}
+& {-u} & {List all the active UDP connections showing domain names.}\\
+\cline{2-3}
+& {-n} & {List all the active, showing IP and port numbers.}\\
+\hline
+\multicolumn{2}{|l|}{\textbf{nslookup} domain} & {Shows the IP address related to the domain (E.g. IP of www.google.it)}\\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Files}
+
+\begin{table}[h]
+\begin{tabular}{|l|l|}
+\hline
+\multirow{2}{*}{\textbf{/etc/services}} & {List all the applications with their port}\\
+& {and type of protocol (TCP/UDP).}\\
+\hline
+{\textbf{/usr/include/x86\_64-linux-gnu/bits/socket.h}} & {List all the protocol type possible for socket.}\\
+\hline
+{\textbf{/usr/include/x86\_64-linux-gnu/sys/socket.h}} & {Definition of struct sockaddr and specific ones.}\\
+\hline
+{\textbf{}} & {.}\\
+\hline
+\end{tabular}
+\end{table}
+
+\section{vim}
+\subsection{.vimrc}
+In this section there will be shown the file \textbf{.vimrc} that can be put in the user home (\textbf{$\sim$} or \textbf{\$HOME} or \textbf{--}) or in the path \textbf{/usr/share/vim/} to change main settings of the program.
+
+\lstinputlisting[caption={\footnotesize{web\_client.c}}, style=code, firstnumber=1, firstline=1, lastline=8, label=web_client, language=c]{Code/vimrc}
+
+\subsection{Shortcuts}
+
+%\section{Usefull information about shell}

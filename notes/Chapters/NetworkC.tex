@@ -1,0 +1,130 @@
+\chapter{Network services in C}
+\section{socket}\label{socket}
+Entry-point (system call) that allow us to use the network services. It also allows application layer to access to level 4 of IP protocol. 
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=270pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int socket(int domain, int type, int protocol);\\
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcl}
+\textbf{RETURN VALUE} & \multicolumn{2}{l}{\textit{File Descriptor (FD) of the socket} }\\
+{} & \multicolumn{2}{l}{\textit{-1} if some error occurs and errno is set appropriately}\\
+{} & \multicolumn{2}{l}{(You can check value of errno including <errno.h>).}\\
+& & \\
+\textbf{domain =} & \multicolumn{2}{l}{\textit{Communication domain}}\\
+{} & \multicolumn{2}{l}{protocol family which will be used for communication.}\\
+{} & \textbf{AF\_INET:} & {IPv4 Internet Protocol}\\
+{} & \textbf{AF\_INET6:} & {IPv6 Internet Protocol}\\
+{} & \textbf{AF\_PACKET:} & {Low level packet interface}\\
+& &\\
+\textbf{type =} & \multicolumn{2}{l}{\textit{Communication semantics}}\\
+{} & \textbf{SOCK\_STREAM:} & {Provides sequenced, reliable, two-way, connection-based}\\
+{} & {} & {bytes stream. An OUT-OF-BAND data mechanism may}\\
+{} & {} & {be supported.}\\
+{} & \textbf{SOCK\_DGRAM} & {Supports datagrams (connectionless, unreliable messages} \\
+& & {of a fixed maximum length).}\\
+& & \\
+\textbf{protocol =} & \multicolumn{2}{l}{\textit{Particular protocol to be used within the socket}}\\
+{} & \multicolumn{2}{l}{Normally there is only a protocol for each socket type and protocol}\\
+{} & \multicolumn{2}{l}{family (protocol=0), otherwise ID of the protocol you want to use}\\
+\end{tabular}
+\end{table}
+
+\section{TCP connection}
+In TCP connection, defined by type \textbf{SOCK\_STREAM} as written in the Section \ref{socket}, there is a client that connects to a server. It uses three primitives (related to File System primitives for management of files on disk) that do these logic actions:
+\begin{enumerate}
+\item{start (open bytes stream)}
+\item{add/remove bytes from stream}
+\item{finish (clos bytes stream)}
+\end{enumerate}
+TCP is used transfering big files on the network and for example with HTTP, that supports parallel download and upload (FULL-DUPLEX). The length of the stream is defined only at closure of the stream.
+ 
+\subsection{Client}
+The client calls \textbf{connect()} function, after \textbf{socket()} function of Section \ref{socket}. This function is a system call that client can use to define what is the remote terminal to which he wants to connect.
+
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=370pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int connect(int sockfd, const struct sockaddr *addr,socklen_t addrlen);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcl}
+\textbf{RETURN VALUE} & \multicolumn{2}{l}{\textit{0} if connection succeds}\\
+{} & \multicolumn{2}{l}{\textit{-1} if some error occurs and errno is set appropriately}\\
+& & \\
+\textbf{sockfd =} & \multicolumn{2}{l}{\textit{Socket File Descriptor} returned by socket().}\\
+& &\\
+\textbf{addr =} & \multicolumn{2}{l}{\textit{Reference to struct sockaddr}}\\
+{} & \multicolumn{2}{l}{sockaddr is a general structure that defines the concept of address.}\\
+{} & \multicolumn{2}{l}{In practice it's a union of all the possible specific structures of each protocol.}\\
+{} & \multicolumn{2}{l}{This approach is used to leave the function written in a generic way.}\\
+& & \\
+\textbf{addr =} & \multicolumn{2}{l}{\textit{Length of specific data structure used.}}\\
+\end{tabular}
+\end{table}
+
+In the following there is the description of struct \textbf{sockaddr\_in}, that is the specific sockaddr structure implemented for family of protocls \textbf{AF\_INET}:
+
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=350pt, basicstyle=\footnotesize\sffamily,]
+#include <netinet/in.h>
+
+struct sockaddr_in {
+    sa_family_t    sin_family; /* address family: AF_INET */
+    in_port_t      sin_port;   /* port in network byte order */
+    struct in_addr sin_addr;   /* internet address */
+};
+
+/* Internet address. */
+struct in_addr {
+    uint32_t       s_addr;     /* address in network byte order */
+};\\
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+The following piece of code define a structure, used to connect to Google server. 
+\lstinputlisting[caption={\footnotesize{web\_client.c}}, style=code, firstnumber=1, firstline=1, lastline=44, label=web_client, language=c]{../src/2_tcp/web_client.c}
+As mentioned in Section \ref{littleBig}, network data are organized as Big Endian, so in this case we need to insert the IP address according to this protocol. It can be done as in previous example or with the follow function:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+int inet_aton(const char *cp, struct in_addr *inp);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+The port number is written according to Big Endian architecture, through the next function:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=200pt, basicstyle=\footnotesize\sffamily,]
+#include <arpa/inet.h>
+
+uint16_t htons(uint16_t hostshort);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\section{UDP connection}
+UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer. It's used in Twitter application and in video streaming.
+
+%\lstinputlisting[]  
