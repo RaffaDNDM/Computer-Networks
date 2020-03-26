@@ -48,6 +48,7 @@ In TCP connection, defined by type \textbf{SOCK\_STREAM} as written in the Secti
 TCP is used transfering big files on the network and for example with HTTP, that supports parallel download and upload (FULL-DUPLEX). The length of the stream is defined only at closure of the stream.
  
 \subsection{Client}
+\subsubsection{connect}
 The client calls \textbf{connect()} function, after \textbf{socket()} function of Section \ref{socket}. This function is a system call that client can use to define what is the remote terminal to which he wants to connect.
 
 \begin{center}
@@ -98,9 +99,6 @@ struct in_addr {
 \end{lstlisting}
 \end{tabular}
 \end{center}
-
-The following piece of code define a structure, used to connect to Google server. 
-\lstinputlisting[caption={\footnotesize{web\_client.c}}, style=code, firstnumber=1, firstline=1, lastline=44, label=web_client, language=c]{../src/2_tcp/web_client.c}
 As mentioned in Section \ref{littleBig}, network data are organized as Big Endian, so in this case we need to insert the IP address according to this protocol. It can be done as in previous example or with the follow function:
 \begin{center}
 \begin{tabular}{c}
@@ -124,7 +122,82 @@ uint16_t htons(uint16_t hostshort);
 \end{tabular}
 \end{center}
 
-\section{UDP connection}
-UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer. It's used in Twitter application and in video streaming.
+\subsubsection{write()}
+Application protocol uses a readable string, to excange readable information (as in HTTP). This tecnique is called simple protocol and commands, sent by the protocol, are standardized and readable strings.  
 
-%\lstinputlisting[]  
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
+#include <unistd.h>
+
+ssize_t write(int fd, const void *buf, size_t count);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcl}
+\textbf{RETURN VALUE} & \multicolumn{2}{l}{\textit{Number of bytes written} on success}\\
+{} & \multicolumn{2}{l}{\textit{-1} if some error occurs and errno is set appropriately}\\
+& & \\
+\textbf{fd =} & \multicolumn{2}{l}{\textit{Socket File Descriptor} returned by socket().}\\
+& &\\
+\textbf{buf =} & \multicolumn{2}{l}{\textit{Buffer of characters to write}}\\
+& & \\
+\textbf{count =} & \multicolumn{2}{l}{\textit{Max number of bytes to write} in the file (stream).}\\
+\end{tabular}
+\end{table}
+
+The write buffer is usually a string but we don't consider the null value (\textbf{$\backslash 0$} character), that determine the end of the string, in the evaluation of count (\textbf{strlen(buf)-1}). This convention is used because \textbf{$\backslash 0$} can be part of characters stream.\\
+
+\subsubsection{read()}
+The client uses this blocking function to wait and obtain response from the remote server. Not all the request are completed immediat from the server, for the meaning of stream type of protocol. Infact in this protocol, there is a flow for which the complete sequence is defined only at the closure of it\ref{socket}.\\
+\textbf{read()} is consuming bytes fom the stream asking to level 4 a portion of them, because it cannot access directly to bytes in Kernel buffer. Lower layer controls the stream of information that comes from the same layer of remove system.\\
+
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
+#include <unistd.h>
+
+       ssize_t read(int fd, void *buf, size_t count);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcl}
+\textbf{RETURN VALUE} & \multicolumn{2}{l}{\textit{Number of bytes read} on success}\\
+{} & \multicolumn{2}{l}{\textit{0} if EOF is reached (end of the stream)}\\
+{} & \multicolumn{2}{l}{\textit{-1} if some error occurs and errno is set appropriately}\\
+& & \\
+\textbf{fd =} & \multicolumn{2}{l}{\textit{Socket File Descriptor} returned by socket().}\\
+& &\\
+\textbf{buf =} & \multicolumn{2}{l}{\textit{Buffer of characters in which it reads and stores info}}\\
+& & \\
+\textbf{count =} & \multicolumn{2}{l}{\textit{Max number of bytes to read} from the file (stream).}
+\end{tabular}
+\end{table}
+So if \textbf{read()} doesn't return, this means that the stream isn't ended but the system buffer is empty.\\
+If \textbf{read=0}, the function met EOF and the local system buffer is now empty. This helps client to understand that server ended before the connection.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.7]{Images/read_write1}\caption{\footnotesize{Request by the client.}}\label{rw1}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.7]{Images/read_write2}\caption{\footnotesize{Response from the server.}}\label{rw2}
+\end{figure}
+
+\clearpage
+\subsubsection{Client connection to google}
+The following piece of code define a structure, used to connect to Google server. 
+\lstinputlisting[caption={\footnotesize{web\_client.c}}, style=code, firstnumber=1, firstline=1, lastline=73, label=web_client, language=c]{../src/2_tcp/web_client.c}
+
+The most important thing is that \textbf{socket()} is entry-point for level 4, but also \textbf{connect()} is the request to Kernel to extablish the connection.\\ \textbf{read()} and \textbf{write()} are system calls used respectively to obtain result(response) of a request and to generate request.\\ These function permit us to ask to lower level to do this things, without knowing content of system buffers (stream).
+
+\section{UDP connection}
+UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer. It's used in Twitter application and in video streaming.  

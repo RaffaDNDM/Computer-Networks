@@ -5,20 +5,27 @@
 \begin{table}[h]
 \begin{tabular}{|l|l|l|}
 \hline
-\multicolumn{2}{|l|}{\textbf{strace} objFile} & {List all the system calls used in the program.}\\
+\multicolumn{2}{|l|}{\multirow{2}{*}{\textbf{man} man}}&{Shows info about man command and}\\
+\multicolumn{2}{|l|}{} & {lists all the sections of the manual.}\\
 \hline
-\multicolumn{2}{|l|}{\textbf{gcc} -o objFile source \textbf{-v}} & {List all the path of libraries and headers used in creation of objFile.}\\
+\multicolumn{2}{|l|}{\textbf{strace} objFile} & {Lists all the system calls used in the program.}\\
 \hline
-\multirow{3}{*}{\textbf{netstat}} & {-t} & {List all the active TCP connections showing domain names.}\\
+\multicolumn{2}{|l|}{\textbf{gcc} -o objFile source \textbf{-v}} & {Lists all the path of libraries and headers used in creation of objFile.}\\
+\hline
+\multirow{3}{*}{\textbf{netstat}} & {-t} & {Lists all the active TCP connections showing domain names.}\\
 \cline{2-3}
-& {-u} & {List all the active UDP connections showing domain names.}\\
+& {-u} & {Lists all the active UDP connections showing domain names.}\\
 \cline{2-3}
-& {-n} & {List all the active, showing IP and port numbers.}\\
+& {-n} & {Lists all the active, showing IP and port numbers.}\\
 \hline
 \multicolumn{2}{|l|}{\textbf{nslookup} domain} & {Shows the IP address related to the domain (E.g. IP of www.google.it)}\\
 \hline
+\multicolumn{2}{|l|}{\multirow{2}{*}{\textbf{wc} [file]}} & {Prints in order newline, word, and byte counts for file}\\
+\multicolumn{2}{|l|}{} & {if file not specified or equal to -, counts from stdin.}\\
+\hline
 \end{tabular}
 \end{table}
+
 
 \section{Files}
 
@@ -31,8 +38,6 @@
 {\textbf{/usr/include/x86\_64-linux-gnu/bits/socket.h}} & {List all the protocol type possible for socket.}\\
 \hline
 {\textbf{/usr/include/x86\_64-linux-gnu/sys/socket.h}} & {Definition of struct sockaddr and specific ones.}\\
-\hline
-{\textbf{}} & {.}\\
 \hline
 \end{tabular}
 \end{table}
