@@ -1,4 +1,12 @@
 \chapter{Network services in C}
+\section{Application layer}
+We need IP protocol to use Internet. In this protocol, level 5 and 6 are hidden in Application Layer.\\
+In this case, Application Layer needs to interact with Transport Layer, that is implemented in OS Kernel (Figure \ref{app_kernel}). Hence Application and Transport can talk each other with System Calls.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.6]{Images/NetworkC/application}\caption{\footnotesize{System calls interface.}}\label{app_kernel}
+\end{figure}
+
 \section{socket}\label{socket}
 Entry-point (system call) that allow us to use the network services. It also allows application layer to access to level 4 of IP protocol. 
 \begin{center}
@@ -18,7 +26,12 @@ int socket(int domain, int type, int protocol);\\
 \textbf{RETURN VALUE} & \multicolumn{2}{l}{\textit{File Descriptor (FD) of the socket} }\\
 {} & \multicolumn{2}{l}{\textit{-1} if some error occurs and errno is set appropriately}\\
 {} & \multicolumn{2}{l}{(You can check value of errno including <errno.h>).}\\
-& & \\
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcl}
 \textbf{domain =} & \multicolumn{2}{l}{\textit{Communication domain}}\\
 {} & \multicolumn{2}{l}{protocol family which will be used for communication.}\\
 {} & \textbf{AF\_INET:} & {IPv4 Internet Protocol}\\
@@ -38,6 +51,7 @@ int socket(int domain, int type, int protocol);\\
 \end{tabular}
 \end{table}
 
+\vspace{10cm}
 \section{TCP connection}
 In TCP connection, defined by type \textbf{SOCK\_STREAM} as written in the Section \ref{socket}, there is a client that connects to a server. It uses three primitives (related to File System primitives for management of files on disk) that do these logic actions:
 \begin{enumerate}
@@ -78,7 +92,7 @@ int connect(int sockfd, const struct sockaddr *addr,socklen_t addrlen);
 \textbf{addr =} & \multicolumn{2}{l}{\textit{Length of specific data structure used.}}\\
 \end{tabular}
 \end{table}
-
+\vspace{8cm}
 In the following there is the description of struct \textbf{sockaddr\_in}, that is the specific sockaddr structure implemented for family of protocls \textbf{AF\_INET}:
 
 \begin{center}
@@ -148,7 +162,7 @@ ssize_t write(int fd, const void *buf, size_t count);
 \textbf{count =} & \multicolumn{2}{l}{\textit{Max number of bytes to write} in the file (stream).}\\
 \end{tabular}
 \end{table}
-
+\vspace{4cm}
 The write buffer is usually a string but we don't consider the null value (\textbf{$\backslash 0$} character), that determine the end of the string, in the evaluation of count (\textbf{strlen(buf)-1}). This convention is used because \textbf{$\backslash 0$} can be part of characters stream.\\
 
 \subsubsection{read()}

@@ -18,6 +18,7 @@ int i;
 \caption{\footnotesize{Little Endian and Big Endian.}}
 \end{figure}
 
+The order of bytes in packets, sent through the network, is Big Endian.\\
 The size of \textbf{int, float, char, ...} types
 depends on the architecture used. The max size of possible types depends on the architecture (E.g. in 64bits architecture, in one istruction, 8 bytes can be written and read in parallel).
 
@@ -36,7 +37,7 @@ depends on the architecture used. The max size of possible types depends on the 
 \end{table}
 \vspace{4cm}
 \section{Struct organization of memory}
-The size of a structure depends on the order of fields and the architecture. This is caused by alignment that depends on the number of memory banks, number of bytes read in parallel. For example the size is 4 bytes for 32 bits architecture, composed by 4 banks (Figure \ref{parallel}).
+The size of a structure depends on the order of fields and the architecture. This is caused by alignment that depends on the number of memory banks, number of bytes read in parallel. For example the size is 4 bytes for 32 bits architecture, composed by 4 banks (Figure \ref{parallel}). The Network Packet Representation is made by a stream of 4 Bytes packets as we're using 32 bits architecture. 
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=200pt, basicstyle=\footnotesize\sffamily,]
