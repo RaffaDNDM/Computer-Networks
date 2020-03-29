@@ -349,4 +349,136 @@ In this section there will be shown the file \textbf{.vimrc} that can be put in 
 \hline
 \end{tabular}
 \end{table}
+
+\clearpage
+\subsection{Multiple files}
+\begin{itemize}
+\item{\textbf{Opening many files in the buffer}\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=80pt, basicstyle=\footnotesize\sffamily,]
+vim file1 file2
+\end{lstlisting}
+\end{tabular}
+\end{center}
+Launching this command, you can see only one file at the same time. To jump between the files you can use the following vim commands:
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\hline
+\textbf{n(ext)} & {jumps to the next file}\\
+\hline
+\textbf{prev} & {jumps to the previous file}\\
+\hline
+\end{tabular}
+\end{table}
+}
+\item{\textbf{Opening many files in several tabs}\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=130pt, basicstyle=\footnotesize\sffamily,]
+vim -p file1 file2 file3
+\end{lstlisting}
+\end{tabular}
+\end{center}
+All files will be opened in tabs instead of hidden buffers. The tab bar is displayed on the top of the editor.\\
+You can also open a new tab with file \textit{filename} when you're already in Vim in the normal mode with command:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=80pt, basicstyle=\footnotesize\sffamily,]
+:tabe filename
+\end{lstlisting}
+\end{tabular}
+\end{center}
+To manage tabs you can use the following vim commands:
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\hline
+{\textbf{:tabn[ext]}   (command-line command)} & \multirow{2}{*}{Jumps to the next tab}\\
+\cline{1-1}
+{\textbf{gt}          (normal mode command)}&\\
+\hline
+\textbf{:tabp[revious] (command-line command)} & \multirow{2}{*}{Jumps to the previous tab}\\
+\cline{1-1}
+{\textbf{gT}          (normal mode command)}&\\
+\hline
+\multirow{2}{*}{\textbf{ngT}          (normal mode command)} & {Jumps to a specific tab index}\\
+&{n= index of tab (starting by 1)}\\
+\hline
+{\textbf{:tabc[lose]} (command-line command)} & {Closes the current tab}\\
+\hline
+\end{tabular}
+\end{table}
+}
+\item{\textbf{Open multiple files splitting the window}\\
+\textit{splits the window horizontally}\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=100pt, basicstyle=\footnotesize\sffamily,]
+vim -o file1 file2
+\end{lstlisting}
+\end{tabular}
+\end{center}
+You can also split the window horizontally, opening the file \textit{filename}, when you're already in Vim in the normal mode with command:\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=100pt, basicstyle=\footnotesize\sffamily,]
+:sp[lit] filename
+\end{lstlisting}
+\end{tabular}
+\end{center}
+\textit{splits the window vertically}\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=100pt, basicstyle=\footnotesize\sffamily,]
+vim -O file1 file2
+\end{lstlisting}
+\end{tabular}
+\end{center}
+You can also split the window vertically, opening the file \textit{filename}, when you're already in Vim in the normal mode with command:\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=100pt, basicstyle=\footnotesize\sffamily,]
+:vs[plit] filename
+\end{lstlisting}
+\end{tabular}
+\end{center}
+Management of the windows can be done, staying in the normal mode of Vim, using the following commands:\\
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Ctrl+w  <cursor-keys>} & \multirow{3}{*}{Jumps between windows}\\
+\cline{1-1}
+\textbf{Ctrl+w  [hjkl]} & {}\\
+\cline{1-1}
+\textbf{Ctrl+w  Ctrl+[hjkl]} & {}\\
+\hline
+\textbf{Ctrl+w  w} & \multirow{2}{*}{Jumps to the next window}\\
+\cline{1-1}
+\textbf{Ctrl+w  Ctrl+w} & {}\\
+\hline
+\textbf{Ctrl+w  W} & {Jumps to the previous window}\\
+\hline
+\textbf{Ctrl+w  p} & \multirow{2}{*}{Jumps to the last accessed window}\\
+\cline{1-1}
+\textbf{Ctrl+w  Ctrl+p} & {}\\
+\hline
+\textbf{Ctrl+w  c} & \multirow{2}{*}{Closes the current window}\\
+\cline{1-1}
+\textbf{:clo[se]} & {}\\
+\hline
+\textbf{Ctrl+w  o} & \multirow{2}{*}{Makes the current window the only one and closes all other ones}\\
+\cline{1-1}
+\textbf{:on[ly]} & {}\\
+\hline
+\end{tabular}
+\end{table}
+}
+\end{itemize}
+
 %\section{Usefull information about shell}
