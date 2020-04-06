@@ -47,12 +47,10 @@ int main()
     }
 
     /*
-     * Send a Request (Application Layer = HTTP)
+     * Send a Request (Application Layer = HTTPS)
      */
-    sprintf(request, "GET / HTTP/1.0\r\n\r\n");
-
-    for(size=0; request[size]; size++);
-    t = write(s, request, size);
+    sprintf(request, "GET /\r\n");
+    t = write(s, request, 7);
 
     if(t==-1)
     {

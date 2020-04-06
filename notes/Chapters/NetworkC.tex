@@ -1,10 +1,10 @@
-\chapter{Network services in C}
+\chapter{Network services in C}\label{networkC}
 \section{Application layer}
 We need IP protocol to use Internet. In this protocol, level 5 and 6 are hidden in Application Layer.\\
 In this case, Application Layer needs to interact with Transport Layer, that is implemented in OS Kernel (Figure \ref{app_kernel}). Hence Application and Transport can talk each other with System Calls.
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.6]{Images/NetworkC/application}\caption{\footnotesize{System calls interface.}}\label{app_kernel}
+\includegraphics[scale=0.5]{Images/NetworkC/application}\caption{\footnotesize{System calls interface.}}\label{app_kernel}
 \end{figure}
 
 \section{socket}\label{socket}
@@ -113,6 +113,15 @@ struct in_addr {
 \end{lstlisting}
 \end{tabular}
 \end{center}
+The two addresses, needed to define a connection, are (see Figure \ref{addresses}):
+\begin{itemize}
+\item{\textbf{IP address (}$sin_addr$ in $sockaddr\_in\;\;struct$\textbf{)}\\
+identifies a virtual interface in the network. It can be considered the entry-point for data arriving to the computer. \textit{It's unique in the world.}
+}
+\item{\textbf{Port number (}$sin_port$ in $sockaddr\_in\;\;struct$\textbf{)}\\
+identifies to which application data are going to be sent. The port so must be open for that stream of data and it can be considered a service identifier. There are well known port numbers, related to standard services and others that are free to be used by the programmer for its applications (see Section \ref{files} to find which file contains well known port numbers). \textit{It's unique in the system.}
+}
+\end{itemize}
 As mentioned in Section \ref{littleBig}, network data are organized as Big Endian, so in this case we need to insert the IP address according to this protocol. It can be done as in previous example or with the follow function:
 \begin{center}
 \begin{tabular}{c}
@@ -135,6 +144,10 @@ uint16_t htons(uint16_t hostshort);
 \end{lstlisting}
 \end{tabular}
 \end{center}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/NetworkC/addresses}\caption{\footnotesize{After successful connection.}}\label{addresses}
+\end{figure}
 
 \subsubsection{write()}
 Application protocol uses a readable string, to excange readable information (as in HTTP). This tecnique is called simple protocol and commands, sent by the protocol, are standardized and readable strings.  
@@ -198,20 +211,14 @@ If \textbf{read=0}, the function met EOF and the local system buffer is now empt
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.6]{Images/NetworkC/read_write1}\caption{\footnotesize{Request by the client.}}\label{rw1}
+\includegraphics[scale=0.5]{Images/NetworkC/read_write1}\caption{\footnotesize{Request by the client.}}\label{rw1}
 \end{figure}
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.6]{Images/NetworkC/read_write2}\caption{\footnotesize{Response from the server.}}\label{rw2}
+\includegraphics[scale=0.5]{Images/NetworkC/read_write2}\caption{\footnotesize{Response from the server.}}\label{rw2}
 \end{figure}
 
 \clearpage
-\subsubsection{Client connection to google}
-The following piece of code define a structure, used to connect to Google server. 
-\lstinputlisting[caption={\footnotesize{web\_client.c}}, style=code, firstnumber=1, firstline=1, lastline=73, label=web_client, language=c]{../src/2_tcp/web_client.c}
-
-The most important thing is that \textbf{socket()} is entry-point for level 4, but also \textbf{connect()} is the request to Kernel to extablish the connection.\\ \textbf{read()} and \textbf{write()} are system calls used respectively to obtain result(response) of a request and to generate request.\\ These function permit us to ask to lower level to do this things, without knowing content of system buffers (stream).
-
 \section{UDP connection}
 UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer. It's used in Twitter application and in video streaming.  
