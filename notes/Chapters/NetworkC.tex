@@ -7,7 +7,7 @@ In this case, Application Layer needs to interact with Transport Layer, that is 
 \includegraphics[scale=0.5]{Images/NetworkC/application}\caption{\footnotesize{System calls interface.}}\label{app_kernel}
 \end{figure}
 
-\section{socket}\label{socket}
+\section{socket()}\label{socket}
 Entry-point (system call) that allow us to use the network services. It also allows application layer to access to level 4 of IP protocol. 
 \begin{center}
 \begin{tabular}{c}
@@ -62,7 +62,7 @@ In TCP connection, defined by type \textbf{SOCK\_STREAM} as written in the Secti
 TCP is used transfering big files on the network and for example with HTTP, that supports parallel download and upload (FULL-DUPLEX). The length of the stream is defined only at closure of the stream.
  
 \subsection{Client}
-\subsubsection{connect}
+\subsubsection{connect()}
 The client calls \textbf{connect()} function, after \textbf{socket()} function of Section \ref{socket}. This function is a system call that client can use to define what is the remote terminal to which he wants to connect.
 
 \begin{center}
@@ -89,7 +89,7 @@ int connect(int sockfd, const struct sockaddr *addr,socklen_t addrlen);
 {} & \multicolumn{2}{l}{In practice it's a union of all the possible specific structures of each protocol.}\\
 {} & \multicolumn{2}{l}{This approach is used to leave the function written in a generic way.}\\
 & & \\
-\textbf{addr =} & \multicolumn{2}{l}{\textit{Length of specific data structure used.}}\\
+\textbf{addrlen =} & \multicolumn{2}{l}{\textit{Length of specific data structure used for sockaddr.}}\\
 \end{tabular}
 \end{table}
 \vspace{8cm}
@@ -220,5 +220,80 @@ If \textbf{read=0}, the function met EOF and the local system buffer is now empt
 \end{figure}
 
 \clearpage
+\subsection{Server}
+\subsubsection{bind()}
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=350pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcl}
+\textbf{RETURN VALUE} & \multicolumn{2}{l}{\textit{0} on success}\\
+{} & \multicolumn{2}{l}{\textit{-1} if some error occurs and errno is set appropriately}\\
+{} & \multicolumn{2}{l}{(You can check value of errno including <errno.h>).}\\
+& & \\
+\textbf{sockfd =} & \multicolumn{2}{l}{\textit{Socket File Descriptor} returned by socket().}\\
+& &\\
+\textbf{addr =} & \multicolumn{2}{l}{\textit{Reference to struct sockaddr}}\\
+{} & \multicolumn{2}{l}{sockaddr is a general structure that defines the concept of address.}\\
+& & \\
+\textbf{addrlen =} & \multicolumn{2}{l}{\textit{Length of specific data structure used for sockaddr.}}\\
+\end{tabular}
+\end{table}
+
+\subsubsection{listen()}
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=185pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int listen(int sockfd, int backlog);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rcl}
+\textbf{RETURN VALUE} & \multicolumn{2}{l}{\textit{0} on success}\\
+{} & \multicolumn{2}{l}{\textit{-1} if some error occurs and errno is set appropriately}\\
+{} & \multicolumn{2}{l}{(You can check value of errno including <errno.h>).}\\
+& & \\
+\textbf{sockfd =} & \multicolumn{2}{l}{\textit{Socket File Descriptor} returned by socket().}\\
+& &\\
+\textbf{backlog =} & \multicolumn{2}{l}{\textit{Maximum length of queue of pending connections}}\\
+& {The number of pending connections for sockfd can grow up}\\
+& {to this value.}\\
+& {The normal distribution of new requests by clients}\\
+& {is usually Poisson, organized as in Figure \ref{poisson}.}
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.3]{Images/NetworkC/poisson}\caption{\footnotesize{Poisson distribution of connections by clients.}}\label{poisson}
+\end{figure}
+
+\subsubsection{accept()}
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
 \section{UDP connection}
 UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer. It's used in Twitter application and in video streaming.  

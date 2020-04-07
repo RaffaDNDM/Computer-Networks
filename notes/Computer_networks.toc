@@ -5,31 +5,35 @@
 \contentsline {section}{\numberline {1.3}Structure of C program}{3}{section.1.3}
 \contentsline {chapter}{\numberline {2}Network services in C}{5}{chapter.2}
 \contentsline {section}{\numberline {2.1}Application layer}{5}{section.2.1}
-\contentsline {section}{\numberline {2.2}socket}{5}{section.2.2}
+\contentsline {section}{\numberline {2.2}socket()}{5}{section.2.2}
 \contentsline {section}{\numberline {2.3}TCP connection}{6}{section.2.3}
 \contentsline {subsection}{\numberline {2.3.1}Client}{6}{subsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.1.1}connect}{6}{subsubsection.2.3.1.1}
+\contentsline {subsubsection}{\numberline {2.3.1.1}connect()}{6}{subsubsection.2.3.1.1}
 \contentsline {subsubsection}{\numberline {2.3.1.2}write()}{8}{subsubsection.2.3.1.2}
 \contentsline {subsubsection}{\numberline {2.3.1.3}read()}{8}{subsubsection.2.3.1.3}
-\contentsline {section}{\numberline {2.4}UDP connection}{10}{section.2.4}
-\contentsline {chapter}{\numberline {3}HTTP protocol}{11}{chapter.3}
-\contentsline {section}{\numberline {3.1}Terminology}{11}{section.3.1}
-\contentsline {section}{\numberline {3.2}Basic rules}{12}{section.3.2}
-\contentsline {section}{\numberline {3.3}Messages}{13}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Different versions of HTTP protocol}{13}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Headers}{13}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Request-Line}{13}{subsection.3.3.3}
-\contentsline {subsection}{\numberline {3.3.4}Request-URI}{14}{subsection.3.3.4}
-\contentsline {subsection}{\numberline {3.3.5}Request Header}{14}{subsection.3.3.5}
-\contentsline {subsection}{\numberline {3.3.6}Status line}{14}{subsection.3.3.6}
-\contentsline {section}{\numberline {3.4}Examples}{15}{section.3.4}
-\contentsline {subsubsection}{\numberline {3.4.0.1}HTTP 0.9}{15}{subsubsection.3.4.0.1}
-\contentsline {subsubsection}{\numberline {3.4.0.2}HTTP 1.0}{16}{subsubsection.3.4.0.2}
-\contentsline {subsubsection}{\numberline {3.4.0.3}HTTP 1.1}{16}{subsubsection.3.4.0.3}
-\contentsline {chapter}{\numberline {4}Shell}{17}{chapter.4}
-\contentsline {section}{\numberline {4.1}Commands}{17}{section.4.1}
-\contentsline {section}{\numberline {4.2}Files}{17}{section.4.2}
-\contentsline {section}{\numberline {4.3}vim}{17}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}.vimrc}{17}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Shortcuts}{18}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Multiple files}{21}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {2.3.2}Server}{10}{subsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.2.1}bind()}{10}{subsubsection.2.3.2.1}
+\contentsline {subsubsection}{\numberline {2.3.2.2}listen()}{10}{subsubsection.2.3.2.2}
+\contentsline {subsubsection}{\numberline {2.3.2.3}accept()}{11}{subsubsection.2.3.2.3}
+\contentsline {section}{\numberline {2.4}UDP connection}{11}{section.2.4}
+\contentsline {chapter}{\numberline {3}HTTP protocol}{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}Terminology}{13}{section.3.1}
+\contentsline {section}{\numberline {3.2}Basic rules}{14}{section.3.2}
+\contentsline {section}{\numberline {3.3}Messages}{15}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Different versions of HTTP protocol}{15}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Headers}{15}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Request-Line}{15}{subsection.3.3.3}
+\contentsline {subsection}{\numberline {3.3.4}Request-URI}{16}{subsection.3.3.4}
+\contentsline {subsection}{\numberline {3.3.5}Request Header}{16}{subsection.3.3.5}
+\contentsline {subsection}{\numberline {3.3.6}Status line}{16}{subsection.3.3.6}
+\contentsline {section}{\numberline {3.4}Examples}{17}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}HTTP 0.9}{17}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}HTTP 1.0}{18}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}HTTP 1.1}{20}{subsection.3.4.3}
+\contentsline {chapter}{\numberline {4}Shell}{23}{chapter.4}
+\contentsline {section}{\numberline {4.1}Commands}{23}{section.4.1}
+\contentsline {section}{\numberline {4.2}Files}{23}{section.4.2}
+\contentsline {section}{\numberline {4.3}vim}{23}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}.vimrc}{23}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Shortcuts}{24}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Multiple files}{27}{subsection.4.3.3}
