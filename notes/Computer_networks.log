@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.3.25)  7 APR 2020 13:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.3.25)  8 APR 2020 11:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1572,14 +1572,25 @@ File: Images/NetworkC/poisson.png Graphic file (type png)
 <use Images/NetworkC/poisson.png>
 Package pdftex.def Info: Images/NetworkC/poisson.png  used on input line 283.
 (pdftex.def)             Requested size: 283.66194pt x 42.45894pt.
+<Images/NetworkC/listen.png, id=372, 1010.77625pt x 407.5225pt>
+File: Images/NetworkC/listen.png Graphic file (type png)
+<use Images/NetworkC/listen.png>
+Package pdftex.def Info: Images/NetworkC/listen.png  used on input line 290.
+(pdftex.def)             Requested size: 303.23521pt x 122.25769pt.
+[10
 
-Overfull \hbox (56.52084pt too wide) in paragraph at lines 293--294
+ <./Images/NetworkC/poisson.png>]
+Overfull \hbox (56.52084pt too wide) in paragraph at lines 300--301
 [][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[10
-
- <./Images/NetworkC/poisson.png>]) (./Chapters/HTTP.tex [11] [12
+<Images/NetworkC/accept.png, id=392, 1020.81375pt x 407.5225pt>
+File: Images/NetworkC/accept.png Graphic file (type png)
+<use Images/NetworkC/accept.png>
+Package pdftex.def Info: Images/NetworkC/accept.png  used on input line 309.
+(pdftex.def)             Requested size: 306.24649pt x 122.25769pt.
+) (./Chapters/HTTP.tex [11 <./Images/NetworkC/listen.png> <./Images/NetworkC/ac
+cept.png>] [12
 
 ]
 Chapter 3.
@@ -1688,10 +1699,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 171.
  ) 
 Here is how much of TeX's memory you used:
- 24211 strings out of 492982
- 438139 string characters out of 6134896
- 550643 words of memory out of 5000000
- 27017 multiletter control sequences out of 15000+600000
+ 24227 strings out of 492982
+ 438471 string characters out of 6134896
+ 550870 words of memory out of 5000000
+ 27029 multiletter control sequences out of 15000+600000
  553927 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  44i,15n,52p,10406b,2394s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1714,10 +1725,10 @@ lic/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl100
 xmf/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf/fonts/type1/publ
 ic/cm-super/sfti1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfxc1440
 .pfb>
-Output written on Computer_networks.pdf (32 pages, 625760 bytes).
+Output written on Computer_networks.pdf (32 pages, 683849 bytes).
 PDF statistics:
- 946 PDF objects out of 1000 (max. 8388607)
- 860 compressed objects within 9 object streams
- 457 named destinations out of 1000 (max. 500000)
- 360 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 954 PDF objects out of 1000 (max. 8388607)
+ 864 compressed objects within 9 object streams
+ 459 named destinations out of 1000 (max. 500000)
+ 370 words of extra memory for PDF output out of 10000 (max. 10000000)
 

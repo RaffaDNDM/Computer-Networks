@@ -283,6 +283,13 @@ int listen(int sockfd, int backlog);
 \includegraphics[scale=0.3]{Images/NetworkC/poisson}\caption{\footnotesize{Poisson distribution of connections by clients.}}\label{poisson}
 \end{figure}
 
+The listening socket, identified by \textbf{sockfd}, is unique for each association of a port number and a IP address of the server (Figure \ref{listen}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.3]{Images/NetworkC/listen}\caption{\footnotesize{listen() function.}}\label{listen}
+\end{figure}
+
 \subsubsection{accept()}
 \begin{center}
 \begin{tabular}{c}
@@ -295,5 +302,12 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 \end{tabular}
 \end{center}
 
+To manage many clients simultaneously, we use the \textbf{accept()} function to extablish the connection one-to-one with each client, creating a uniquely socket with each client. At lower layers of ISO/OSI, the port number and the IP Address are the same identifiers, to which listening socket is associated (Figure \ref{accept}).
+ 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.3]{Images/NetworkC/accept}\caption{\footnotesize{accept() function.}}\label{accept}
+\end{figure}
+
 \section{UDP connection}
-UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer. It's used in Twitter application and in video streaming.  
+UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer. It's used in Twitter application and in video streaming.
