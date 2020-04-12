@@ -239,22 +239,48 @@ Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 The following pieces of code are examples of TCP client connection to \textbf{www.google.it}, using functions explained in Chapter \ref{networkC}.
 \subsection{HTTP 0.9}
 The following piece of code define a structure, used to connect to Google server. 
-\lstinputlisting[caption={\footnotesize{web\_client.c}}, style=code, firstnumber=1, firstline=1, lastline=73, label=web_client, language=c]{../src/2_tcp/web_client.c}
 
 The most important thing is that \textbf{socket()} is entry-point for level 4, but also \textbf{connect()} is the request to Kernel to extablish the connection.\\ \textbf{read()} and \textbf{write()} are system calls used respectively to obtain result(response) of a request and to generate request.\\ These function permit us to ask to lower level to do this things, without knowing content of system buffers (stream). The second part is only used to read the input.
 
 \subsection{HTTP 1.0}
 The protocol has no mandatory headers to be added in the request field. This protocol is compliant with HTTP 0.9.
-\lstinputlisting[caption={\footnotesize{web\_client.c}}, style=code, firstnumber=1, firstline=1, lastline=73, label=web_client, language=c]{../src/2_tcp/web_client.c}
 To keep the connection alive, "Connection" header with "keep-alive" as header field must be added to request message. The server, receiving the request, replies with a message with the same header value for "Connection".\\
 This is used to prevent the closure of the connection, so if the client needs to send another request, he can use the same connection.
 This is usually used to send many files and not only one.\\
 The connection is kept alive until either the client or the server decides that the connection is over and one of them drops the connection. If the client doesn't send new requests to the server, the second one usually drops the connection after a couple of minutes.\\
-This is useful with dynamic pages, in which the server doesn't know the length of the stream in advance and can update the content of the stream during the extablished connection, sending a fixed amount of bytes to client.\\
 The client could read the response of request, with activated keep alive option, reading only header and looking to "Content-length" header field value to understand the length of the message body. This header is added only if a request with keep-alive option is done.\\
 This must be done because we can't look only to empty system stream, because it could be that was send only the response of the first request or a part of the response.\\
 Otherwise, when the option keep alive is not used, the client must fix a max number of characters to read from the specific response to his request, because it doesn't know how many character compose the message body.
 
 \subsection{HTTP 1.1}
-It has by default the option keep alive actived by default with respect to HTTP 1.0. It has the mandatory header "Host" followed by the hostname of the remote system to which the request or the response is sent. 
-\lstinputlisting[caption={\footnotesize{web\_client.c}}, style=code, firstnumber=1, firstline=1, lastline=73, label=web_client, language=c]{../src/2_tcp/web_client.c}
+It has by default the option keep alive actived by default with respect to HTTP 1.0. It has the mandatory header "Host" followed by the hostname of the remote system to which the request or the response is sent. The body is organized in chunks, so we need the connection kept alive to manage future new chunks.\\
+This is useful with dynamic pages, in which the server doesn't know the length of the stream in advance and can update the content of the stream during the extablished connection, sending a fixed amount of bytes to client. We can check if the connection is chunked oriented, looking for the header "Transfer-Encoding" with value "chunked".\\ 
+Each connection is composed by many chunks and each of them is composed by chunk length followed by chunk body, except for the last one that has length 0 (see Figure \ref{chunked_body}). The following grammar represents how the body is organized:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
+Chunked-Body   = *chunk
+                 last-chunk
+                 trailer
+                 CRLF
+
+chunk          = chunk-size [ chunk-extension ] CRLF
+                 chunk-data CRLF
+
+chunk-size     = 1*HEX
+last-chunk     = 1*("0") [ chunk-extension ] CRLF
+
+chunk-extension= *( ";" chunk-ext-name [ "=" chunk-ext-val ] )
+
+chunk-ext-name = token
+chunk-ext-val  = token | quoted-string
+chunk-data     = chunk-size(OCTET)
+trailer        = *(entity-header CRLF)
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{Images/HTTP/Chunked-Body}\caption{\footnotesize{Chunked body.}}\label{chunked_body}
+\end{figure}

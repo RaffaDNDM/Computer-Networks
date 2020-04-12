@@ -25,11 +25,13 @@ int main(int argc, char ** argv)
     int k;
     int size;
     int body_length;
-    int L;
+    int chunk_size;
+    char c;
     char request[100];
     char response[1000000];
+    char entity[1000000];
     char website[100]="";
-    unsigned char ipaddr[4] = {216,58,211, 163};
+    unsigned char ipaddr[4] = {216,58,211,163};
 
     sd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -71,7 +73,6 @@ int main(int argc, char ** argv)
         return 1;
     }
     
-    //sprintf(request, "GET / HTTP/1.0\r\n\r\n");
     sprintf(request, "GET / HTTP/1.1\r\nHost:www.google.it\r\n\r\n");
 
     for(size=0; request[size]; size++);
@@ -120,27 +121,81 @@ int main(int argc, char ** argv)
             strcpy(website,h[i].value);
 
         if(!strcmp(h[i].name, "Transfer-Encoding") && !strcmp(h[i].value," chunked"))
-            bodylength=-1;
+            body_length=-1;
 
         printf("Name= %s -----> Value= %s\n",h[i].name, h[i].value);
     }
 
-    
     if(body_length>0)
-        for(size=0; (t=read(sd, response+size, body_length-size))>0; size+=t);
-    else if(body_length<0)
+        for(size=0; (t=read(sd, entity+size, body_length-size))>0; size+=t); 
+    if(body_length<0)
     {
         printf("Chunked read\n");
-        L=0;
-
-        while(1)
-        {
-            l=0;
+        body_length=0;
         
+        do
+        {
+            chunk_size=0;
+            printf("HEX chunck size: ");
+
+            while((t=read(sd, &c, 1))>0)
+            {
+                if(c=='\n')
+                    break;
+
+                else if(c=='\r')
+                    continue;
+
+                else 
+                {
+                   switch(c)
+                   {
+                        case '0' ... '9':
+                            printf("%c", c);
+                            c = c - '0';
+                            break;
+
+                        case 'A' ... 'F':
+                            printf("%c", c);
+                            c = c - 'A' +10;
+                            break;
+
+                        case 'a' ... 'f':
+                            printf("%c", c);
+                            c = c - 'a' +10;
+                            break;
+                            
+                        default:
+                            printf("%c", c);
+                            perror("Error in chunk size format");
+                            return 1;
+                   }
+
+                   chunk_size = chunk_size*16+c;
+                }
+            }
+            
+            if(t==-1)
+            {
+                printf("Errno = %d\n", errno);
+                perror("Chunk body read failed");
+                return 1;
+            }
+
+            printf("\nChunk size: %d\n",chunk_size);
+            for(size=0; (t=read(sd, entity+body_length+size, chunk_size-size))>0; size+=t);
+
+            read(sd, &c, 1);
+            read(sd, &c, 1);
+
+            body_length+=chunk_size;
         }
+        while(chunk_size>0);
+    
+        size=body_length;
     }    
-    else
-        for(size=0; (t=read(sd, response+size, 1000000-size))>0; size+=t);
+    else if(body_length==0)
+        for(size=0; (t=read(sd, entity+size, 1000000-size))>0; size+=t);
 
     if(t==-1)
     {
@@ -149,13 +204,8 @@ int main(int argc, char ** argv)
         return 1;
     }
 
-    if(strcmp(website,""))
-        printf("\nRedirection:       %s\n\n", website);
-    else
-    {
-        for(i=0; i<size; i++)
-            printf("%c", response[i]);
-    }
+    for(i=0; i<size; i++)
+        printf("%c", entity[i]);
 
     return 0;
 }

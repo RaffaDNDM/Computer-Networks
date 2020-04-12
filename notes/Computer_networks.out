@@ -29,10 +29,14 @@
 \BOOKMARK [2][-]{subsection.3.4.1}{HTTP 0.9}{section.3.4}% 29
 \BOOKMARK [2][-]{subsection.3.4.2}{HTTP 1.0}{section.3.4}% 30
 \BOOKMARK [2][-]{subsection.3.4.3}{HTTP 1.1}{section.3.4}% 31
-\BOOKMARK [0][-]{chapter.4}{Shell}{}% 32
-\BOOKMARK [1][-]{section.4.1}{Commands}{chapter.4}% 33
-\BOOKMARK [1][-]{section.4.2}{Files}{chapter.4}% 34
-\BOOKMARK [1][-]{section.4.3}{vim}{chapter.4}% 35
-\BOOKMARK [2][-]{subsection.4.3.1}{.vimrc}{section.4.3}% 36
-\BOOKMARK [2][-]{subsection.4.3.2}{Shortcuts}{section.4.3}% 37
-\BOOKMARK [2][-]{subsection.4.3.3}{Multiple files}{section.4.3}% 38
+\BOOKMARK [0][-]{chapter.4}{Code examples}{}% 32
+\BOOKMARK [1][-]{section.4.1}{Client HTTP 0.9}{chapter.4}% 33
+\BOOKMARK [1][-]{section.4.2}{Client HTTP 1.0}{chapter.4}% 34
+\BOOKMARK [1][-]{section.4.3}{Client HTTP 1.1}{chapter.4}% 35
+\BOOKMARK [0][-]{chapter.5}{Shell}{}% 36
+\BOOKMARK [1][-]{section.5.1}{Commands}{chapter.5}% 37
+\BOOKMARK [1][-]{section.5.2}{Files}{chapter.5}% 38
+\BOOKMARK [1][-]{section.5.3}{vim}{chapter.5}% 39
+\BOOKMARK [2][-]{subsection.5.3.1}{.vimrc}{section.5.3}% 40
+\BOOKMARK [2][-]{subsection.5.3.2}{Shortcuts}{section.5.3}% 41
+\BOOKMARK [2][-]{subsection.5.3.3}{Multiple files}{section.5.3}% 42
