@@ -250,7 +250,7 @@ This is usually used to send many files and not only one.\\
 The connection is kept alive until either the client or the server decides that the connection is over and one of them drops the connection. If the client doesn't send new requests to the server, the second one usually drops the connection after a couple of minutes.\\
 The client could read the response of request, with activated keep alive option, reading only header and looking to "Content-length" header field value to understand the length of the message body. This header is added only if a request with keep-alive option is done.\\
 This must be done because we can't look only to empty system stream, because it could be that was send only the response of the first request or a part of the response.\\
-Otherwise, when the option keep alive is not used, the client must fix a max number of characters to read from the specific response to his request, because it doesn't know how many character compose the message body.
+Otherwise, when the option keep alive is not used, the client must fix a max number of characters to read from the specific response to his request, because he doesn't know how many character compose the message body. If you make many requests to server without keep-alive option, the server will reply requests, after the first, with only headers but empty body.\\
 
 \subsection{HTTP 1.1}
 It has by default the option keep alive actived by default with respect to HTTP 1.0. It has the mandatory header "Host" followed by the hostname of the remote system to which the request or the response is sent. The body is organized in chunks, so we need the connection kept alive to manage future new chunks.\\
@@ -284,3 +284,6 @@ trailer        = *(entity-header CRLF)
 \centering
 \includegraphics[scale=0.5]{Images/HTTP/Chunked-Body}\caption{\footnotesize{Chunked body.}}\label{chunked_body}
 \end{figure}
+
+\section{HTML}
+The body of an HTTP request, it's often composed from the HTML related page. Each click, of a link inside the web page, generates a new request to the server with GET method.

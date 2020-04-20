@@ -15,7 +15,7 @@
 \contentsline {subsubsection}{\numberline {2.3.2.1}bind()}{10}{subsubsection.2.3.2.1}
 \contentsline {subsubsection}{\numberline {2.3.2.2}listen()}{10}{subsubsection.2.3.2.2}
 \contentsline {subsubsection}{\numberline {2.3.2.3}accept()}{11}{subsubsection.2.3.2.3}
-\contentsline {section}{\numberline {2.4}UDP connection}{11}{section.2.4}
+\contentsline {section}{\numberline {2.4}UDP connection}{12}{section.2.4}
 \contentsline {chapter}{\numberline {3}HTTP protocol}{13}{chapter.3}
 \contentsline {section}{\numberline {3.1}Terminology}{13}{section.3.1}
 \contentsline {section}{\numberline {3.2}Basic rules}{14}{section.3.2}
@@ -30,14 +30,17 @@
 \contentsline {subsection}{\numberline {3.4.1}HTTP 0.9}{17}{subsection.3.4.1}
 \contentsline {subsection}{\numberline {3.4.2}HTTP 1.0}{17}{subsection.3.4.2}
 \contentsline {subsection}{\numberline {3.4.3}HTTP 1.1}{18}{subsection.3.4.3}
-\contentsline {chapter}{\numberline {4}Code examples}{19}{chapter.4}
-\contentsline {section}{\numberline {4.1}Client HTTP 0.9}{19}{section.4.1}
-\contentsline {section}{\numberline {4.2}Client HTTP 1.0}{20}{section.4.2}
-\contentsline {section}{\numberline {4.3}Client HTTP 1.1}{23}{section.4.3}
-\contentsline {chapter}{\numberline {5}Shell}{27}{chapter.5}
-\contentsline {section}{\numberline {5.1}Commands}{27}{section.5.1}
-\contentsline {section}{\numberline {5.2}Files}{27}{section.5.2}
-\contentsline {section}{\numberline {5.3}vim}{27}{section.5.3}
-\contentsline {subsection}{\numberline {5.3.1}.vimrc}{27}{subsection.5.3.1}
-\contentsline {subsection}{\numberline {5.3.2}Shortcuts}{28}{subsection.5.3.2}
-\contentsline {subsection}{\numberline {5.3.3}Multiple files}{31}{subsection.5.3.3}
+\contentsline {section}{\numberline {3.5}HTML}{19}{section.3.5}
+\contentsline {chapter}{\numberline {4}Code examples}{21}{chapter.4}
+\contentsline {section}{\numberline {4.1}Header}{21}{section.4.1}
+\contentsline {section}{\numberline {4.2}Client HTTP 0.9}{21}{section.4.2}
+\contentsline {section}{\numberline {4.3}Client HTTP 1.0}{22}{section.4.3}
+\contentsline {section}{\numberline {4.4}Client HTTP 1.1}{25}{section.4.4}
+\contentsline {section}{\numberline {4.5}Server HTTP 1.1}{29}{section.4.5}
+\contentsline {chapter}{\numberline {5}Shell}{33}{chapter.5}
+\contentsline {section}{\numberline {5.1}Commands}{33}{section.5.1}
+\contentsline {section}{\numberline {5.2}Files}{33}{section.5.2}
+\contentsline {section}{\numberline {5.3}vim}{33}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}.vimrc}{33}{subsection.5.3.1}
+\contentsline {subsection}{\numberline {5.3.2}Shortcuts}{34}{subsection.5.3.2}
+\contentsline {subsection}{\numberline {5.3.3}Multiple files}{37}{subsection.5.3.3}

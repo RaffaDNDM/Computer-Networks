@@ -1,3 +1,6 @@
+#include "wc10.h"
+#include "net_utility.h"
+
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -8,13 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LINE "--------------------------------------------------------\n"
 struct sockaddr_in server;
-
-struct header{
-    char* name;
-    char* value;  
-}h[30];
+header h[30];
 
 int main(int argc, char ** argv)
 {
@@ -36,22 +34,16 @@ int main(int argc, char ** argv)
     char *phrase;
     */
     char *status_tokens[3];
-    unsigned char ipaddr[4] = {216,58,211, 163};
+    unsigned char ipaddr[4] = {216, 58, 208, 131};
+    
+    if(argc>3)
+    {
+        control(-1,"Too many arguments");
+    }
 
     sd = socket(AF_INET, SOCK_STREAM, 0);
 
-    if(argc>3)
-    {
-        perror("Too many arguments");
-        return 1;
-    }
-
-    if(sd==-1)
-    {   
-        printf("Errno = %d \n", errno);
-        perror("Socket failed");
-        return 1;
-    }
+    control(sd, "Socket failed \n");
 
     server.sin_family=AF_INET;
     server.sin_port = htons(80); //HTTP port number
@@ -69,29 +61,18 @@ int main(int argc, char ** argv)
         server.sin_addr.s_addr = *(uint32_t *) ipaddr;
         server.sin_port = htons(80); //HTTP port number
     }
+    
     t = connect(sd, (struct sockaddr *)&server, sizeof(server));
+    control(t, "Connection failed \n");
 
-    if(t==-1)
-    {
-        printf("Errno = %d \n", errno);
-        perror("Connection failed \n");
-        return 1;
-    }
-    
     //sprintf(request, "GET / HTTP/1.0\r\n\r\n");
-    sprintf(request, "GET / HTTP/1.0\r\nHost: www.repubblica.it\r\n\r\n");
+    sprintf(request, "GET / HTTP/1.0\r\nConnection: keep-alive\r\n\r\n");
 
-    for(size=0; request[size]; size++);
-
+    size = my_strlen(request);
     t = write(sd, request, size);
+   
+    control(t, "Write failed\n");
     
-    if(t == -1)
-    {
-        printf("Errno = %d\n", errno);
-        perror("Write failed");
-        return 1;
-    }
-
     j = 0;
     k = 0;
     h[k].name= response;
@@ -125,8 +106,7 @@ int main(int argc, char ** argv)
     phrase = strtok(NULL, " ");
     */
     
-    
-    for(status_length=0; h[0].name[status_length]; status_length++);
+    status_length = my_strlen(h[0].name);    
 
     status_tokens[0]=h[0].name;
     i=1;
@@ -166,28 +146,24 @@ int main(int argc, char ** argv)
         if(!strcmp(h[i].name, "Location") && code>300 && code<303)
             website=h[i].value;
 
-        printf("Name= %s -----> Value= %s\n",h[i].name, h[i].value);
+        printf("Name=%s -----> Value=%s\n",h[i].name, h[i].value);
     }
 
-    
     if(body_length)
         for(size=0; (t=read(sd, response+j+size, body_length-size))>0; size+=t);
     else
         for(size=0; (t=read(sd, response+j+size, 1000000-size))>0; size+=t);
     
 
-    if(t==-1)
-    {
-        printf("Errno = %d\n", errno);
-        perror("Read failed");
-        return 1;
+    control(t, "Read failed");
+
+    if(website!=NULL)
+    {        
+        printf(LINE);
+        printf("\nRedirection:       %s \n\n", website);
     }
 
-    //if(website!=NULL)
-        printf("\nRedirection:       %s \n\n", website);
-        
-    for(i=j; i<size+j; i++)
-        printf("%c", response[i]);
+    print_body(response, size, j);
 
     return 0;
 }

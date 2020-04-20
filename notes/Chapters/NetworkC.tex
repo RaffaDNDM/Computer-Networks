@@ -175,13 +175,12 @@ ssize_t write(int fd, const void *buf, size_t count);
 \textbf{count =} & \multicolumn{2}{l}{\textit{Max number of bytes to write} in the file (stream).}\\
 \end{tabular}
 \end{table}
-\vspace{4cm}
 The write buffer is usually a string but we don't consider the null value (\textbf{$\backslash 0$} character), that determine the end of the string, in the evaluation of count (\textbf{strlen(buf)-1}). This convention is used because \textbf{$\backslash 0$} can be part of characters stream.\\
 
 \subsubsection{read()}
 The client uses this blocking function to wait and obtain response from the remote server. Not all the request are completed immediat from the server, for the meaning of stream type of protocol. Infact in this protocol, there is a flow for which the complete sequence is defined only at the closure of it\ref{socket}.\\
 \textbf{read()} is consuming bytes fom the stream asking to level 4 a portion of them, because it cannot access directly to bytes in Kernel buffer. Lower layer controls the stream of information that comes from the same layer of remove system.\\
-
+\vspace{3cm}
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
@@ -221,6 +220,7 @@ If \textbf{read=0}, the function met EOF and the local system buffer is now empt
 
 \clearpage
 \subsection{Server}
+A server is a daemon, an application that works in background forever. The end of this process can be made only through the use of the Operating System.
 \subsubsection{bind()}
 \begin{center}
 \begin{tabular}{c}
@@ -277,13 +277,12 @@ int listen(int sockfd, int backlog);
 & {is usually Poisson, organized as in Figure \ref{poisson}.}
 \end{tabular}
 \end{table}
+The listening socket, identified by \textbf{sockfd}, is unique for each association of a port number and a IP address of the server (Figure \ref{listen}).
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.3]{Images/NetworkC/poisson}\caption{\footnotesize{Poisson distribution of connections by clients.}}\label{poisson}
 \end{figure}
-
-The listening socket, identified by \textbf{sockfd}, is unique for each association of a port number and a IP address of the server (Figure \ref{listen}).
 
 \begin{figure}[h]
 \centering
@@ -293,7 +292,7 @@ The listening socket, identified by \textbf{sockfd}, is unique for each associat
 \subsubsection{accept()}
 \begin{center}
 \begin{tabular}{c}
-\begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
+\begin{lstlisting}[linewidth=340pt, basicstyle=\footnotesize\sffamily,]
 #include <sys/types.h>
 #include <sys/socket.h>
 
@@ -302,11 +301,40 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 \end{tabular}
 \end{center}
 
-To manage many clients simultaneously, we use the \textbf{accept()} function to extablish the connection one-to-one with each client, creating a uniquely socket with each client. At lower layers of ISO/OSI, the port number and the IP Address are the same identifiers, to which listening socket is associated (Figure \ref{accept}).
+\begin{table}[h]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Accepted Socket Descriptor}}\\
+{} & {it will be used by server, to manage requests and responses from}\\
+{} & {that specific client.}\\
+{} & {\textit{-1} if some error occurs and errno is set appropriately}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{sockfd =} & {\textit{Listen Socket File Descriptor}}\\
+&\\
+\textbf{addr =} & {\textit{Reference to struct sockaddr}}\\
+{} & {It's going to be filled by the accept() function.}\\
+& \\
+\textbf{addrlen =} & {\textit{Length of the struct of addr.}}\\
+{} & {It's going to be filled by accept() function.}\\
+{} & {( accept() is used in different cases so it can return different}\\
+{} & {type of specific implementation of struct addr.)}\\
+&\\
+\end{tabular}
+\end{table}
+
+To manage many clients requests, we use the \textbf{accept()} function to extablish the connection one-to-one with each client, creating a uniquely socket with each client.\\
+This function extracts the  first   connection request on the queue of pending connections for the listening socket \textbf{sockfd} creates a new connected socket, and returns a new file descriptor  referring  to that socket. The accept() is blocking for the server when the queue of pending requests is empty (Figure \ref{pending_accept}).\\
+At lower layers of ISO/OSI, the port number and the IP Address are the same identifiers, to which listening socket is associated (Figure \ref{accept}).
  
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.3]{Images/NetworkC/accept}\caption{\footnotesize{accept() function.}}\label{accept}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/NetworkC/pending_accept}\caption{\footnotesize{Management of pending requests with accept().}}\label{pending_accept}
 \end{figure}
 
 \section{UDP connection}
