@@ -14,12 +14,11 @@ int main(int argc, char ** argv)
 {
     int sd; //Socket Descriptor
     int t; //Control value returned by connect, write and read
-    int i;
     int size;
     char request[100];
     char response[1000000];
 
-    unsigned char ipaddr[4] = {216,58,211, 163};
+    unsigned char ipaddr[4] = {216,58,211,163};
 
     if(argc>3)
         control(-1, "Too many arguments");
@@ -51,7 +50,7 @@ int main(int argc, char ** argv)
     
     sprintf(request, "GET /\r\n");
 
-    for(size=0; request[size]; size++);
+    size = my_strlen(request);
     t = write(sd, request, size);
     
     control(t, "Write failed\n");
@@ -61,10 +60,6 @@ int main(int argc, char ** argv)
     control(t, "Read failed \n");
 
     print_body(response, size, 0);
+ 
     return 0;
 }
-
-
-
-
-

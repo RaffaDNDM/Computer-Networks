@@ -24,7 +24,7 @@ int main()
     int t;
     socklen_t len;
     int yes = 1;
-    FILE *f=NULL;
+    FILE *f;
 
     sd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -89,6 +89,7 @@ int main()
         printf("Path:  %s\n", path);
         printf("Version:  %s\n", version);
 
+        f=NULL;
         manage_request(method, path, version, response, &f);
         printf("%s", response);
         write(sd2, response, strlen(response));
@@ -135,12 +136,14 @@ void manage_request(char* method, char* path, char* version, char* response, FIL
     {
         char file_name[40];
         sprintf(file_name,"%s%s",ROOT_PATH,path);
-        
-        
-        if((*f=fopen(file_name,"r"))==NULL) //it's GET request for a file
-            sprintf(response,"HTTP/1.1 404 Not Found\r\nConnection: close\r\n\r\n");
+        printf("%s\n", file_name);
+                    
+        //"r+" because in linux directory are file so we need to specify
+        //also writing rights to be sure that fopen return NULL with also directory
+        if(((*f)=fopen(file_name,"r+"))==NULL) //it's GET request for a file
+            sprintf(response,"HTTP/1.1 404 Not Found\r\nConnection:Close\r\n\r\n");
         else
-            sprintf(response,"HTTP/1.1 200 Not Found\r\nConnection: close\r\n\r\n");
+            sprintf(response,"HTTP/1.1 200 OK\r\nConnection:Close\r\n\r\n");
     }
 }
 

@@ -121,6 +121,7 @@ int main(int argc, char ** argv)
         }
     }
     
+
     printf(LINE);
     printf("Status line:\n");
     printf(LINE);
@@ -134,7 +135,6 @@ int main(int argc, char ** argv)
     printf("HTTP code:    %30d\n", code);
     printf("HTTP version: %30s\n", status_tokens[2]);
     printf(LINE);
-
 
     
     website=NULL;

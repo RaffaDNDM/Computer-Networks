@@ -2,9 +2,7 @@ SHELL:=/bin/bash
 
 CC = gcc
 
-CFLAGS   = -Wall -I
-LINKER   = gcc -o
-
+CFLAGS   = -Wall -pedantic -I
 
 INCLUDE  = ../include
 SRC   = .
@@ -20,10 +18,10 @@ all : wc09 wc10 wc11 ws
 
 
 % : $(SRC)/%.c $(BIN)/$(UTILITY).o
-	$(CC) -o $(BIN)/$@ $^ -I$(INCLUDE)
+	$(CC) -o $(BIN)/$@ $^ $(CFLAGS)$(INCLUDE)
 
 $(BIN)/$(UTILITY).o : $(SRC)/$(UTILITY).c
-	$(CC) -c -o $@ $< -I$(INCLUDE)
+	$(CC) -c -o $@ $< $(CFLAGS)$(INCLUDE)
 
 clean:
 	rm $(BIN)/*
