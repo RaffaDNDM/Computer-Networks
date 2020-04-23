@@ -10,6 +10,8 @@
 
 #define QUEUE_MAX 10
 #define ROOT_PATH "../dat"
+#define CGI_BIN "../dat/cgi-bin/"
+
 void request_line(char* request, char** method, char** path, char** version);
 void manage_request(char* method, char* path, char* version, char* response, FILE** f);
 void send_body(int sd2, FILE* f);
@@ -138,6 +140,7 @@ void manage_request(char* method, char* path, char* version, char* response, FIL
         sprintf(file_name,"%s%s",ROOT_PATH,path);
         printf("%s\n", file_name);
                     
+        if(!strncmp(file_name, CGB_BIN,))        
         //"r+" because in linux directory are file so we need to specify
         //also writing rights to be sure that fopen return NULL with also directory
         if(((*f)=fopen(file_name,"r+"))==NULL) //it's GET request for a file

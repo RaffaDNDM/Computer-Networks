@@ -4,5 +4,5 @@ CC = gcc
 
 CFLAGS   = -Wall -pedantic
 
-% : %.c
+base64 : base64.c
 	$(CC) -o $@ $^ $(CFLAGS)

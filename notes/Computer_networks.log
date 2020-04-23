@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.3.25)  21 APR 2020 23:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.3.25)  23 APR 2020 12:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1425,12 +1425,12 @@ LaTeX Info: Redefining \nameref on input line 90.
 
 \c__siunitx_mathsf_int=\count327
 \c__siunitx_mathtt_int=\count328
-<./Images/Background.png, id=200, 484.81125pt x 413.545pt>
+<./Images/Background.png, id=180, 484.81125pt x 413.545pt>
 File: ./Images/Background.png Graphic file (type png)
 <use ./Images/Background.png>
 Package pdftex.def Info: ./Images/Background.png  used on input line 95.
 (pdftex.def)             Requested size: 327.20668pt x 279.12451pt.
-<./Images/Icon4.png, id=202, 80.7486pt x 80.7486pt>
+<./Images/Icon4.png, id=182, 80.7486pt x 80.7486pt>
 File: ./Images/Icon4.png Graphic file (type png)
 <use ./Images/Icon4.png>
 Package pdftex.def Info: ./Images/Icon4.png  used on input line 99.
@@ -1459,7 +1459,7 @@ Overfull \hbox (0.5928pt too wide) in paragraph at lines 10--11
 [][][][][][][] 
  []
 
-<Images/Programming/endians.png, id=282, 483.8075pt x 222.8325pt>
+<Images/Programming/endians.png, id=257, 483.8075pt x 222.8325pt>
 File: Images/Programming/endians.png Graphic file (type png)
 <use Images/Programming/endians.png>
 Package pdftex.def Info: Images/Programming/endians.png  used on input line 17.
@@ -1473,12 +1473,12 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
  <./Images/Programming/endians.png>]
-<Images/Programming/struct.png, id=296, 523.9575pt x 266.9975pt>
+<Images/Programming/struct.png, id=271, 523.9575pt x 266.9975pt>
 File: Images/Programming/struct.png Graphic file (type png)
 <use Images/Programming/struct.png>
 Package pdftex.def Info: Images/Programming/struct.png  used on input line 55.
 (pdftex.def)             Requested size: 261.9781pt x 133.49841pt.
-<Images/Programming/parallel_reading.png, id=297, 443.6575pt x 160.6pt>
+<Images/Programming/parallel_reading.png, id=272, 443.6575pt x 160.6pt>
 File: Images/Programming/parallel_reading.png Graphic file (type png)
 <use Images/Programming/parallel_reading.png>
 Package pdftex.def Info: Images/Programming/parallel_reading.png  used on input
@@ -1486,7 +1486,7 @@ Package pdftex.def Info: Images/Programming/parallel_reading.png  used on input
 (pdftex.def)             Requested size: 301.68309pt x 109.20654pt.
  [2 <./Images/Programming/struct.png> <./Images/Programming/parallel_reading.pn
 g>]
-<Images/Programming/program.png, id=314, 377.41pt x 202.7575pt>
+<Images/Programming/program.png, id=289, 377.41pt x 202.7575pt>
 File: Images/Programming/program.png Graphic file (type png)
 <use Images/Programming/program.png>
 Package pdftex.def Info: Images/Programming/program.png  used on input line 78.
@@ -1496,7 +1496,7 @@ Package pdftex.def Info: Images/Programming/program.png  used on input line 78.
 
 ]
 Chapter 2.
-<Images/NetworkC/application.png, id=328, 776.9025pt x 142.5325pt>
+<Images/NetworkC/application.png, id=303, 776.9025pt x 142.5325pt>
 File: Images/NetworkC/application.png Graphic file (type png)
 <use Images/NetworkC/application.png>
 Package pdftex.def Info: Images/NetworkC/application.png  used on input line 7.
@@ -1522,13 +1522,15 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Underfull \vbox (badness 3128) has occurred while \output is active []
 
  [6]
-<Images/NetworkC/addresses.png, id=363, 884.30376pt x 372.39125pt>
+
+LaTeX Warning: Reference `files' on page 7 undefined on input line 122.
+
+<Images/NetworkC/addresses.png, id=337, 884.30376pt x 372.39125pt>
 File: Images/NetworkC/addresses.png Graphic file (type png)
 <use Images/NetworkC/addresses.png>
 Package pdftex.def Info: Images/NetworkC/addresses.png  used on input line 149.
 
 (pdftex.def)             Requested size: 353.71524pt x 148.95386pt.
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -1541,13 +1543,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 178--179
 Underfull \vbox (badness 1917) has occurred while \output is active []
 
  [8 <./Images/NetworkC/addresses.png>]
-<Images/NetworkC/read_write1.png, id=408, 690.58pt x 262.9825pt>
+<Images/NetworkC/read_write1.png, id=382, 690.58pt x 262.9825pt>
 File: Images/NetworkC/read_write1.png Graphic file (type png)
 <use Images/NetworkC/read_write1.png>
 Package pdftex.def Info: Images/NetworkC/read_write1.png  used on input line 21
 3.
 (pdftex.def)             Requested size: 345.28915pt x 131.49092pt.
-<Images/NetworkC/read_write2.png, id=409, 690.58pt x 262.9825pt>
+<Images/NetworkC/read_write2.png, id=383, 690.58pt x 262.9825pt>
 File: Images/NetworkC/read_write2.png Graphic file (type png)
 <use Images/NetworkC/read_write2.png>
 Package pdftex.def Info: Images/NetworkC/read_write2.png  used on input line 21
@@ -1558,7 +1560,7 @@ Overfull \hbox (1.81725pt too wide) in paragraph at lines 231--232
 [][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-<Images/NetworkC/poisson.png, id=426, 945.5325pt x 141.52875pt>
+<Images/NetworkC/poisson.png, id=400, 945.5325pt x 141.52875pt>
 File: Images/NetworkC/poisson.png Graphic file (type png)
 <use Images/NetworkC/poisson.png>
 Package pdftex.def Info: Images/NetworkC/poisson.png  used on input line 284.
@@ -1566,7 +1568,7 @@ Package pdftex.def Info: Images/NetworkC/poisson.png  used on input line 284.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<Images/NetworkC/listen.png, id=427, 1010.77625pt x 407.5225pt>
+<Images/NetworkC/listen.png, id=401, 1010.77625pt x 407.5225pt>
 File: Images/NetworkC/listen.png Graphic file (type png)
 <use Images/NetworkC/listen.png>
 Package pdftex.def Info: Images/NetworkC/listen.png  used on input line 289.
@@ -1577,7 +1579,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [10
 
 ]
-<Images/NetworkC/accept.png, id=448, 1020.81375pt x 407.5225pt>
+<Images/NetworkC/accept.png, id=422, 1020.81375pt x 407.5225pt>
 File: Images/NetworkC/accept.png Graphic file (type png)
 <use Images/NetworkC/accept.png>
 Package pdftex.def Info: Images/NetworkC/accept.png  used on input line 332.
@@ -1586,7 +1588,7 @@ Package pdftex.def Info: Images/NetworkC/accept.png  used on input line 332.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<Images/NetworkC/pending_accept.png, id=449, 603.25375pt x 450.68375pt>
+<Images/NetworkC/pending_accept.png, id=423, 603.25375pt x 450.68375pt>
 File: Images/NetworkC/pending_accept.png Graphic file (type png)
 <use Images/NetworkC/pending_accept.png>
 Package pdftex.def Info: Images/NetworkC/pending_accept.png  used on input line
@@ -1641,7 +1643,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 278--280
 
  []
 
-<Images/HTTP/time_locality.png, id=533, 594.22pt x 376.40625pt>
+<Images/HTTP/time_locality.png, id=507, 594.22pt x 376.40625pt>
 File: Images/HTTP/time_locality.png Graphic file (type png)
 <use Images/HTTP/time_locality.png>
 Package pdftex.def Info: Images/HTTP/time_locality.png  used on input line 290.
@@ -1650,13 +1652,13 @@ Package pdftex.def Info: Images/HTTP/time_locality.png  used on input line 290.
 
 LaTeX Warning: Reference `caching' on page 18 undefined on input line 296.
 
-<Images/HTTP/caching.png, id=534, 487.8225pt x 355.3275pt>
+<Images/HTTP/caching.png, id=508, 487.8225pt x 355.3275pt>
 File: Images/HTTP/caching.png Graphic file (type png)
 <use Images/HTTP/caching.png>
 Package pdftex.def Info: Images/HTTP/caching.png  used on input line 299.
 (pdftex.def)             Requested size: 243.91064pt x 177.6633pt.
 [18 <./Images/HTTP/time_locality.png>]
-<Images/HTTP/expires_cache.png, id=541, 486.81876pt x 814.04124pt>
+<Images/HTTP/expires_cache.png, id=515, 486.81876pt x 814.04124pt>
 File: Images/HTTP/expires_cache.png Graphic file (type png)
 <use Images/HTTP/expires_cache.png>
 Package pdftex.def Info: Images/HTTP/expires_cache.png  used on input line 318.
@@ -1667,7 +1669,7 @@ Package pdftex.def Info: Images/HTTP/expires_cache.png  used on input line 318.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [19 <./Images/HTTP/caching.png>] [20 <./Images/HTTP/expires_cache.png>]
-<Images/HTTP/last_cache.png, id=557, 518.93875pt x 821.0675pt>
+<Images/HTTP/last_cache.png, id=531, 518.93875pt x 821.0675pt>
 File: Images/HTTP/last_cache.png Graphic file (type png)
 <use Images/HTTP/last_cache.png>
 Package pdftex.def Info: Images/HTTP/last_cache.png  used on input line 332.
@@ -1680,7 +1682,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 336--337
 
  []
 
-<Images/HTTP/if_cache.png, id=569, 553.06625pt x 1243.64626pt>
+<Images/HTTP/if_cache.png, id=542, 553.06625pt x 1243.64626pt>
 File: Images/HTTP/if_cache.png Graphic file (type png)
 <use Images/HTTP/if_cache.png>
 Package pdftex.def Info: Images/HTTP/if_cache.png  used on input line 347.
@@ -1691,7 +1693,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [22
 
 ] [23 <./Images/HTTP/if_cache.png>]
-<Images/HTTP/auth.png, id=583, 473.77pt x 322.20375pt>
+<Images/HTTP/auth.png, id=556, 473.77pt x 322.20375pt>
 File: Images/HTTP/auth.png Graphic file (type png)
 <use Images/HTTP/auth.png>
 Package pdftex.def Info: Images/HTTP/auth.png  used on input line 393.
@@ -1703,17 +1705,17 @@ Package pdftex.def Info: Images/HTTP/auth.png  used on input line 393.
 LaTeX Warning: Reference `base64_table' on page 25 undefined on input line 398.
 
 
-<Images/HTTP/pad_base64.png, id=599, 703.62875pt x 310.15875pt>
+<Images/HTTP/pad_base64.png, id=573, 703.62875pt x 310.15875pt>
 File: Images/HTTP/pad_base64.png Graphic file (type png)
 <use Images/HTTP/pad_base64.png>
 Package pdftex.def Info: Images/HTTP/pad_base64.png  used on input line 402.
 (pdftex.def)             Requested size: 351.8135pt x 155.079pt.
-<Images/HTTP/base64.png, id=600, 701.62125pt x 135.50626pt>
+<Images/HTTP/base64.png, id=574, 701.62125pt x 135.50626pt>
 File: Images/HTTP/base64.png Graphic file (type png)
 <use Images/HTTP/base64.png>
 Package pdftex.def Info: Images/HTTP/base64.png  used on input line 406.
 (pdftex.def)             Requested size: 350.80975pt x 67.75294pt.
-<Images/HTTP/basic.png, id=601, 419.5675pt x 238.8925pt>
+<Images/HTTP/basic.png, id=575, 419.5675pt x 238.8925pt>
 File: Images/HTTP/basic.png Graphic file (type png)
 <use Images/HTTP/basic.png>
 Package pdftex.def Info: Images/HTTP/basic.png  used on input line 441.
@@ -1721,13 +1723,13 @@ Package pdftex.def Info: Images/HTTP/basic.png  used on input line 441.
 [25
 
  <./Images/HTTP/pad_base64.png> <./Images/HTTP/base64.png>]
-<Images/HTTP/challenge_sym.png, id=611, 649.42625pt x 283.0575pt>
+<Images/HTTP/challenge_sym.png, id=585, 649.42625pt x 283.0575pt>
 File: Images/HTTP/challenge_sym.png Graphic file (type png)
 <use Images/HTTP/challenge_sym.png>
 Package pdftex.def Info: Images/HTTP/challenge_sym.png  used on input line 447.
 
 (pdftex.def)             Requested size: 324.71233pt x 141.5284pt.
-<Images/HTTP/challenge_asym.png, id=612, 649.42625pt x 283.0575pt>
+<Images/HTTP/challenge_asym.png, id=586, 649.42625pt x 283.0575pt>
 File: Images/HTTP/challenge_asym.png Graphic file (type png)
 <use Images/HTTP/challenge_asym.png>
 Package pdftex.def Info: Images/HTTP/challenge_asym.png  used on input line 453
@@ -1735,175 +1737,93 @@ Package pdftex.def Info: Images/HTTP/challenge_asym.png  used on input line 453
 (pdftex.def)             Requested size: 324.71233pt x 141.5284pt.
  [26 <./Images/HTTP/basic.png> <./Images/HTTP/challenge_sym.png> <./Images/HTTP
 /challenge_asym.png>]
-<Images/HTTP/Chunked-Body.png, id=624, 604.2575pt x 599.23875pt>
+<Images/HTTP/Chunked-Body.png, id=598, 604.2575pt x 599.23875pt>
 File: Images/HTTP/Chunked-Body.png Graphic file (type png)
 <use Images/HTTP/Chunked-Body.png>
 Package pdftex.def Info: Images/HTTP/Chunked-Body.png  used on input line 487.
 (pdftex.def)             Requested size: 302.128pt x 299.61864pt.
-) (./Chapters/Examples.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [27 <./Images/HTTP/Chunked-Body.png>] [28]
-Chapter 4.
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2015/06/04 1.6 listings language file
-)
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-)
-(../code/2_tcp/include/net_utility.h) (../code/2_tcp/src/wc09.c [29
-
-])
-(../code/2_tcp/src/wc10.c [30]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [31]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [32])
-(../code/2_tcp/src/wc11.c [33]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [34]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [35]
-Overfull \hbox (41.4796pt too wide) in paragraph at lines 208--210
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][][][][][][][][][][][][][][][][] 
- []
-
-) (../code/2_tcp/src/ws.c [36]
-Overfull \hbox (56.776pt too wide) in paragraph at lines 66--67
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][][][] 
+ [27 <./Images/HTTP/Chunked-Body.png>]
+Overfull \hbox (1.22444pt too wide) in paragraph at lines 528--530
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [37]))
-(./Chapters/Shell.tex [38]
-Chapter 5.
-(./Code/vimrc) [39
+ [28]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[40] [41] [42]
-Underfull \hbox (badness 10000) in paragraph at lines 355--356
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--377
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 415--417
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 424--425
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 432--433
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 440--441
-
- []
-
-[43
-
-])
+ [29])
+(./Chapters/References.tex)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 172.
- [44]
+ [30]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 172.
  (./Computer_networks.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 172.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 172.
-Package rerunfilecheck Info: File `Computer_networks.out' has not changed.
-(rerunfilecheck)             Checksum: F85F8EE130701E5A0163F87C048B8D80;3087.
 
+
+Package rerunfilecheck Warning: File `Computer_networks.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `Computer_networks.out':
+(rerunfilecheck)             Before: CC48DFDBC5EEC9A0B409271BF5ED3D51;2810
+(rerunfilecheck)             After:  BFB040B63D6AA22DC2A9E02E5308BD0F;2460.
 
 LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 172.
  ) 
 Here is how much of TeX's memory you used:
- 24975 strings out of 492982
- 450472 string characters out of 6134896
- 560335 words of memory out of 5000000
- 27250 multiletter control sequences out of 15000+600000
- 554613 words of font info for 69 fonts, out of 8000000 for 9000
+ 23994 strings out of 492982
+ 435916 string characters out of 6134896
+ 563425 words of memory out of 5000000
+ 26936 multiletter control sequences out of 15000+600000
+ 554627 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 44i,15n,52p,10406b,2330s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/
-fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-msy8.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx0800.pfb></usr/share
-/texmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/p
-ublic/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1
-440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2074.pfb></usr/share/
-texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/pu
-blic/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc14
-40.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0500.pfb></usr/share/t
-exmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/pub
-lic/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl100
-0.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0800.pfb></usr/share/te
-xmf/fonts/type1/public/cm-super/sfti0800.pfb></usr/share/texmf/fonts/type1/publ
-ic/cm-super/sfti1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1440
-.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfxc1440.pfb>
-Output written on Computer_networks.pdf (48 pages, 1094426 bytes).
+ 44i,15n,49p,10406b,1453s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{section.4.5} has been referenced but does not exi
+st, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.4.4} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.4.3} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.4.2} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{section.4.1} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{chapter.4} has been referenced but does not exist, 
+replaced by a fixed one
+
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/fo
+nts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y8.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx0800.pfb></usr/share/t
+exmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/pub
+lic/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx144
+0.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2074.pfb></usr/share/te
+xmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/publ
+ic/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1440
+.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/tex
+mf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/publi
+c/cm-super/sfsl1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0800.
+pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx0800.pfb></usr/share/texm
+f/fonts/type1/public/cm-super/sfti0800.pfb></usr/share/texmf/fonts/type1/public
+/cm-super/sfti1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1440.p
+fb></usr/share/texmf/fonts/type1/public/cm-super/sfxc1440.pfb>
+Output written on Computer_networks.pdf (34 pages, 991682 bytes).
 PDF statistics:
- 1686 PDF objects out of 1728 (max. 8388607)
- 1546 compressed objects within 16 object streams
- 958 named destinations out of 1000 (max. 500000)
- 523 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 847 PDF objects out of 1000 (max. 8388607)
+ 729 compressed objects within 8 object streams
+ 321 named destinations out of 1000 (max. 500000)
+ 483 words of extra memory for PDF output out of 10000 (max. 10000000)
 

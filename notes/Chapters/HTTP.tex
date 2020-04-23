@@ -496,5 +496,98 @@ It's like the caching mechanism used looking to "Last-Modified" header value thr
 If the store date has different hash code from one received, the client makes a new request for the resource to the server. Otherwise, he uses the resource in the cache.}
 \end{enumerate}
 
+\section{URI}
+In URI, there is the encapsulation of the operation done in the past, to have a resource from a server:
+\begin{itemize}
+\item{Open the application ftp}
+\item{Open the server File System, through a general login}
+\item{Select the resource you want to use and download it}
+\end{itemize}
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
+Chunked-Body   = *chunk
+                 last-chunk
+                 trailer
+                 CRLF
+
+chunk          = chunk-size [ chunk-extension ] CRLF
+                 chunk-data CRLF
+
+chunk-size     = 1*HEX
+last-chunk     = 1*("0") [ chunk-extension ] CRLF
+
+chunk-extension= *( ";" chunk-ext-name [ "=" chunk-ext-val ] )
+
+chunk-ext-name = token
+chunk-ext-val  = token | quoted-string
+chunk-data     = chunk-size(OCTET)
+trailer        = *(entity-header CRLF)
+
+
+URI            = ( absoluteURI | relativeURI ) [ "#" fragment ]
+
+absoluteURI    = scheme ":" *( uchar | reserved )
+relativeURI    = net_path | abs_path | rel_path
+
+net_path       = "//" net_loc [ abs_path ]
+abs_path       = "/" rel_path
+rel_path       = [ path ] [ ";" params ] [ "?" query ]
+
+path           = fsegment *( "/" segment )
+fsegment       = 1*pchar
+segment        = *pchar
+
+params         = param *( ";" param )
+param          = *( pchar | "/" )
+
+scheme         = 1*( ALPHA | DIGIT | "+" | "-" | "." )
+net_loc        = *( pchar | ";" | "?" )
+query          = *( uchar | reserved )
+fragment       = *( uchar | reserved )
+
+pchar          = uchar | ":" | "@" | "&" | "=" | "+"
+uchar          = unreserved | escape
+unreserved     = ALPHA | DIGIT | safe | extra | national
+
+escape         = "%" HEX HEX
+reserved       = ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+"
+extra          = "!" | "*" | "'" | "(" | ")" | ","
+safe           = "$" | "-" | "_" | "."
+unsafe         = CTL | SP | <"> | "#" | "%" | "<" | ">"
+national       = <any OCTET excluding ALPHA, DIGIT,
+\end{lstlisting}
+\end{tabular}
+\end{center}
+Uniform Resource Identifiers are simply formatted strings which identify--via name, location, or any other characteristic--a network resource. 
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
+Relative URI
+//net_loc/a/b/c?query
+ server   path  params
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\subsection{HTTP URL}
+It's a particulare instance of absolute URI, with scheme "http".
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
+http_URL       = "http:" "//" host [ ":" port ] [ abs_path ]
+
+host           = <A legal Internet host domain name
+                  or IP address (in dotted-decimal form),
+                  as defined by Section 2.1 of RFC 1123>
+
+port           = *DIGIT
+\end{lstlisting}
+\end{tabular}
+\end{center}
+There are also other schemes that are not used for web, for example \textbf{ftp} to download resources.
+%CGI
+%parameters
+%function call
 \section{HTML}
 The body of an HTTP request, it's often composed from the HTML related page. Each click, of a link inside the web page, generates a new request to the server with GET method.
