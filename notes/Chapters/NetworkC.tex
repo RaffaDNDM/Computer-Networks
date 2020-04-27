@@ -220,7 +220,8 @@ If \textbf{read=0}, the function met EOF and the local system buffer is now empt
 
 \clearpage
 \subsection{Server}
-A server is a daemon, an application that works in background forever. The end of this process can be made only through the use of the Operating System.
+A server is a daemon, an application that works in background forever. The end of this process can be made only through the use of the Operating System.\\
+The server usually uses parallel programming, to guarantee the management of more than one request simultaneously. Hence each process is composed by an infinite loop, as mentioned before.
 \subsubsection{bind()}
 \begin{center}
 \begin{tabular}{c}

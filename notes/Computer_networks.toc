@@ -16,24 +16,29 @@
 \contentsline {subsubsection}{\numberline {2.3.2.2}listen()}{10}{subsubsection.2.3.2.2}
 \contentsline {subsubsection}{\numberline {2.3.2.3}accept()}{11}{subsubsection.2.3.2.3}
 \contentsline {section}{\numberline {2.4}UDP connection}{12}{section.2.4}
-\contentsline {chapter}{\numberline {3}HTTP protocol}{13}{chapter.3}
-\contentsline {section}{\numberline {3.1}Terminology}{13}{section.3.1}
-\contentsline {section}{\numberline {3.2}Basic rules}{14}{section.3.2}
-\contentsline {section}{\numberline {3.3}Messages}{15}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Different versions of HTTP protocol}{15}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Headers}{15}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Request-Line}{15}{subsection.3.3.3}
-\contentsline {subsection}{\numberline {3.3.4}Request-URI}{16}{subsection.3.3.4}
-\contentsline {subsection}{\numberline {3.3.5}Request Header}{16}{subsection.3.3.5}
-\contentsline {subsection}{\numberline {3.3.6}Status line}{16}{subsection.3.3.6}
-\contentsline {section}{\numberline {3.4}HTTP 1.0}{16}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Other headers of HTTP/1.0 and HTTP/1.1}{17}{subsection.3.4.1}
-\contentsline {subsection}{\numberline {3.4.2}Caching}{18}{subsection.3.4.2}
-\contentsline {subsection}{\numberline {3.4.3}Authorization}{24}{subsection.3.4.3}
-\contentsline {subsubsection}{\numberline {3.4.3.1}base64}{25}{subsubsection.3.4.3.1}
-\contentsline {subsubsection}{\numberline {3.4.3.2}Auth-schemes}{26}{subsubsection.3.4.3.2}
-\contentsline {section}{\numberline {3.5}HTTP 1.1}{26}{section.3.5}
-\contentsline {subsection}{\numberline {3.5.1}Caching based on HASH}{27}{subsection.3.5.1}
-\contentsline {section}{\numberline {3.6}URI}{28}{section.3.6}
-\contentsline {subsection}{\numberline {3.6.1}HTTP URL}{29}{subsection.3.6.1}
-\contentsline {section}{\numberline {3.7}HTML}{30}{section.3.7}
+\contentsline {chapter}{\numberline {3}Gateway}{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}Proxy}{14}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Proxy implementation}{16}{subsection.3.1.1}
+\contentsline {chapter}{\numberline {4}HTTP protocol}{17}{chapter.4}
+\contentsline {section}{\numberline {4.1}Terminology}{17}{section.4.1}
+\contentsline {section}{\numberline {4.2}Basic rules}{18}{section.4.2}
+\contentsline {section}{\numberline {4.3}Messages}{19}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Different versions of HTTP protocol}{19}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Headers}{19}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Request-Line}{19}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Request-URI}{20}{subsection.4.3.4}
+\contentsline {subsection}{\numberline {4.3.5}Request Header}{20}{subsection.4.3.5}
+\contentsline {subsection}{\numberline {4.3.6}Status line}{20}{subsection.4.3.6}
+\contentsline {section}{\numberline {4.4}HTTP 1.0}{20}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Other headers of HTTP/1.0 and HTTP/1.1}{21}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Caching}{22}{subsection.4.4.2}
+\contentsline {subsection}{\numberline {4.4.3}Authorization}{28}{subsection.4.4.3}
+\contentsline {subsubsection}{\numberline {4.4.3.1}base64}{29}{subsubsection.4.4.3.1}
+\contentsline {subsubsection}{\numberline {4.4.3.2}Auth-schemes}{30}{subsubsection.4.4.3.2}
+\contentsline {section}{\numberline {4.5}HTTP 1.1}{30}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}Caching based on HASH}{31}{subsection.4.5.1}
+\contentsline {subsection}{\numberline {4.5.2}URI}{32}{subsection.4.5.2}
+\contentsline {subsection}{\numberline {4.5.3}HTTP URL}{33}{subsection.4.5.3}
+\contentsline {section}{\numberline {4.6}Dynamic pages}{33}{section.4.6}
+\contentsline {chapter}{\numberline {5}HTML}{35}{chapter.5}
+\contentsline {chapter}{References}{35}{chapter.5}

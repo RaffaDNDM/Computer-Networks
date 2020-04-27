@@ -15,24 +15,29 @@
 \BOOKMARK [3][-]{subsubsection.2.3.2.2}{listen\(\)}{subsection.2.3.2}% 15
 \BOOKMARK [3][-]{subsubsection.2.3.2.3}{accept\(\)}{subsection.2.3.2}% 16
 \BOOKMARK [1][-]{section.2.4}{UDP connection}{chapter.2}% 17
-\BOOKMARK [0][-]{chapter.3}{HTTP protocol}{}% 18
-\BOOKMARK [1][-]{section.3.1}{Terminology}{chapter.3}% 19
-\BOOKMARK [1][-]{section.3.2}{Basic rules}{chapter.3}% 20
-\BOOKMARK [1][-]{section.3.3}{Messages}{chapter.3}% 21
-\BOOKMARK [2][-]{subsection.3.3.1}{Different versions of HTTP protocol}{section.3.3}% 22
-\BOOKMARK [2][-]{subsection.3.3.2}{Headers}{section.3.3}% 23
-\BOOKMARK [2][-]{subsection.3.3.3}{Request-Line}{section.3.3}% 24
-\BOOKMARK [2][-]{subsection.3.3.4}{Request-URI}{section.3.3}% 25
-\BOOKMARK [2][-]{subsection.3.3.5}{Request Header}{section.3.3}% 26
-\BOOKMARK [2][-]{subsection.3.3.6}{Status line}{section.3.3}% 27
-\BOOKMARK [1][-]{section.3.4}{HTTP 1.0}{chapter.3}% 28
-\BOOKMARK [2][-]{subsection.3.4.1}{Other headers of HTTP/1.0 and HTTP/1.1}{section.3.4}% 29
-\BOOKMARK [2][-]{subsection.3.4.2}{Caching}{section.3.4}% 30
-\BOOKMARK [2][-]{subsection.3.4.3}{Authorization}{section.3.4}% 31
-\BOOKMARK [3][-]{subsubsection.3.4.3.1}{base64}{subsection.3.4.3}% 32
-\BOOKMARK [3][-]{subsubsection.3.4.3.2}{Auth-schemes}{subsection.3.4.3}% 33
-\BOOKMARK [1][-]{section.3.5}{HTTP 1.1}{chapter.3}% 34
-\BOOKMARK [2][-]{subsection.3.5.1}{Caching based on HASH}{section.3.5}% 35
-\BOOKMARK [1][-]{section.3.6}{URI}{chapter.3}% 36
-\BOOKMARK [2][-]{subsection.3.6.1}{HTTP URL}{section.3.6}% 37
-\BOOKMARK [1][-]{section.3.7}{HTML}{chapter.3}% 38
+\BOOKMARK [0][-]{chapter.3}{Gateway}{}% 18
+\BOOKMARK [1][-]{section.3.1}{Proxy}{chapter.3}% 19
+\BOOKMARK [2][-]{subsection.3.1.1}{Proxy implementation}{section.3.1}% 20
+\BOOKMARK [0][-]{chapter.4}{HTTP protocol}{}% 21
+\BOOKMARK [1][-]{section.4.1}{Terminology}{chapter.4}% 22
+\BOOKMARK [1][-]{section.4.2}{Basic rules}{chapter.4}% 23
+\BOOKMARK [1][-]{section.4.3}{Messages}{chapter.4}% 24
+\BOOKMARK [2][-]{subsection.4.3.1}{Different versions of HTTP protocol}{section.4.3}% 25
+\BOOKMARK [2][-]{subsection.4.3.2}{Headers}{section.4.3}% 26
+\BOOKMARK [2][-]{subsection.4.3.3}{Request-Line}{section.4.3}% 27
+\BOOKMARK [2][-]{subsection.4.3.4}{Request-URI}{section.4.3}% 28
+\BOOKMARK [2][-]{subsection.4.3.5}{Request Header}{section.4.3}% 29
+\BOOKMARK [2][-]{subsection.4.3.6}{Status line}{section.4.3}% 30
+\BOOKMARK [1][-]{section.4.4}{HTTP 1.0}{chapter.4}% 31
+\BOOKMARK [2][-]{subsection.4.4.1}{Other headers of HTTP/1.0 and HTTP/1.1}{section.4.4}% 32
+\BOOKMARK [2][-]{subsection.4.4.2}{Caching}{section.4.4}% 33
+\BOOKMARK [2][-]{subsection.4.4.3}{Authorization}{section.4.4}% 34
+\BOOKMARK [3][-]{subsubsection.4.4.3.1}{base64}{subsection.4.4.3}% 35
+\BOOKMARK [3][-]{subsubsection.4.4.3.2}{Auth-schemes}{subsection.4.4.3}% 36
+\BOOKMARK [1][-]{section.4.5}{HTTP 1.1}{chapter.4}% 37
+\BOOKMARK [2][-]{subsection.4.5.1}{Caching based on HASH}{section.4.5}% 38
+\BOOKMARK [2][-]{subsection.4.5.2}{URI}{section.4.5}% 39
+\BOOKMARK [2][-]{subsection.4.5.3}{HTTP URL}{section.4.5}% 40
+\BOOKMARK [1][-]{section.4.6}{Dynamic pages}{chapter.4}% 41
+\BOOKMARK [0][-]{chapter.5}{HTML}{}% 42
+\BOOKMARK [0][-]{chapter.5}{References}{}% 43

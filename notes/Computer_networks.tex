@@ -19,6 +19,7 @@
 \newcommand{\minitab}[2][l]{\begin{tabular}#1 #2\end{tabular}}
 \usepackage{rotating}
 \usepackage{xfrac}
+\usepackage{cite}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -166,7 +167,12 @@ Raffaele Di Nardo Di Maio
 \mainmatter
 \input{Chapters/Programming.tex}
 \input{Chapters/NetworkC.tex}
+\input{Chapters/Gateway.tex}
 \input{Chapters/HTTP}
+\input{Chapters/HTML}
 %\input{Chapters/Examples.tex}
-\input{Chapters/References.tex}
+
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{plain}
+\bibliography{Chapters/biblio}
 \end{document}

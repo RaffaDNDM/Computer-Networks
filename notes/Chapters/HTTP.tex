@@ -1,5 +1,5 @@
 \chapter{HTTP protocol}
-HTTP protocol was presented for the first time in the RFC 1945 (Request for Comment).\\
+HTTP protocol was presented for the first time in the RFC 1945\cite{RFC1945} (Request for Comment).\\
 The Hypertext Transfer Protocol (HTTP) is an application-level protocol with the lightness and speed necessary for distributed, collaborative, hypermedia information systems. It is a generic, stateless, object-oriented protocol which can be used for many tasks, such as name servers and distributed object management systems, through extension of its request methods (commands).\\
 It's not the first Hypertext protocol in history because there was Hypertalk, made by Apple before. \\
 A feature of HTTP is the typing of data representation, allowing systems to be built independently f the data being transferred. HTTP has been in use by the World-Wide Web global information initiative since 1990.
@@ -496,35 +496,16 @@ It's like the caching mechanism used looking to "Last-Modified" header value thr
 If the store date has different hash code from one received, the client makes a new request for the resource to the server. Otherwise, he uses the resource in the cache.}
 \end{enumerate}
 
-\section{URI}
-In URI, there is the encapsulation of the operation done in the past, to have a resource from a server:
-\begin{itemize}
+\subsection{URI}
+In URI, there is the encapsulation of the operation done in the past, to have a resource from a server. The following phases are related to \textbf{ftp} application:
+\begin{enumerate}
 \item{Open the application ftp}
 \item{Open the server File System, through a general login}
 \item{Select the resource you want to use and download it}
-\end{itemize}
+\end{enumerate}
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
-Chunked-Body   = *chunk
-                 last-chunk
-                 trailer
-                 CRLF
-
-chunk          = chunk-size [ chunk-extension ] CRLF
-                 chunk-data CRLF
-
-chunk-size     = 1*HEX
-last-chunk     = 1*("0") [ chunk-extension ] CRLF
-
-chunk-extension= *( ";" chunk-ext-name [ "=" chunk-ext-val ] )
-
-chunk-ext-name = token
-chunk-ext-val  = token | quoted-string
-chunk-data     = chunk-size(OCTET)
-trailer        = *(entity-header CRLF)
-
-
 URI            = ( absoluteURI | relativeURI ) [ "#" fragment ]
 
 absoluteURI    = scheme ":" *( uchar | reserved )
@@ -559,16 +540,22 @@ national       = <any OCTET excluding ALPHA, DIGIT,
 \end{lstlisting}
 \end{tabular}
 \end{center}
-Uniform Resource Identifiers are simply formatted strings which identify--via name, location, or any other characteristic--a network resource. 
+Hence Uniform Resource Identifiers are simply formatted strings which identify--via name, location, or any other characteristic--a network resource. The following example refers to Relative URI:
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
-Relative URI
-//net_loc/a/b/c?query
- server   path  params
+//net_loc/a/b/c?parameters
 \end{lstlisting}
 \end{tabular}
 \end{center}
+\begin{table}[h]
+\centering \footnotesize
+\begin{tabular}{rl}
+\textbf{//net\_loc}&{Server location}\\
+\textbf{/a/b/c}&{Resource with the path}\\
+\textbf{?parameters}&{Set of parameters}
+\end{tabular}
+\end{table}
 
 \subsection{HTTP URL}
 It's a particulare instance of absolute URI, with scheme "http".
@@ -586,8 +573,42 @@ port           = *DIGIT
 \end{tabular}
 \end{center}
 There are also other schemes that are not used for web, for example \textbf{ftp} to download resources.
-%CGI
-%parameters
-%function call
-\section{HTML}
-The body of an HTTP request, it's often composed from the HTML related page. Each click, of a link inside the web page, generates a new request to the server with GET method.
+
+\section{Dynamic pages}
+Dynamic pages are created on fly by some web applications in the server. The client makes a request to the server function with some parameters (Figure \ref{cgi}).\\
+This approach is based on \textbf{Common Gateway Interface (CGI-bin)}, whose name comes from first network applications that were binary. Then the evolution of web applications brings to two types of program:
+\begin{itemize}
+\item{\textbf{Script Server programs}\\
+based on PHP, ASP.net}
+\item{\textbf{Server application (based on Java)}
+written through J2EE, TomCat and Websphere}
+\end{itemize}
+The result of these programs are written at Presentation layer, like HTML source. To use the CGI-bin paradigm, the client needs to create a request for a file to be executed and not transfered. For convention, the server usually has its executable files in \textbf{"/CGI-bin"} path of the server.
+The following HTTP URL is the request to the server, made by the client, for the function \textbf{f}:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
+http://www.hello.com/CGI-bin/f?a=10&b=20&c=%22ciao%22
+\end{lstlisting}
+\end{tabular}
+\end{center}
+In this example the client is asking to server \textbf{www.hello.com}, using an HTTP URL, the result of the call of function \textbf{f}. The symbol \textbf{?} defines from which point the parameters of the function are specified. In this case there are three parameters: \textbf{a} with value \textbf{10}, \textbf{b} with value \textbf{20} and \textbf{c} with value \textbf{\%22ciao\%22}.\\ There are particular symbols, used in URL:
+\begin{table}[h]
+\centering \footnotesize
+\begin{tabular}{|l|l|}
+\hline
+\textbf{?}&{Beginning of parameters section}\\
+\hline
+\multirow{2}{*}{\textbf{\%}}&{\textit{Escape character}}\\
+&{followed by the hex number that defines the symbol you want to code}\\
+\hline
+\multirow{2}{*}{\textbf{\&}}&{\textit{Separator character}}\\
+&{character between each couple of specified parameters}\\
+\hline
+\end{tabular}
+\end{table}
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.4]{Images/HTTP/cgi}
+\caption{\footnotesize{Example of CGI application.}}\label{cgi}
+\end{figure}
