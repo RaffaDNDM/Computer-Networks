@@ -1,9 +1,9 @@
-*.log
-*.aux
-*.toc
-*.bbl
-*.blg
-*.out
-*.synctex.gz
-*.o
+notes/Chapters/*.log
+notes/*.aux
+notes/*.toc
+notes/*.bbl
+notes/*.blg
+notes/*.out
+notes/*.synctex.gz
+code/1_endianness/*.o
 code/2_http/bin/*
