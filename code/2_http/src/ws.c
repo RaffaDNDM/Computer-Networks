@@ -7,14 +7,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <signal.h>
 
 #define QUEUE_MAX 10
 #define ROOT_PATH "../dat"
-#define CGI_BIN "../dat/cgi-bin/"
+#define CGI_BIN "/cgi-bin/"
+#define CGI_RESULT "../dat/result.txt"
 
 void request_line(char* request, char** method, char** path, char** version);
 void manage_request(char* method, char* path, char* version, char* response, FILE** f);
 void send_body(int sd2, FILE* f);
+void endDaemon(int sig);
 
 struct sockaddr_in local, remote;
 
@@ -28,6 +32,7 @@ int main()
     int yes = 1;
     FILE *f;
 
+    signal(SIGINT, endDaemon);
     sd = socket(AF_INET, SOCK_STREAM, 0);
 
     if(sd == -1)
@@ -72,9 +77,9 @@ int main()
 
     while(1)
     {
+        f=NULL;
         remote.sin_family = AF_INET;
-        len = sizeof(struct sockaddr_in);
-        
+        len = sizeof(struct sockaddr_in);  
         sd2 = accept(sd, (struct sockaddr*) &remote, &len);
 
         if(sd2==-1)
@@ -83,22 +88,25 @@ int main()
             return 1;
         }
 
-        t = read(sd2, request, 1999);
-        request[t]=0;
+        if(!fork())
+        {
+            t = read(sd2, request, 1999);
+            request[t]=0;
         
-        request_line(request, &method, &path, &version);
-        printf("Method:  %s\n", method);
-        printf("Path:  %s\n", path);
-        printf("Version:  %s\n", version);
+            request_line(request, &method, &path, &version);
+            printf("Method:  %s\n", method);
+            printf("Path:  %s\n", path);
+            printf("Version:  %s\n", version);
 
-        f=NULL;
-        manage_request(method, path, version, response, &f);
-        printf("%s", response);
-        write(sd2, response, strlen(response));
-        send_body(sd2, f);
+            manage_request(method, path, version, response, &f);
+            printf("%s", response);
+            write(sd2, response, strlen(response));
+            send_body(sd2, f);
 
-        shutdown(sd2, SHUT_RDWR);
-        close(sd2);
+            shutdown(sd2, SHUT_RDWR);
+            close(sd2);
+            exit(0);
+        }
     }
 }
 
@@ -135,18 +143,44 @@ void manage_request(char* method, char* path, char* version, char* response, FIL
         sprintf(response,"HTTP/1.1 200 Not Found\r\nConnection: close\r\n\r\n");
     */
     else
-    {
+    { 
         char file_name[40];
         sprintf(file_name,"%s%s",ROOT_PATH,path);
-        printf("%s\n", file_name);
-                    
-        if(!strncmp(file_name, CGB_BIN,))        
-        //"r+" because in linux directory are file so we need to specify
-        //also writing rights to be sure that fopen return NULL with also directory
-        if(((*f)=fopen(file_name,"r+"))==NULL) //it's GET request for a file
-            sprintf(response,"HTTP/1.1 404 Not Found\r\nConnection:Close\r\n\r\n");
+
+        if(!strncmp(path, CGI_BIN, 9))
+        {
+            char command[40]; 
+            sprintf(command, "cd %s & %s > %s", ROOT_PATH, path+9, CGI_RESULT);
+            int status = system(command);
+            
+            if(!status)        
+            {
+                //Useless if because the file is always created, because of pipe implementation
+                if(((*f)=fopen(CGI_RESULT, "r+"))==NULL)
+                {
+                    perror("Error with CGI");
+                }
+                else
+                    sprintf(response,"HTTP/1.1 200 OK\r\nConnection:Close\r\n\r\n");
+            }
+            else if(status==-1)
+            {       
+                //Used to manage if a program doesn't exists
+                sprintf(response,"HTTP/1.1 400 Not Found\r\nConnection:Close\r\n\r\n");
+                *f=NULL;
+            }
+        }
         else
-            sprintf(response,"HTTP/1.1 200 OK\r\nConnection:Close\r\n\r\n");
+        {
+            printf("%s\n", file_name);
+         
+            //"r+" because in linux directory are file so we need to specify
+            //also writing rights to be sure that fopen return NULL with also directory
+            if(((*f)=fopen(file_name,"r+"))==NULL) //it's GET request for a file
+                sprintf(response,"HTTP/1.1 404 Not Found\r\nConnection:Close\r\n\r\n");
+            else
+                sprintf(response,"HTTP/1.1 200 OK\r\nConnection:Close\r\n\r\n");
+        }
     }
 }
 
@@ -161,3 +195,18 @@ void send_body(int sd2, FILE* f)
         fclose(f);
     }
 }
+
+void endDaemon(int sig) 
+{
+    FILE* f; 
+    
+    if((f=fopen(CGI_RESULT,"r+"))!=NULL)
+    {
+        char command[40];
+        sprintf(command, "rm %s", CGI_RESULT);
+        system(command);
+    }
+
+    exit(0);
+}
+

@@ -29,3 +29,14 @@ for the insertion of the string, on a line during the execution
 If you specify a file in the input, the result of the execution of
 the program will be in "output.txt"
 *******************************************************************
+
+Content of the folder
+
+.
+├── base64.c
+├── base64.h
+├── file.txt
+├── makefile
+└── README.txt
+
+

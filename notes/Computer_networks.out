@@ -1,43 +1,60 @@
-\BOOKMARK [0][-]{chapter.1}{C programming}{}% 1
-\BOOKMARK [1][-]{section.1.1}{Organization of data}{chapter.1}% 2
-\BOOKMARK [1][-]{section.1.2}{Struct organization of memory}{chapter.1}% 3
-\BOOKMARK [1][-]{section.1.3}{Structure of C program}{chapter.1}% 4
-\BOOKMARK [0][-]{chapter.2}{Network services in C}{}% 5
-\BOOKMARK [1][-]{section.2.1}{Application layer}{chapter.2}% 6
-\BOOKMARK [1][-]{section.2.2}{socket\(\)}{chapter.2}% 7
-\BOOKMARK [1][-]{section.2.3}{TCP connection}{chapter.2}% 8
-\BOOKMARK [2][-]{subsection.2.3.1}{Client}{section.2.3}% 9
-\BOOKMARK [3][-]{subsubsection.2.3.1.1}{connect\(\)}{subsection.2.3.1}% 10
-\BOOKMARK [3][-]{subsubsection.2.3.1.2}{write\(\)}{subsection.2.3.1}% 11
-\BOOKMARK [3][-]{subsubsection.2.3.1.3}{read\(\)}{subsection.2.3.1}% 12
-\BOOKMARK [2][-]{subsection.2.3.2}{Server}{section.2.3}% 13
-\BOOKMARK [3][-]{subsubsection.2.3.2.1}{bind\(\)}{subsection.2.3.2}% 14
-\BOOKMARK [3][-]{subsubsection.2.3.2.2}{listen\(\)}{subsection.2.3.2}% 15
-\BOOKMARK [3][-]{subsubsection.2.3.2.3}{accept\(\)}{subsection.2.3.2}% 16
-\BOOKMARK [1][-]{section.2.4}{UDP connection}{chapter.2}% 17
-\BOOKMARK [0][-]{chapter.3}{Gateway}{}% 18
-\BOOKMARK [1][-]{section.3.1}{Proxy}{chapter.3}% 19
-\BOOKMARK [2][-]{subsection.3.1.1}{Proxy implementation}{section.3.1}% 20
-\BOOKMARK [0][-]{chapter.4}{HTTP protocol}{}% 21
-\BOOKMARK [1][-]{section.4.1}{Terminology}{chapter.4}% 22
-\BOOKMARK [1][-]{section.4.2}{Basic rules}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.3}{Messages}{chapter.4}% 24
-\BOOKMARK [2][-]{subsection.4.3.1}{Different versions of HTTP protocol}{section.4.3}% 25
-\BOOKMARK [2][-]{subsection.4.3.2}{Headers}{section.4.3}% 26
-\BOOKMARK [2][-]{subsection.4.3.3}{Request-Line}{section.4.3}% 27
-\BOOKMARK [2][-]{subsection.4.3.4}{Request-URI}{section.4.3}% 28
-\BOOKMARK [2][-]{subsection.4.3.5}{Request Header}{section.4.3}% 29
-\BOOKMARK [2][-]{subsection.4.3.6}{Status line}{section.4.3}% 30
-\BOOKMARK [1][-]{section.4.4}{HTTP 1.0}{chapter.4}% 31
-\BOOKMARK [2][-]{subsection.4.4.1}{Other headers of HTTP/1.0 and HTTP/1.1}{section.4.4}% 32
-\BOOKMARK [2][-]{subsection.4.4.2}{Caching}{section.4.4}% 33
-\BOOKMARK [2][-]{subsection.4.4.3}{Authorization}{section.4.4}% 34
-\BOOKMARK [3][-]{subsubsection.4.4.3.1}{base64}{subsection.4.4.3}% 35
-\BOOKMARK [3][-]{subsubsection.4.4.3.2}{Auth-schemes}{subsection.4.4.3}% 36
-\BOOKMARK [1][-]{section.4.5}{HTTP 1.1}{chapter.4}% 37
-\BOOKMARK [2][-]{subsection.4.5.1}{Caching based on HASH}{section.4.5}% 38
-\BOOKMARK [2][-]{subsection.4.5.2}{URI}{section.4.5}% 39
-\BOOKMARK [2][-]{subsection.4.5.3}{HTTP URL}{section.4.5}% 40
-\BOOKMARK [1][-]{section.4.6}{Dynamic pages}{chapter.4}% 41
-\BOOKMARK [0][-]{chapter.5}{HTML}{}% 42
-\BOOKMARK [0][-]{chapter.5}{References}{}% 43
+\BOOKMARK [0][-]{chapter.1}{OSI model}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Application Layer}{}% 2
+\BOOKMARK [0][-]{chapter.3}{C programming}{}% 3
+\BOOKMARK [1][-]{section.3.1}{Organization of data}{chapter.3}% 4
+\BOOKMARK [1][-]{section.3.2}{Struct organization of memory}{chapter.3}% 5
+\BOOKMARK [1][-]{section.3.3}{Structure of C program}{chapter.3}% 6
+\BOOKMARK [0][-]{chapter.4}{Network services in C}{}% 7
+\BOOKMARK [1][-]{section.4.1}{Application layer}{chapter.4}% 8
+\BOOKMARK [1][-]{section.4.2}{socket\(\)}{chapter.4}% 9
+\BOOKMARK [1][-]{section.4.3}{TCP connection}{chapter.4}% 10
+\BOOKMARK [2][-]{subsection.4.3.1}{Client}{section.4.3}% 11
+\BOOKMARK [3][-]{subsubsection.4.3.1.1}{connect\(\)}{subsection.4.3.1}% 12
+\BOOKMARK [3][-]{subsubsection.4.3.1.2}{write\(\)}{subsection.4.3.1}% 13
+\BOOKMARK [3][-]{subsubsection.4.3.1.3}{read\(\)}{subsection.4.3.1}% 14
+\BOOKMARK [2][-]{subsection.4.3.2}{Server}{section.4.3}% 15
+\BOOKMARK [3][-]{subsubsection.4.3.2.1}{bind\(\)}{subsection.4.3.2}% 16
+\BOOKMARK [3][-]{subsubsection.4.3.2.2}{listen\(\)}{subsection.4.3.2}% 17
+\BOOKMARK [3][-]{subsubsection.4.3.2.3}{accept\(\)}{subsection.4.3.2}% 18
+\BOOKMARK [1][-]{section.4.4}{UDP connection}{chapter.4}% 19
+\BOOKMARK [0][-]{chapter.5}{Gateway}{}% 20
+\BOOKMARK [1][-]{section.5.1}{Proxy}{chapter.5}% 21
+\BOOKMARK [0][-]{chapter.6}{HTTP protocol}{}% 22
+\BOOKMARK [1][-]{section.6.1}{Terminology}{chapter.6}% 23
+\BOOKMARK [1][-]{section.6.2}{Basic rules}{chapter.6}% 24
+\BOOKMARK [1][-]{section.6.3}{Messages}{chapter.6}% 25
+\BOOKMARK [2][-]{subsection.6.3.1}{Different versions of HTTP protocol}{section.6.3}% 26
+\BOOKMARK [2][-]{subsection.6.3.2}{Headers}{section.6.3}% 27
+\BOOKMARK [2][-]{subsection.6.3.3}{Request-Line}{section.6.3}% 28
+\BOOKMARK [2][-]{subsection.6.3.4}{Request-URI}{section.6.3}% 29
+\BOOKMARK [2][-]{subsection.6.3.5}{Request Header}{section.6.3}% 30
+\BOOKMARK [2][-]{subsection.6.3.6}{Status line}{section.6.3}% 31
+\BOOKMARK [1][-]{section.6.4}{HTTP 1.0}{chapter.6}% 32
+\BOOKMARK [2][-]{subsection.6.4.1}{Other headers of HTTP/1.0 and HTTP/1.1}{section.6.4}% 33
+\BOOKMARK [2][-]{subsection.6.4.2}{Caching}{section.6.4}% 34
+\BOOKMARK [2][-]{subsection.6.4.3}{Authorization}{section.6.4}% 35
+\BOOKMARK [3][-]{subsubsection.6.4.3.1}{base64}{subsection.6.4.3}% 36
+\BOOKMARK [3][-]{subsubsection.6.4.3.2}{Auth-schemes}{subsection.6.4.3}% 37
+\BOOKMARK [1][-]{section.6.5}{HTTP 1.1}{chapter.6}% 38
+\BOOKMARK [2][-]{subsection.6.5.1}{Caching based on HASH}{section.6.5}% 39
+\BOOKMARK [2][-]{subsection.6.5.2}{URI}{section.6.5}% 40
+\BOOKMARK [2][-]{subsection.6.5.3}{HTTP URL}{section.6.5}% 41
+\BOOKMARK [1][-]{section.6.6}{Dynamic pages}{chapter.6}% 42
+\BOOKMARK [1][-]{section.6.7}{Proxy}{chapter.6}% 43
+\BOOKMARK [0][-]{chapter.7}{Resolution of names}{}% 44
+\BOOKMARK [1][-]{section.7.1}{Network Information Center \(NIC\)}{chapter.7}% 45
+\BOOKMARK [1][-]{section.7.2}{Domain Name System \(DNS\)}{chapter.7}% 46
+\BOOKMARK [2][-]{subsection.7.2.1}{Goals}{section.7.2}% 47
+\BOOKMARK [2][-]{subsection.7.2.2}{Hierarchy structure}{section.7.2}% 48
+\BOOKMARK [0][-]{chapter.8}{HTML}{}% 49
+\BOOKMARK [0][-]{chapter.9}{CSS}{}% 50
+\BOOKMARK [0][-]{chapter.10}{Javascript}{}% 51
+\BOOKMARK [0][-]{chapter.11}{PHP}{}% 52
+\BOOKMARK [0][-]{chapter.12}{Shell}{}% 53
+\BOOKMARK [1][-]{section.12.1}{Commands}{chapter.12}% 54
+\BOOKMARK [1][-]{section.12.2}{UNIX Files}{chapter.12}% 55
+\BOOKMARK [0][-]{chapter.13}{vim}{}% 56
+\BOOKMARK [1][-]{section.13.1}{.vimrc}{chapter.13}% 57
+\BOOKMARK [1][-]{section.13.2}{Shortcuts}{chapter.13}% 58
+\BOOKMARK [1][-]{section.13.3}{Multiple files}{chapter.13}% 59
+\BOOKMARK [0][-]{table.caption.81}{References}{}% 60

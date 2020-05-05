@@ -1,0 +1,441 @@
+\chapter{vim}
+\section{.vimrc}
+In this section there will be shown the file \textbf{.vimrc} that can be put in the user home (\textbf{$\sim$} or \textbf{\$HOME} or \textbf{--}) or in the path \textbf{/usr/share/vim/} to change main settings of the program.
+
+\lstinputlisting[caption={\footnotesize{.vimrc}}, style=code, firstnumber=1, firstline=1, lastline=8, label=vimrc, language=c]{Code/vimrc}
+
+\section{Shortcuts}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Main}}\\
+\hline
+\multirow{2}{*}{\textbf{Esc}} & {Gets out of the current mode into the “command mode”.}\\
+& {All keys are bound of commands}\\
+\hline
+\multirow{2}{*}{\textbf{i}} & {“Insert mode”}\\
+& {for inserting text.}\\ 
+\hline
+\multirow{2}{*}{\textbf{:}} & {“Last-line mode”}\\ 
+& {where Vim expects you to enter a command.}\\ 
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Navigation keys}}\\
+\hline
+\textbf{h}	& {moves the cursor one character to the left.}\\
+\hline
+{\textbf{j} or\textbf{ Ctrl + J}}	& {moves the cursor down one line.}\\
+\hline
+{\textbf{k} or \textbf{Ctrl + P}}	& {moves the cursor up one line.}\\
+\hline
+\textbf{l}  & {moves the cursor one character to the right.}\\
+\hline
+\textbf{0}	& {moves the cursor to the beginning of the line.}\\
+\hline
+\textbf{\$}	& {moves the cursor to the end of the line.}\\
+\hline
+\textbf{\^}	& {moves the cursor to the first non-empty character of the line}\\
+\hline
+\textbf{w}	& {move forward one word (next alphanumeric word)}\\
+\hline
+\textbf{W}	& {move forward one word (delimited by a white space)}\\
+\hline
+\textbf{5w}	& {move forward five words}\\
+\hline
+\textbf{b}	& {move backward one word (previous alphanumeric word)}\\
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\hline
+\textbf{B}	& {move backward one word (delimited by a white space)}\\
+\hline
+\textbf{5b}	& {move backward five words}\\
+\hline
+\textbf{G}	& {move to the end of the file}\\
+\hline
+\textbf{gg}	& {move to the beginning of the file.}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Navigate around the document}}\\
+\hline
+\textbf{h}	& {moves the cursor one character to the left.}\\
+\hline
+\textbf{(}	& {jumps to the previous sentence}\\
+\hline
+\textbf{)}	& {jumps to the next sentence}\\
+\hline
+\textbf{$\lbrace$ }	& {jumps to the previous paragraph}\\
+\hline
+\textbf{$\rbrace$}	& {jumps to the next paragraph}\\
+\hline
+\textbf{[[}	& {jumps to the previous section}\\
+\hline
+\textbf{]]}	& {jumps to the next section}\\
+\hline
+\textbf{[]}	& {jump to the end of the previous section}\\
+\hline
+\textbf{][}	& {jump to the end of the next section}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Insert text}}\\
+\hline
+\textbf{h}	& {moves the cursor one character to the left.}\\
+\hline
+\textbf{a}	& {Insert text after the cursor}\\
+\hline
+\textbf{A}	& {Insert text at the end of the line}\\
+\hline
+\textbf{i}	& {Insert text before the cursor}\\
+\hline
+\textbf{o}	& {Begin a new line below the cursor}\\
+\hline
+\textbf{O}	& {Begin a new line above the cursor}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Special inserts}}\\
+\hline
+{\textbf{:r} [filename]} & {Insert the file [filename] below the cursor}\\
+\hline
+{\textbf{:r !}[command]} & {Execute [command] and insert its output below the cursor}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Delete text}}\\
+\hline
+\textbf{x}	& {delete character at cursor}\\
+\hline
+\textbf{dw}	& {delete a word.}\\
+\hline
+\textbf{d0}	& {delete to the beginning of a line.}\\
+\hline
+\textbf{d\$} & {delete to the end of a line.}\\
+\hline
+\textbf{d)}	& {delete to the end of sentence.}\\
+\hline
+\textbf{dgg} & {delete to the beginning of the file.}\\
+\hline
+\textbf{dG}	& {delete to the end of the file.}\\
+\hline
+\textbf{dd}	& {delete line}\\
+\hline
+\textbf{3dd} & {delete three lines}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Simple replace text}}\\
+\hline
+{\textbf{r}$\rbrace$text$\rbrace$}	& {Replace the character under the cursor with $\lbrace$text$\rbrace$}\\
+\hline
+\textbf{R}	& {Replace characters instead of inserting them}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Copy/Paste text}}\\
+\hline
+\textbf{yy}	& {copy current line into storage buffer}\\
+\hline
+\textbf{["x]yy}& {	Copy the current lines into register x}\\
+\hline
+\textbf{p}	& {paste storage buffer after current line}\\
+\hline
+\textbf{P}	& {paste storage buffer before current line}\\
+\hline
+\textbf{["x]p}	& {paste from register x after current line}\\
+\hline
+\textbf{["x]P}	& {paste from register x before current line}\\
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Undo/Redo operation}}\\
+\hline
+\textbf{u}	& {undo the last operation.}\\
+\hline
+\textbf{Ctrl+r}	& {redo the last undo.}\\
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Search and Replace keys}}\\
+\hline
+\textbf{/search\_text}	& {search document for search\_text going forward}\\
+\hline
+\textbf{?search\_text}	& {search document for search\_text going backward}\\
+\hline
+\textbf{n} & {move to the next instance of the result from the search}\\
+\hline
+\textbf{N} & {move to the previous instance of the result}\\
+\hline
+\multirow{2}{*}{\textbf{:\%s/original/replacement}} & {Search for the first occurrence of the string “original”}\\
+& {and replace it with “replacement”}\\
+\hline
+\multirow{2}{*}{\textbf{:\%s/original/replacement/g}} & {Search and replace all occurrences of the string}\\
+& {“original” with “replacement”}\\
+\hline
+\multirow{2}{*}{\textbf{:\%s/original/replacement/gc}} & {Search for all occurrences of the string “original” but}\\
+& {ask for confirmation before replacing them with “replacement”}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Bookmarks}}\\
+\hline
+\textbf{m $\lbrace$a-z A-Z$\rbrace$} &	{Set bookmark $\lbrace$a-z A-Z$\rbrace$ at the current cursor position}\\
+\hline
+\textbf{:marks} & {List all bookmarks}\\
+\hline
+\textbf{'$\lbrace$a-z A-Z$\rbrace$}	 & {Jumps to the bookmark $\lbrace$a-z A-Z$\rbrace$}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Select text}}\\
+\hline
+\textbf{v} & {Enter visual mode per character}\\
+\hline
+\textbf{V} & {Enter visual mode per line}\\
+\hline
+\textbf{Esc} & {Exit visual mode}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Modify selected text}}\\
+\hline
+\textbf{~}	& {Switch case}\\
+\hline
+\textbf{d}	& {delete a word.}\\
+\hline
+\textbf{c}	& {change}\\
+\hline
+\textbf{y}	& {yank}\\
+\hline
+\textbf{>}	& {shift right}\\
+\hline
+\textbf{<}	& {shift left}\\
+\hline
+\textbf{!}	& {filter through an external command}\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\multicolumn{2}{c}{\textbf{Save and quit}}\\
+\hline
+\textbf{:q}	& {Quits Vim but fails when file has been changed}\\
+\hline
+\textbf{:w}	& {Save the file}\\
+\hline
+{\textbf{:w} new\_name} & {Save the file with the new\_name filename}\\
+\hline
+\textbf{:wq} & {Save the file and quit Vim.}\\
+\hline
+\textbf{:q!} & {Quit Vim without saving the changes to the file.}\\
+\hline
+\textbf{ZZ}	& {Write file, if modified, and quit Vim}\\
+\hline
+\textbf{ZQ}	& {Same as :q! Quits Vim without writing changes}\\
+\hline
+\end{tabular}
+\end{table}
+
+\clearpage
+\section{Multiple files}
+\begin{itemize}
+\item{\textbf{Opening many files in the buffer}\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=80pt, basicstyle=\footnotesize\sffamily,]
+vim file1 file2
+\end{lstlisting}
+\end{tabular}
+\end{center}
+Launching this command, you can see only one file at the same time. To jump between the files you can use the following vim commands:
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\hline
+\textbf{n(ext)} & {jumps to the next file}\\
+\hline
+\textbf{prev} & {jumps to the previous file}\\
+\hline
+\end{tabular}
+\end{table}
+}
+\item{\textbf{Opening many files in several tabs}\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=130pt, basicstyle=\footnotesize\sffamily,]
+vim -p file1 file2 file3
+\end{lstlisting}
+\end{tabular}
+\end{center}
+All files will be opened in tabs instead of hidden buffers. The tab bar is displayed on the top of the editor.\\
+You can also open a new tab with file \textit{filename} when you're already in Vim in the normal mode with command:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=80pt, basicstyle=\footnotesize\sffamily,]
+:tabe filename
+\end{lstlisting}
+\end{tabular}
+\end{center}
+To manage tabs you can use the following vim commands:
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\hline
+{\textbf{:tabn[ext]}   (command-line command)} & \multirow{2}{*}{Jumps to the next tab}\\
+\cline{1-1}
+{\textbf{gt}          (normal mode command)}&\\
+\hline
+\textbf{:tabp[revious] (command-line command)} & \multirow{2}{*}{Jumps to the previous tab}\\
+\cline{1-1}
+{\textbf{gT}          (normal mode command)}&\\
+\hline
+\multirow{2}{*}{\textbf{ngT}          (normal mode command)} & {Jumps to a specific tab index}\\
+&{n= index of tab (starting by 1)}\\
+\hline
+{\textbf{:tabc[lose]} (command-line command)} & {Closes the current tab}\\
+\hline
+\end{tabular}
+\end{table}
+}
+\item{\textbf{Open multiple files splitting the window}\\
+\textit{splits the window horizontally}\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=100pt, basicstyle=\footnotesize\sffamily,]
+vim -o file1 file2
+\end{lstlisting}
+\end{tabular}
+\end{center}
+You can also split the window horizontally, opening the file \textit{filename}, when you're already in Vim in the normal mode with command:\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=100pt, basicstyle=\footnotesize\sffamily,]
+:sp[lit] filename
+\end{lstlisting}
+\end{tabular}
+\end{center}
+\textit{splits the window vertically}\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=100pt, basicstyle=\footnotesize\sffamily,]
+vim -O file1 file2
+\end{lstlisting}
+\end{tabular}
+\end{center}
+You can also split the window vertically, opening the file \textit{filename}, when you're already in Vim in the normal mode with command:\\
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=100pt, basicstyle=\footnotesize\sffamily,]
+:vs[plit] filename
+\end{lstlisting}
+\end{tabular}
+\end{center}
+Management of the windows can be done, staying in the normal mode of Vim, using the following commands:\\
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Ctrl+w  <cursor-keys>} & \multirow{3}{*}{Jumps between windows}\\
+\cline{1-1}
+\textbf{Ctrl+w  [hjkl]} & {}\\
+\cline{1-1}
+\textbf{Ctrl+w  Ctrl+[hjkl]} & {}\\
+\hline
+\textbf{Ctrl+w  w} & \multirow{2}{*}{Jumps to the next window}\\
+\cline{1-1}
+\textbf{Ctrl+w  Ctrl+w} & {}\\
+\hline
+\textbf{Ctrl+w  W} & {Jumps to the previous window}\\
+\hline
+\textbf{Ctrl+w  p} & \multirow{2}{*}{Jumps to the last accessed window}\\
+\cline{1-1}
+\textbf{Ctrl+w  Ctrl+p} & {}\\
+\hline
+\textbf{Ctrl+w  c} & \multirow{2}{*}{Closes the current window}\\
+\cline{1-1}
+\textbf{:clo[se]} & {}\\
+\hline
+\textbf{Ctrl+w  o} & \multirow{2}{*}{Makes the current window the only one and closes all other ones}\\
+\cline{1-1}
+\textbf{:on[ly]} & {}\\
+\hline
+\end{tabular}
+\end{table}
+}
+\end{itemize}

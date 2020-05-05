@@ -455,7 +455,7 @@ If the stream of bytes is not composed by a multiple of 24 bits, base64 pad whol
 }
 \end{itemize}
 \section{HTTP 1.1}
-It has by default the option keep alive actived by default with respect to HTTP 1.0. It has the mandatory header "Host" followed by the hostname of the remote system, to which the request or the response is sent. The headers used in HTTP/1.0 are used also in HTTP/1.1, but in this new protocol there are new headers not used in the previous one. The body is organized in chunks, so we need the connection kept alive to manage future new chunks.\\
+The architecture of the model is in RFC2616\cite{RFC2616}. It has by default the option keep alive actived by default with respect to HTTP 1.0. It has the mandatory header "Host" followed by the hostname of the remote system, to which the request or the response is sent. The headers used in HTTP/1.0 are used also in HTTP/1.1, but in this new protocol there are new headers not used in the previous one. The body is organized in chunks, so we need the connection kept alive to manage future new chunks.\\
 This is useful with dynamic pages, in which the server doesn't know the length of the stream in advance and can update the content of the stream during the extablished connection, sending a fixed amount of bytes to client. We can check if the connection is chunked oriented, looking for the header "Transfer-Encoding" with value "chunked".\\
 Each connection is composed by many chunks and each of them is composed by chunk length followed by chunk body, except for the last one that has length 0 (see Figure \ref{chunked_body}). The following grammar represents how the body is organized:
 \begin{center}
@@ -497,7 +497,7 @@ If the store date has different hash code from one received, the client makes a 
 \end{enumerate}
 
 \subsection{URI}
-In URI, there is the encapsulation of the operation done in the past, to have a resource from a server. The following phases are related to \textbf{ftp} application:
+In URI, there is the encapsulation of the operation done in the past, to have a resource from a server\cite{RFC3986}. The following phases are related to \textbf{ftp} application:
 \begin{enumerate}
 \item{Open the application ftp}
 \item{Open the server File System, through a general login}
@@ -540,7 +540,7 @@ national       = <any OCTET excluding ALPHA, DIGIT,
 \end{lstlisting}
 \end{tabular}
 \end{center}
-Hence Uniform Resource Identifiers are simply formatted strings which identify--via name, location, or any other characteristic--a network resource. The following example refers to Relative URI:
+Hence Uniform Resource Identifiers are simply formatted strings which identify via name, location, or any other characteristic a network resource. The following example refers to Relative URI:
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
@@ -572,7 +572,7 @@ port           = *DIGIT
 \end{lstlisting}
 \end{tabular}
 \end{center}
-There are also other schemes that are not used for web, for example \textbf{ftp} to download resources.
+There are also other schemes that are not used for web\cite{URIschemes}, for example \textbf{ftp} to download resources.
 
 \section{Dynamic pages}
 Dynamic pages are created on fly by some web applications in the server. The client makes a request to the server function with some parameters (Figure \ref{cgi}).\\
@@ -607,8 +607,76 @@ In this example the client is asking to server \textbf{www.hello.com}, using an 
 \hline
 \end{tabular}
 \end{table}
-\begin{figure}[ht]
+\begin{figure}[h]
 \centering
 \includegraphics[scale=0.4]{Images/HTTP/cgi}
 \caption{\footnotesize{Example of CGI application.}}\label{cgi}
 \end{figure}
+\vspace{10cm}
+\section{Proxy}
+The implementation of the proxy depends on the type of protocol used:
+\begin{itemize}
+\item{\textbf{HTTP}\\
+If the client wants to use a proxy, doing a \textit{GET} request, he needs to modify its behaviour with the following steps:
+\begin{enumerate}
+\item{\textbf{Connection of Client to Web Proxy instead of the server}\\
+The client needs to change address and port w.r.t. proxy ones, instead of server ones.}
+\item{\textbf{Specify the absolute URI of the requested resource}\\
+Otherwise proxy doesn't to which one the message needs to be sent. Hence he couldn't forward as it is the request.\\
+The proxy can analyze the content of data they need to transmit, obtaining the absolute URI and doing another request.
+}
+\end{enumerate}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{Images/HTTP/direct_access}
+\caption{\footnotesize{Direct access.}}\label{direct_access}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{Images/HTTP/proxy_access}
+\caption{\footnotesize{Proxy access.}}\label{proxy_access}
+\end{figure}
+}
+\item{\textbf{HTTPS}\\
+Data are sent over encrypted channel (TLS) and the proxy can be implemented in two different ways:
+\begin{itemize}
+\item{\textbf{Split the encrypted channel}\\
+The proxy has an encrypted channel with the client and one with the server. This approach can be applied only when we have a trusted proxy (E.g. WAF) because the proxy needs to access data to forward them.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/HTTP/split_HTTPS}
+\caption{\footnotesize{Proxy as WAF in HTTPS.}}\label{split_HTTPS}
+\end{figure}
+}
+\vspace{1cm}
+\item{\textbf{Change default behaviour of proxy}\\
+The proxy in this case can only forward encrypted data without knowing anything about them. In this case, proxy works as a Layer-4 gateway and creates a tunnel between client and server\cite{RFC2817}.\\
+In HTTPS the client uses the method \textit{CONNECT} to tell to the proxy to work as a tunnel. The proxy, receiving the \textit{CONNECT} request, extablish the secure connection between client and server (through the preliminary exchange of keys with Diffie-Hellmann).\\
+The proxy sends HTTP response to the client if the \textbf{connect()} call succeded. Then the client can send encrypted data as \textit{raw data} and the proxy will not access them but only forward them. With \textit{CONNECT} request, the client asks to open a connection to web host.\\
+The proxy needs to create two processes (Figure \ref{proxy_HTTPS}):\\
+\begin{itemize}
+\item{\textbf{Parent process}\\
+It reads response from the server and forwards it to the client. When the connection will be closed from the server, it will kill its child process.}
+\item{\textbf{Child process}\\
+It reads request from the client and forwards it to the server.}
+\end{itemize} 
+In a browser, when you type an address or server name, the connection starts by default using HTTP. Then the remote server replies with a HTTP response with redirection to an HTTPS URL.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/HTTP/proxy_4}
+\caption{\footnotesize{Tunneling using proxy in HTTPS.}}\label{proxy_4}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{Images/HTTP/connect_HTTPS}
+\caption{\footnotesize{CONNECT request in HTTPS.}}\label{connect_HTTPS}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.55]{Images/HTTP/proxy_HTTPS}
+\caption{\footnotesize{How proxy works with HTTPS.}}\label{proxy_HTTPS}
+\end{figure}
+}
+\end{itemize}
+}
+\end{itemize} 

@@ -122,7 +122,7 @@ identifies a virtual interface in the network. It can be considered the entry-po
 identifies to which application data are going to be sent. The port so must be open for that stream of data and it can be considered a service identifier. There are well known port numbers, related to standard services and others that are free to be used by the programmer for its applications (see Section \ref{files} to find which file contains well known port numbers). \textit{It's unique in the system.}
 }
 \end{itemize}
-As mentioned in Section \ref{littleBig}, network data are organized as Big Endian, so in this case we need to insert the IP address according to this protocol. It can be done as in previous example or with the follow function:
+As mentioned in Section \ref{littleBig}, network data are organized as Big Endian, so in this case we need to insert the IP address according to this protocol. It can be done creating an array of char and analysing it as an int pointer* or with the follow function, that converts a string (E.g. "127.0.0.1") in the corresponding address:
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
@@ -134,6 +134,27 @@ int inet_aton(const char *cp, struct in_addr *inp);
 \end{lstlisting}
 \end{tabular}
 \end{center}
+If you want to obtain the IP address from the name of the host, using DNS, you need to use the following function that returns in h\_addr\_list the set of ip addresses related to that hostname, as arrays of characters:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=300pt, basicstyle=\footnotesize\sffamily,]
+#include <netdb.h>
+extern int h_errno;
+
+struct hostent *gethostbyname(const char *name);
+
+struct hostent
+{
+    char  *h_name;            /* official name of host */
+    char **h_aliases;         /* alias list */
+    int    h_addrtype;        /* host address type */
+    int    h_length;          /* length of address */
+    char **h_addr_list;       /* list of addresses */
+}
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
 The port number is written according to Big Endian architecture, through the next function:
 \begin{center}
 \begin{tabular}{c}
@@ -179,14 +200,13 @@ The write buffer is usually a string but we don't consider the null value (\text
 
 \subsubsection{read()}
 The client uses this blocking function to wait and obtain response from the remote server. Not all the request are completed immediat from the server, for the meaning of stream type of protocol. Infact in this protocol, there is a flow for which the complete sequence is defined only at the closure of it\ref{socket}.\\
-\textbf{read()} is consuming bytes fom the stream asking to level 4 a portion of them, because it cannot access directly to bytes in Kernel buffer. Lower layer controls the stream of information that comes from the same layer of remove system.\\
-\vspace{3cm}
+\textbf{read()} is consuming bytes fom the stream asking to level 4 a portion of them, because it cannot access directly to bytes in Kernel buffer. Lower layer controls the stream of information that comes from the same layer of remove system.
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
 #include <unistd.h>
 
-       ssize_t read(int fd, void *buf, size_t count);
+ssize_t read(int fd, void *buf, size_t count);
 \end{lstlisting}
 \end{tabular}
 \end{center}
@@ -218,7 +238,7 @@ If \textbf{read=0}, the function met EOF and the local system buffer is now empt
 \includegraphics[scale=0.5]{Images/NetworkC/read_write2}\caption{\footnotesize{Response from the server.}}\label{rw2}
 \end{figure}
 
-\clearpage
+\vspace{4cm}
 \subsection{Server}
 A server is a daemon, an application that works in background forever. The end of this process can be made only through the use of the Operating System.\\
 The server usually uses parallel programming, to guarantee the management of more than one request simultaneously. Hence each process is composed by an infinite loop, as mentioned before.
@@ -261,7 +281,6 @@ int listen(int sockfd, int backlog);
 \end{lstlisting}
 \end{tabular}
 \end{center}
-
 \begin{table}[h]
 \centering
 \begin{tabular}{rcl}
@@ -278,6 +297,7 @@ int listen(int sockfd, int backlog);
 & {is usually Poisson, organized as in Figure \ref{poisson}.}
 \end{tabular}
 \end{table}
+\vspace{4cm}
 The listening socket, identified by \textbf{sockfd}, is unique for each association of a port number and a IP address of the server (Figure \ref{listen}).
 
 \begin{figure}[h]
@@ -287,7 +307,7 @@ The listening socket, identified by \textbf{sockfd}, is unique for each associat
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.3]{Images/NetworkC/listen}\caption{\footnotesize{listen() function.}}\label{listen}
+\includegraphics[scale=0.4]{Images/NetworkC/listen}\caption{\footnotesize{listen() function.}}\label{listen}
 \end{figure}
 
 \subsubsection{accept()}
@@ -326,11 +346,12 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 
 To manage many clients requests, we use the \textbf{accept()} function to extablish the connection one-to-one with each client, creating a uniquely socket with each client.\\
 This function extracts the  first   connection request on the queue of pending connections for the listening socket \textbf{sockfd} creates a new connected socket, and returns a new file descriptor  referring  to that socket. The accept() is blocking for the server when the queue of pending requests is empty (Figure \ref{pending_accept}).\\
-At lower layers of ISO/OSI, the port number and the IP Address are the same identifiers, to which listening socket is associated (Figure \ref{accept}).
+At lower layers of ISO/OSI, the port number and the IP Address are the same identifiers, to which listening socket is associated (Figure \ref{accept}).\\
+The server needs to do a fork after doing the accept(), inside the infinite loop. Hence a new process is created to manage a new request and there is a pair client-worker for each client. So the server can be seen as it would be composed by many servers (Figure \ref{connect_accept}). 
  
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.3]{Images/NetworkC/accept}\caption{\footnotesize{accept() function.}}\label{accept}
+\includegraphics[scale=0.4]{Images/NetworkC/accept}\caption{\footnotesize{accept() function.}}\label{accept}
 \end{figure}
 
 \begin{figure}[h]
@@ -338,5 +359,11 @@ At lower layers of ISO/OSI, the port number and the IP Address are the same iden
 \includegraphics[scale=0.4]{Images/NetworkC/pending_accept}\caption{\footnotesize{Management of pending requests with accept().}}\label{pending_accept}
 \end{figure}
 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/NetworkC/connect_accept}
+\caption{\footnotesize{connect() and accept() functions in parallel server implementation.}}\label{connect_accept}
+\end{figure}
+\clearpage
 \section{UDP connection}
 UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer. It's used in Twitter application and in video streaming.

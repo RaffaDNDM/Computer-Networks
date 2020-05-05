@@ -1,7 +1,21 @@
 \begin{thebibliography}{1}
 
 \bibitem{RFC1945}
-T.~Berners-Lee.
-\newblock {\em HTTP/1.0 RFC1945}, May 1996 (accessed April 27, 2020).
+\url{https://tools.ietf.org/html/rfc1945}.
+
+\bibitem{RFC2616}
+\url{https://tools.ietf.org/html/rfc2616}.
+
+\bibitem{RFC3986}
+\url{https://tools.ietf.org/html/rfc3986}.
+
+\bibitem{URIschemes}
+\url{https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml}.
+
+\bibitem{RFC2817}
+\url{https://tools.ietf.org/html/rfc2817}.
+
+\bibitem{RFC1034}
+\url{https://tools.ietf.org/html/rfc1034}.
 
 \end{thebibliography}

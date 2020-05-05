@@ -71,13 +71,3 @@ This action is repeated for each client's request. Hence the client thinks that 
 \end{figure}
 }
 \end{itemize}
-
-\subsection{Proxy implementation}
-If the client wants to use a proxy, he needs to modify its behaviour, following the following steps:
-\begin{enumerate}
-\item{\textbf{Connection of Client to Web Proxy instead of the server}\\
-The client needs to change address and port w.r.t. proxy ones, instead of server ones.}
-\item{\textbf{Specify the absolute path of the requested resource}\\
-Otherwise proxy doesn't to which one the message needs to be sent. Hence he couldn't forward as it is the request.
-}
-\end{enumerate}

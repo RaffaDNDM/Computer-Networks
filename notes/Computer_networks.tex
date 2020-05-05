@@ -79,7 +79,7 @@
 %------------------------------ active url
 \usepackage{url}
 \renewcommand{\UrlFont}{\color{black}\small\ttfamily}
-\usepackage[colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black]{hyperref} % active ref
+\usepackage{hyperref} % active ref
 %------------------------------ macros
 \newcommand{\sectionname}{Section} % define Section ref
 \newcommand{\subsectionname}{Sub-section} % define Sub-section ref
@@ -165,14 +165,23 @@ Raffaele Di Nardo Di Maio
 \endgroup
 
 \mainmatter
-\input{Chapters/Programming.tex}
-\input{Chapters/NetworkC.tex}
-\input{Chapters/Gateway.tex}
-\input{Chapters/HTTP}
-\input{Chapters/HTML}
-%\input{Chapters/Examples.tex}
 
+\input{Chapters/OSI}
+\input{Chapters/Application_Layer}
+\input{Chapters/Programming}
+\input{Chapters/NetworkC}
+\input{Chapters/Gateway}
+\input{Chapters/HTTP}
+\input{Chapters/Resolution}
+\input{Chapters/HTML}
+\input{Chapters/CSS}
+\input{Chapters/Javascript}
+\input{Chapters/PHP}
+\input{Chapters/Shell}
+\input{Chapters/Vim}
+%Bibliography part (called References)
 \addcontentsline{toc}{chapter}{References}
 \bibliographystyle{plain}
+\renewcommand{\bibname}{References}
 \bibliography{Chapters/biblio}
 \end{document}

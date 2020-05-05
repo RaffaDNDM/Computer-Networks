@@ -27,7 +27,7 @@ int main()
 	 // WRONG : server.sin_addr.s_addr = (uint32_t )*ipaddr
 	 t = connect(s, (struct sockaddr *)&server, sizeof(server));
 	 if ( t == -1) { perror("Connect Failed"); return 1; }
-	 sprintf(request,"GET /  HTTP/1.0\r\nConnection: keep-alive\r\n\r\n"); // request[0]='G', request[1]='E',... request[7]=0 (or '\0') 
+	 sprintf(request,"GET /  HTTP/1.0\r\n\r\n"); // request[0]='G', request[1]='E',... request[7]=0 (or '\0') 
 	 for(size=0;request[size];size++);
 	 t=write(s,request,size);	
 	 if ( t == -1 ) { perror("Write failed"); return 1; }
