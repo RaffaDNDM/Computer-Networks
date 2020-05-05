@@ -44,7 +44,7 @@
 \contentsline {section}{\numberline {6.7}Proxy}{40}{section.6.7}
 \contentsline {chapter}{\numberline {7}Resolution of names}{43}{chapter.7}
 \contentsline {section}{\numberline {7.1}Network Information Center (NIC)}{43}{section.7.1}
-\contentsline {section}{\numberline {7.2}Domain Name System (DNS)}{44}{section.7.2}
+\contentsline {section}{\numberline {7.2}Domain Name System (DNS)}{43}{section.7.2}
 \contentsline {subsection}{\numberline {7.2.1}Goals}{44}{subsection.7.2.1}
 \contentsline {subsection}{\numberline {7.2.2}Hierarchy structure}{44}{subsection.7.2.2}
 \contentsline {chapter}{\numberline {8}HTML}{47}{chapter.8}

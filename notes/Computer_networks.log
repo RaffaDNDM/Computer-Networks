@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.3.25)  5 MAY 2020 18:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.3.25)  5 MAY 2020 18:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1896,16 +1896,16 @@ Chapter 7.
 File: Images/Resolution/NIC.png Graphic file (type png)
 <use Images/Resolution/NIC.png>
 Package pdftex.def Info: Images/Resolution/NIC.png  used on input line 10.
-(pdftex.def)             Requested size: 483.05618pt x 292.59402pt.
+(pdftex.def)             Requested size: 351.30627pt x 212.79123pt.
 [43
 
  <./Images/Resolution/NIC.png>]
-<Images/Resolution/DNS_hierarchy.png, id=912, 655.44875pt x 642.4pt>
+<Images/Resolution/DNS_hierarchy.png, id=913, 655.44875pt x 642.4pt>
 File: Images/Resolution/DNS_hierarchy.png Graphic file (type png)
 <use Images/Resolution/DNS_hierarchy.png>
 Package pdftex.def Info: Images/Resolution/DNS_hierarchy.png  used on input lin
 e 42.
-(pdftex.def)             Requested size: 360.49792pt x 353.32109pt.
+(pdftex.def)             Requested size: 262.17485pt x 256.95544pt.
 ) (./Chapters/HTML.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -2063,7 +2063,7 @@ ic/cm-super/sfti0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000
 .pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1440.pfb></usr/share/tex
 mf/fonts/type1/public/cm-super/sftt0900.pfb></usr/share/texmf/fonts/type1/publi
 c/cm-super/sfxc1440.pfb>
-Output written on Computer_networks.pdf (67 pages, 1599711 bytes).
+Output written on Computer_networks.pdf (67 pages, 1599709 bytes).
 PDF statistics:
  1236 PDF objects out of 1440 (max. 8388607)
  1044 compressed objects within 11 object streams

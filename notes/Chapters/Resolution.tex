@@ -7,7 +7,7 @@ This system collects all the files, like an hub, and shared resolution names to 
 This architecture is unfeasable and not scalable with nowadays number of IP addresses, because the files become very huge and transfering becomes very slow.\\
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.55]{Images/Resolution/NIC}
+\includegraphics[scale=0.4]{Images/Resolution/NIC}
 \caption{\footnotesize{How NIC worked.}}\label{NIC}
 \end{figure}
 
@@ -39,6 +39,6 @@ To obtain the IP address of this name server, we need to ask, to name server of 
 For each request to NS, we obtain also the expiration time information because a caching approach is adopted also in DNS but at level 4. There are 13 root name servers that are returned when asking resolution to root. In reality root name servers are more than 13 but the communication used in DNS is made through UDP and this type of connection supports only 13 simultaneously transfering.
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.55]{Images/Resolution/DNS_hierarchy}
+\includegraphics[scale=0.4]{Images/Resolution/DNS_hierarchy}
 \caption{\footnotesize{DNS structure.}}\label{DNS_hierarchy}
 \end{figure}

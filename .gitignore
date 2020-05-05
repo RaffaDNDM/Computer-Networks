@@ -1,0 +1,9 @@
+*.log
+*.aux
+*.toc
+*.bbl
+*.blg
+*.out
+*.synctex.gz
+*.o
+code/2_http/bin/*
