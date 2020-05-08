@@ -27,7 +27,7 @@ int i,s,t,s2,s3,n,len,c,yes=1,j,k,pid;
 s = socket(AF_INET, SOCK_STREAM, 0);
 if ( s == -1) { perror("Socket Failed\n"); return 1;}
 local.sin_family=AF_INET;
-local.sin_port = htons(8083);
+local.sin_port = htons(8099);
 local.sin_addr.s_addr = 0;
 setsockopt(s,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int));
 t = bind(s,(struct sockaddr *) &local, sizeof(struct sockaddr_in));
@@ -39,7 +39,7 @@ while( 1 ){
 	remote.sin_family=AF_INET;
 	len = sizeof(struct sockaddr_in);
 	s2 = accept(s,(struct sockaddr *) &remote, &len);
-	if(fork()) continue;
+	if(fork()) continue; //<< MULTI PROCESS HADLING
 	if (s2 == -1) {perror("Accept Failed\n"); return 1;}
 	// <---- ADDED HEADER PARSER
 	j=0;k=0;
@@ -108,7 +108,7 @@ while( 1 ){
 		 	server.sin_addr.s_addr=*(unsigned int*) he->h_addr;			
 			t=connect(s3,(struct sockaddr *)&server,sizeof(struct sockaddr_in));		
 			if(t==-1){perror("Connect to server failed"); exit(0);}
-			// ===============> BACO MANCA RISPOSTA ALLA CONNECT
+			// ===============> Bug : missing the HTTP response for successful connection 
 			sprintf(response,"HTTP/1.1 200 Established\r\n\r\n");
 			write(s2,response,strlen(response));
 			// <==============
@@ -121,9 +121,8 @@ while( 1 ){
 				}
 			else { //Parent	
 				while(t=read(s3,response2,2000)){	
-					write(s2,response2,t);	
+					write(s2,response2,t);
 					printf("CL <<<(%d)%s \n",t,host);
-					printf("CL >>>(%d)%s \n",t,host); //SOLO PER CHECK
 					}	
 				kill(pid,15);
 				shutdown(s3,SHUT_RDWR);

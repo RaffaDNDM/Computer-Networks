@@ -1,4 +1,5 @@
 notes/Chapters/*.log
+code/1_endianness/endianness.o
 notes/*.aux
 notes/*.toc
 notes/*.bbl

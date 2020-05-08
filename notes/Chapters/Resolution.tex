@@ -36,9 +36,37 @@ Both personal computers and large timeshared hosts should be able to use the sys
 Hierarchy permits to manage a lot of nambers of domain names and IP addresses, reducing the time spent to resolve them. Given for example the host name \textbf{www.dei.unipd.it}, we have a \textbf{Name Server (NS)} for each of the domain name inside it (Figure \ref{DNS_hierarchy}).\\
 The tree hierarchy has a name server for each one of its internal nodes.The name server gives us only the name of the name server of the lower level to which we need to go.\\
 To obtain the IP address of this name server, we need to ask, to name server of upper layer, a \textbf{glue record}. The glue record is an additional information that needs us to understand how to rich that name server. Hence the glue record is the IP address of NS of the lower level in hierarchy. \\
-For each request to NS, we obtain also the expiration time information because a caching approach is adopted also in DNS but at level 4. There are 13 root name servers that are returned when asking resolution to root. In reality root name servers are more than 13 but the communication used in DNS is made through UDP and this type of connection supports only 13 simultaneously transfering.
+For each request to NS, we obtain also the expiration time information because a caching approach is adopted also in DNS but at level 4. There are 13 root name servers that are returned when asking resolution to root. \\
+In reality root name servers are more than 13 but the communication used in DNS is made through UDP and this type of connection supports only 13 simultaneously transfering. The local DNS server for the device, managed by my network provides, contains the 13 root servers and permit us to reach at least one DNS root server.\\
+The 13 DNS root servers are added locally at its installation of local DNS and updated assuming that at least one root server of them can be reachable. There is no address record for the root.\\
+In general structure of the queries to name servers, we ask only the domain resolution for a domain that composes name \ref{default_DNS}.\\
+To use a caching system efficiently, we need to make a recursive query, sending the request of resolution of the whole name with all its domains (Figure \ref{extreme_recursive}. All the name servers, where the query passes throuh, store information about resolution. This system is never applied as it is.\\
+In reality we use an hybrid version, that uses partially recursion \ref{partial_recursion}. Local DNS  usually has huge cache with main important names and also first and second level have caches. So local DNS rarely asks resolution to TOP Level Domain or Root.\\
+Recursive query option in dig command is made by a flag default set yes and that is used in UDP packet as an additional information. The Root Name Server decides if it wants to accept recursive query or if not, how mmany domains can resolve.\\
+I can group some domains, defining a zone, so I can use only a name server for the zone that solves more domains together \ref{DNS_zone}. So the name servers are authorithative over zones and not only single domains. It depends if domains are grouped or not.\\
+The creation of the zones are used to manage easily the responsability and the organization over the zones, partitioning them. Another reason for this partition in zones is because of some domains has few names and so it's better to group the domain with others.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4]{Images/Resolution/DNS_hierarchy}
 \caption{\footnotesize{DNS structure.}}\label{DNS_hierarchy}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/Resolution/default_DNS}
+\caption{\footnotesize{Default DNS behaviour without caching.}}\label{default_DNS}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/Resolution/default_DNS}
+\caption{\footnotesize{Completely recursive DNS structure.}}\label{recursive_DNS}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/Resolution/hybrid_DNS}
+\caption{\footnotesize{Hybrid DNS structure.}}\label{hybrid_DNS}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{Images/Resolution/DNS_zone}
+\caption{\footnotesize{Example of partitioning into zones.}}\label{DNS_zone}
 \end{figure}

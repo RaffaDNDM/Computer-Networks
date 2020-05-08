@@ -9,7 +9,7 @@ SRC   = .
 BIN   = ../bin
 UTILITY = net_utility
 
-all : wc09 wc10 wc11 ws 
+all : wc09 wc10 wc11 ws wp
 
 .PHONY: clean, %_r
 

@@ -47,15 +47,15 @@
 \contentsline {section}{\numberline {7.2}Domain Name System (DNS)}{43}{section.7.2}
 \contentsline {subsection}{\numberline {7.2.1}Goals}{44}{subsection.7.2.1}
 \contentsline {subsection}{\numberline {7.2.2}Hierarchy structure}{44}{subsection.7.2.2}
-\contentsline {chapter}{\numberline {8}HTML}{47}{chapter.8}
-\contentsline {chapter}{\numberline {9}CSS}{49}{chapter.9}
-\contentsline {chapter}{\numberline {10}Javascript}{51}{chapter.10}
-\contentsline {chapter}{\numberline {11}PHP}{53}{chapter.11}
-\contentsline {chapter}{\numberline {12}Shell}{55}{chapter.12}
-\contentsline {section}{\numberline {12.1}Commands}{55}{section.12.1}
-\contentsline {section}{\numberline {12.2}UNIX Files}{55}{section.12.2}
-\contentsline {chapter}{\numberline {13}vim}{57}{chapter.13}
-\contentsline {section}{\numberline {13.1}.vimrc}{57}{section.13.1}
-\contentsline {section}{\numberline {13.2}Shortcuts}{57}{section.13.2}
-\contentsline {section}{\numberline {13.3}Multiple files}{60}{section.13.3}
-\contentsline {chapter}{References}{61}{table.caption.81}
+\contentsline {chapter}{\numberline {8}HTML}{49}{chapter.8}
+\contentsline {chapter}{\numberline {9}CSS}{51}{chapter.9}
+\contentsline {chapter}{\numberline {10}Javascript}{53}{chapter.10}
+\contentsline {chapter}{\numberline {11}PHP}{55}{chapter.11}
+\contentsline {chapter}{\numberline {12}Shell}{57}{chapter.12}
+\contentsline {section}{\numberline {12.1}Commands}{57}{section.12.1}
+\contentsline {section}{\numberline {12.2}UNIX Files}{57}{section.12.2}
+\contentsline {chapter}{\numberline {13}vim}{59}{chapter.13}
+\contentsline {section}{\numberline {13.1}.vimrc}{59}{section.13.1}
+\contentsline {section}{\numberline {13.2}Shortcuts}{59}{section.13.2}
+\contentsline {section}{\numberline {13.3}Multiple files}{62}{section.13.3}
+\contentsline {chapter}{References}{63}{table.caption.85}
