@@ -15,8 +15,8 @@
 
 void request_line(char* request, char** method, char** path, char** version);
 void manage_request(char* method, char* path, char* version, int sd2);
-void parser_path(char* path, char* scheme, char* host, char* resource);
-void parser_connect(char* path, char* host, char* port);
+void parser_path(char* path, char** scheme, char** host, char** resource);
+void parser_connect(char* path, char** host, char** port);
 int connect2server(char* host, char* port);
 
 struct sockaddr_in local, remote;
@@ -42,8 +42,8 @@ int main(int argc, char** argv)
 
     local.sin_family=AF_INET;
     //local.sin_port = htons(80); no possible because port 80 already used
-    local.sin_port = htons(atoi(argv[1])); //we need to use a port not in use 
-    local.sin_addr.s_addr = 0; //By default, it 
+    local.sin_port = htons(atoi(argv[1])); //we need to use a port not in use
+    local.sin_addr.s_addr = 0; //By default, it
 
     setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
     t = bind(sd, (struct sockaddr*) &local, sizeof(struct sockaddr_in));
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
     while(1)
     {
         remote.sin_family = AF_INET;
-        len = sizeof(struct sockaddr_in);  
+        len = sizeof(struct sockaddr_in);
         sd2 = accept(sd, (struct sockaddr*) &remote, &len);
 
         if(sd2==-1)
@@ -89,10 +89,10 @@ int main(int argc, char** argv)
         {
             t = read(sd2, request, 1999);
             request[t]=0;
-        
-            request_line(request, &method, &path, &version); 
+
+            request_line(request, &method, &path, &version);
             manage_request(method, path, version, sd2);
-            
+
             shutdown(sd2, SHUT_RDWR);
             close(sd2);
             exit(0);
@@ -106,8 +106,8 @@ void request_line(char* request, char** method, char** path, char** version)
     int i;
     *method = request;
 
-    for(i=1; request[i]!=' '; i++);
-    
+    for(i=0; request[i]!=' '; i++);
+
     request[i]=0;
     *path=request+i+1;
 
@@ -130,39 +130,41 @@ void manage_request(char* method, char* path, char* version, int sd2)
     printf("Path:  %s\n", path);
     printf("Version:  %s\n", version);
 
-    if(!strcmp(method,"GET")) //it's not GET request
-    { 
-        printf("\n\nGET");
+    if(!strncmp(method,"GET", 3)) //it's GET request
+    {
+        printf("\n\nGET\n\n");
         char *scheme, *host, *resource;
-        parser_path(path, scheme, host, resource);
+        parser_path(path, &scheme, &host, &resource);
 
         int sd3 = connect2server(host, "80");
-        
+
         sprintf(request2, "GET /%s HTTP/1.1\r\nHost:%s\r\nConnection:close\r\n\r\n", resource, host);
-        
+
         write(sd3, request2, strlen(request2));
         printf("request2: %s\n\n", request2);
-        
+
         while((t=read(sd3, response2, 2000)))
-                write(sd2, response2,t);
+        {
+            write(sd2, response2,t);
+        }
 
         shutdown(sd3, SHUT_RDWR);
         close(sd3);
     }
-    else if(!strcmp(method,"CONNECT"))
+    else if(!strncmp(method,"CONNECT", 7))
     {
         printf("\n\nCONNECT\n\n");
-        char* host, *port;
-        parser_connect(path, host, port);
+        char *host, *port;
+        parser_connect(path, &host, &port);
 
         int sd3 = connect2server(host, port);
         sprintf(response, "HTTP/1.1 200 Established\r\n\r\n");
-        
-        write(sd2, response, strlen(request2));
+
+        write(sd2, response, strlen(response));
 
        int pid;
 
-        if(!(pid=fork()))//child to forward data from client to server
+        if((pid=fork())==0)//child to forward data from client to server
         {
             while((t=read(sd2, request2, 2000)))
             {
@@ -172,7 +174,7 @@ void manage_request(char* method, char* path, char* version, int sd2)
 
             exit(0);
         }
-        else //parent to forward data from server to client
+        else if(pid>0)//parent to forward data from server to client
         {
             while((t=read(sd3, response2, 2000)))
             {
@@ -184,38 +186,43 @@ void manage_request(char* method, char* path, char* version, int sd2)
             shutdown(sd3, SHUT_RDWR);
             close(sd3);
         }
+        else
+            printf("\n\nNO PROCESS\n\n");
     }
 }
 
-void parser_path(char* path, char* scheme, char* host, char* resource)
+void parser_path(char* path, char** scheme, char** host, char** resource)
 {
     //http://www.ciao.it/path
-    scheme = path;
+    *scheme = path;
 
     int i=0;
     for(; path[i]!=':'; i++);
     path[i]=0;
 
-    host = path+i+3;
+    *host = path+i+3;
     for(i=i+3; path[i]!='/'; i++);
     path[i]=0;
-    
-    resource = path +i+1;
 
-    printf("Scheme=%s  Host=%s  Resource=%s\n", scheme, host, resource);
+    *resource = path +i+1;
+
+    printf("Scheme=%s  Host=%s  Resource=%s\n", *scheme, *host, *resource);
 }
 
-void parser_connect(char* path, char* host, char* port)
+void parser_connect(char* path, char** host, char** port)
 {
     int i=0;
-    
-    //www.ciao.it:8080
-    host = path;
-    
+
+    // www.ciao.it:8080
+    printf("\n\narrivato\n\n");
+    *host = path;
+
     for(; path[i]!=':'; i++);
     path[i]=0;
 
-    port = path+i+1;
+    *port = path+i+1;
+
+    printf("Host=%s  Port=%s\n", *host, *port);
 }
 
 int connect2server(char* host, char* port)
@@ -234,7 +241,7 @@ int connect2server(char* host, char* port)
 
         //Print the server address
     printf("Server address = %u.%u.%u.%u\n", (unsigned char) he->h_addr[0], (unsigned char) he->h_addr[1], (unsigned char) he->h_addr[2], (unsigned char) he->h_addr[3]);
-        
+
     sd3 = socket(AF_INET, SOCK_STREAM, 0);
 
     if(sd3 == -1)

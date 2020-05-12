@@ -2,6 +2,7 @@ SHELL:=/bin/bash
 
 CC = gcc
 
+GDB_FLAG = -g
 CFLAGS   = -Wall -pedantic -I
 
 INCLUDE  = ../include
@@ -18,7 +19,7 @@ all : wc09 wc10 wc11 ws wp
 
 
 % : $(SRC)/%.c $(BIN)/$(UTILITY).o
-	$(CC) -o $(BIN)/$@ $^ $(CFLAGS)$(INCLUDE)
+	$(CC) $(GDB_FLAG) -o $(BIN)/$@ $^ $(CFLAGS)$(INCLUDE)
 
 $(BIN)/$(UTILITY).o : $(SRC)/$(UTILITY).c
 	$(CC) -c -o $@ $< $(CFLAGS)$(INCLUDE)
