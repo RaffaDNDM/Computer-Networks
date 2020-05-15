@@ -50,6 +50,34 @@ The creation of the zones are used to manage easily the responsability and the o
 \includegraphics[scale=0.4]{Images/Resolution/DNS_hierarchy}
 \caption{\footnotesize{DNS structure.}}\label{DNS_hierarchy}
 \end{figure}
+\begin{lstlisting}[linewidth=470pt, style=code, caption=Example of default DNS queries using dig.]
+//Ask for root name server to the default name server 
+dig -t NS -n .
+ 
+//Ask for address of root name server "a.root-servers.net", previously chosen
+dig -t A -n a.root-servers.net 
+
+//Ask for "it" name server to the "a.root-servers.net" address, previously chosen
+dig @198.41.0.4 -t NS it 
+
+//Ask for address of "nameserver.cnr.it" name server,  previously chosen for "it" domain
+dig @198.41.0.4 -t A  nameserver.cnr.it
+
+//Ask for "unipd.it" name server to the "nameserver.cnr.it" address 
+dig @194.119.192.34 -t NS -n unipd.it
+
+//Ask for "unipd.it" name server to the "nameserver.cnr.it" address 
+dig @194.119.192.34 -t A unipd.it
+
+//Ask for "dei.unipd.it" name server to one ("mail.dei.unipd.it" 
+dig @147.162.1.100 -t NS  dei.unipd.it
+
+//Ask for address of "mail.dei.unipd.it" name server, previously chosen 
+dig @147.162.1.2 -t A  mail.dei.unipd.it 
+
+//Ask for address of "www.dei.unipd.it" to "mail.dei.unpd.it" name server, previousy chosen 
+dig @147.162.2.100 -t A  www.dei.unipd.it
+\end{lstlisting} 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4]{Images/Resolution/default_DNS}

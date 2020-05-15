@@ -1,61 +1,72 @@
 \babel@toc {english}{}
-\contentsline {chapter}{\numberline {1}OSI model}{1}{chapter.1}
-\contentsline {chapter}{\numberline {2}Application Layer}{3}{chapter.2}
-\contentsline {chapter}{\numberline {3}C programming}{5}{chapter.3}
-\contentsline {section}{\numberline {3.1}Organization of data}{5}{section.3.1}
-\contentsline {section}{\numberline {3.2}Struct organization of memory}{6}{section.3.2}
-\contentsline {section}{\numberline {3.3}Structure of C program}{7}{section.3.3}
-\contentsline {chapter}{\numberline {4}Network services in C}{9}{chapter.4}
-\contentsline {section}{\numberline {4.1}Application layer}{9}{section.4.1}
-\contentsline {section}{\numberline {4.2}socket()}{9}{section.4.2}
-\contentsline {section}{\numberline {4.3}TCP connection}{10}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Client}{10}{subsection.4.3.1}
-\contentsline {subsubsection}{\numberline {4.3.1.1}connect()}{10}{subsubsection.4.3.1.1}
-\contentsline {subsubsection}{\numberline {4.3.1.2}write()}{12}{subsubsection.4.3.1.2}
-\contentsline {subsubsection}{\numberline {4.3.1.3}read()}{13}{subsubsection.4.3.1.3}
-\contentsline {subsection}{\numberline {4.3.2}Server}{14}{subsection.4.3.2}
-\contentsline {subsubsection}{\numberline {4.3.2.1}bind()}{14}{subsubsection.4.3.2.1}
-\contentsline {subsubsection}{\numberline {4.3.2.2}listen()}{14}{subsubsection.4.3.2.2}
-\contentsline {subsubsection}{\numberline {4.3.2.3}accept()}{15}{subsubsection.4.3.2.3}
-\contentsline {section}{\numberline {4.4}UDP connection}{18}{section.4.4}
-\contentsline {chapter}{\numberline {5}Gateway}{19}{chapter.5}
-\contentsline {section}{\numberline {5.1}Proxy}{20}{section.5.1}
-\contentsline {chapter}{\numberline {6}HTTP protocol}{23}{chapter.6}
-\contentsline {section}{\numberline {6.1}Terminology}{23}{section.6.1}
-\contentsline {section}{\numberline {6.2}Basic rules}{24}{section.6.2}
-\contentsline {section}{\numberline {6.3}Messages}{25}{section.6.3}
-\contentsline {subsection}{\numberline {6.3.1}Different versions of HTTP protocol}{25}{subsection.6.3.1}
-\contentsline {subsection}{\numberline {6.3.2}Headers}{25}{subsection.6.3.2}
-\contentsline {subsection}{\numberline {6.3.3}Request-Line}{25}{subsection.6.3.3}
-\contentsline {subsection}{\numberline {6.3.4}Request-URI}{26}{subsection.6.3.4}
-\contentsline {subsection}{\numberline {6.3.5}Request Header}{26}{subsection.6.3.5}
-\contentsline {subsection}{\numberline {6.3.6}Status line}{26}{subsection.6.3.6}
-\contentsline {section}{\numberline {6.4}HTTP 1.0}{26}{section.6.4}
-\contentsline {subsection}{\numberline {6.4.1}Other headers of HTTP/1.0 and HTTP/1.1}{27}{subsection.6.4.1}
-\contentsline {subsection}{\numberline {6.4.2}Caching}{28}{subsection.6.4.2}
-\contentsline {subsection}{\numberline {6.4.3}Authorization}{34}{subsection.6.4.3}
-\contentsline {subsubsection}{\numberline {6.4.3.1}base64}{35}{subsubsection.6.4.3.1}
-\contentsline {subsubsection}{\numberline {6.4.3.2}Auth-schemes}{36}{subsubsection.6.4.3.2}
-\contentsline {section}{\numberline {6.5}HTTP 1.1}{36}{section.6.5}
-\contentsline {subsection}{\numberline {6.5.1}Caching based on HASH}{37}{subsection.6.5.1}
-\contentsline {subsection}{\numberline {6.5.2}URI}{38}{subsection.6.5.2}
-\contentsline {subsection}{\numberline {6.5.3}HTTP URL}{39}{subsection.6.5.3}
-\contentsline {section}{\numberline {6.6}Dynamic pages}{39}{section.6.6}
-\contentsline {section}{\numberline {6.7}Proxy}{40}{section.6.7}
-\contentsline {chapter}{\numberline {7}Resolution of names}{43}{chapter.7}
-\contentsline {section}{\numberline {7.1}Network Information Center (NIC)}{43}{section.7.1}
-\contentsline {section}{\numberline {7.2}Domain Name System (DNS)}{43}{section.7.2}
-\contentsline {subsection}{\numberline {7.2.1}Goals}{44}{subsection.7.2.1}
-\contentsline {subsection}{\numberline {7.2.2}Hierarchy structure}{44}{subsection.7.2.2}
-\contentsline {chapter}{\numberline {8}HTML}{49}{chapter.8}
-\contentsline {chapter}{\numberline {9}CSS}{51}{chapter.9}
-\contentsline {chapter}{\numberline {10}Javascript}{53}{chapter.10}
-\contentsline {chapter}{\numberline {11}PHP}{55}{chapter.11}
-\contentsline {chapter}{\numberline {12}Shell}{57}{chapter.12}
-\contentsline {section}{\numberline {12.1}Commands}{57}{section.12.1}
-\contentsline {section}{\numberline {12.2}UNIX Files}{57}{section.12.2}
-\contentsline {chapter}{\numberline {13}vim}{59}{chapter.13}
-\contentsline {section}{\numberline {13.1}.vimrc}{59}{section.13.1}
-\contentsline {section}{\numberline {13.2}Shortcuts}{59}{section.13.2}
-\contentsline {section}{\numberline {13.3}Multiple files}{62}{section.13.3}
-\contentsline {chapter}{References}{63}{table.caption.85}
+\contentsline {chapter}{\numberline {1}OSI model}{1}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}Logical communication}{1}{section.1.1}% 
+\contentsline {section}{\numberline {1.2}Control plane}{2}{section.1.2}% 
+\contentsline {section}{\numberline {1.3}Data plane}{3}{section.1.3}% 
+\contentsline {section}{\numberline {1.4}Onion model}{4}{section.1.4}% 
+\contentsline {section}{\numberline {1.5}TCP/IP Architecture}{4}{section.1.5}% 
+\contentsline {section}{\numberline {1.6}Application paradigms}{5}{section.1.6}% 
+\contentsline {subsection}{\numberline {1.6.1}Client-Server}{5}{subsection.1.6.1}% 
+\contentsline {subsection}{\numberline {1.6.2}Peer-to-Peer (P2P)}{5}{subsection.1.6.2}% 
+\contentsline {subsection}{\numberline {1.6.3}Publish/Subscribe/Notify}{5}{subsection.1.6.3}% 
+\contentsline {chapter}{\numberline {2}Application Layer}{7}{chapter.2}% 
+\contentsline {chapter}{\numberline {3}C programming}{9}{chapter.3}% 
+\contentsline {section}{\numberline {3.1}Organization of data}{9}{section.3.1}% 
+\contentsline {section}{\numberline {3.2}Struct organization of memory}{10}{section.3.2}% 
+\contentsline {section}{\numberline {3.3}Structure of C program}{11}{section.3.3}% 
+\contentsline {chapter}{\numberline {4}Network services in C}{13}{chapter.4}% 
+\contentsline {section}{\numberline {4.1}Application layer}{13}{section.4.1}% 
+\contentsline {section}{\numberline {4.2}socket()}{13}{section.4.2}% 
+\contentsline {section}{\numberline {4.3}TCP connection}{14}{section.4.3}% 
+\contentsline {subsection}{\numberline {4.3.1}Client}{14}{subsection.4.3.1}% 
+\contentsline {subsubsection}{\numberline {4.3.1.1}connect()}{14}{subsubsection.4.3.1.1}% 
+\contentsline {subsubsection}{\numberline {4.3.1.2}write()}{16}{subsubsection.4.3.1.2}% 
+\contentsline {subsubsection}{\numberline {4.3.1.3}read()}{17}{subsubsection.4.3.1.3}% 
+\contentsline {subsection}{\numberline {4.3.2}Server}{18}{subsection.4.3.2}% 
+\contentsline {subsubsection}{\numberline {4.3.2.1}bind()}{18}{subsubsection.4.3.2.1}% 
+\contentsline {subsubsection}{\numberline {4.3.2.2}listen()}{18}{subsubsection.4.3.2.2}% 
+\contentsline {subsubsection}{\numberline {4.3.2.3}accept()}{19}{subsubsection.4.3.2.3}% 
+\contentsline {section}{\numberline {4.4}UDP connection}{22}{section.4.4}% 
+\contentsline {chapter}{\numberline {5}Gateway}{23}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Proxy}{24}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Router}{26}{section.5.2}% 
+\contentsline {chapter}{\numberline {6}Internet Protocol}{29}{chapter.6}% 
+\contentsline {section}{\numberline {6.1}Terminology}{31}{section.6.1}% 
+\contentsline {section}{\numberline {6.2}IP address}{31}{section.6.2}% 
+\contentsline {section}{\numberline {6.3}Fragmentation}{33}{section.6.3}% 
+\contentsline {section}{\numberline {6.4}Internet Header Format}{34}{section.6.4}% 
+\contentsline {chapter}{\numberline {7}HTTP protocol}{37}{chapter.7}% 
+\contentsline {section}{\numberline {7.1}Terminology}{37}{section.7.1}% 
+\contentsline {section}{\numberline {7.2}Basic rules}{38}{section.7.2}% 
+\contentsline {section}{\numberline {7.3}Messages}{39}{section.7.3}% 
+\contentsline {subsection}{\numberline {7.3.1}Different versions of HTTP protocol}{39}{subsection.7.3.1}% 
+\contentsline {subsection}{\numberline {7.3.2}Headers}{39}{subsection.7.3.2}% 
+\contentsline {subsection}{\numberline {7.3.3}Request-Line}{39}{subsection.7.3.3}% 
+\contentsline {subsection}{\numberline {7.3.4}Request-URI}{40}{subsection.7.3.4}% 
+\contentsline {subsection}{\numberline {7.3.5}Request Header}{40}{subsection.7.3.5}% 
+\contentsline {subsection}{\numberline {7.3.6}Status line}{40}{subsection.7.3.6}% 
+\contentsline {section}{\numberline {7.4}HTTP 1.0}{40}{section.7.4}% 
+\contentsline {subsection}{\numberline {7.4.1}Other headers of HTTP/1.0 and HTTP/1.1}{41}{subsection.7.4.1}% 
+\contentsline {subsection}{\numberline {7.4.2}Caching}{42}{subsection.7.4.2}% 
+\contentsline {subsection}{\numberline {7.4.3}Authorization}{48}{subsection.7.4.3}% 
+\contentsline {subsubsection}{\numberline {7.4.3.1}base64}{49}{subsubsection.7.4.3.1}% 
+\contentsline {subsubsection}{\numberline {7.4.3.2}Auth-schemes}{50}{subsubsection.7.4.3.2}% 
+\contentsline {section}{\numberline {7.5}HTTP 1.1}{50}{section.7.5}% 
+\contentsline {subsection}{\numberline {7.5.1}Caching based on HASH}{51}{subsection.7.5.1}% 
+\contentsline {subsection}{\numberline {7.5.2}URI}{52}{subsection.7.5.2}% 
+\contentsline {subsection}{\numberline {7.5.3}HTTP URL}{53}{subsection.7.5.3}% 
+\contentsline {section}{\numberline {7.6}Dynamic pages}{53}{section.7.6}% 
+\contentsline {section}{\numberline {7.7}Proxy}{54}{section.7.7}% 
+\contentsline {chapter}{\numberline {8}Resolution of names}{57}{chapter.8}% 
+\contentsline {section}{\numberline {8.1}Network Information Center (NIC)}{57}{section.8.1}% 
+\contentsline {section}{\numberline {8.2}Domain Name System (DNS)}{57}{section.8.2}% 
+\contentsline {subsection}{\numberline {8.2.1}Goals}{58}{subsection.8.2.1}% 
+\contentsline {subsection}{\numberline {8.2.2}Hierarchy structure}{58}{subsection.8.2.2}% 
+\contentsline {chapter}{\numberline {9}Shell}{63}{chapter.9}% 
+\contentsline {section}{\numberline {9.1}Commands}{63}{section.9.1}% 
+\contentsline {section}{\numberline {9.2}UNIX Files}{63}{section.9.2}% 
+\contentsline {chapter}{\numberline {10}vim}{65}{chapter.10}% 
+\contentsline {section}{\numberline {10.1}.vimrc}{65}{section.10.1}% 
+\contentsline {section}{\numberline {10.2}Shortcuts}{65}{section.10.2}% 
+\contentsline {section}{\numberline {10.3}Multiple files}{68}{section.10.3}% 
+\contentsline {chapter}{References}{69}{table.caption.112}% 
