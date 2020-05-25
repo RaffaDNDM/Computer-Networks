@@ -52,7 +52,7 @@ int socket(int domain, int type, int protocol);\\
 \end{table}
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.4]{Images/NetworkC/unix_low}
+\includegraphics[scale=0.45]{Images/NetworkC/unix_low}
 \caption{\footnotesize{UNIX management.}}\label{unix_low}
 \end{figure}
 
@@ -367,9 +367,10 @@ The server needs to do a fork after doing the accept(), inside the infinite loop
 \section{UDP connection}
 UDP connection is defined by type \textbf{SOCK\_DGRAM} as specified in Section \ref{socket}. It's used for application in which we use small packets and we want immediate feedback directly from application. It isn't reliable because it doesn't need confirmation in transport layer.\\
 It's used in Twitter application and in video streaming. \textbf{SOCK\_DGRAM} is used to read and write directly packets from/to Layer-2, with its header. Layer-2 header is added and removed by the Operating System.\\
-As communication domain, as TCP connection, we can use either \textbf{AF_INET} for IPv4 or \textbf{AF_INET6} for IPv6. The struct sockaddr, used in this type of connection, is \textbf{struct sockaddr_in} like in TCP because of AF_INET domain.\\
+As communication domain, as TCP connection, we can use either \textbf{AF\_INET} for IPv4 or \textbf{AF\_INET6} for IPv6. The struct sockaddr, used in this type of connection, is \textbf{struct sockaddr\_in} like in TCP because of AF\_INET domain.\\
 
 \section{recvfrom}
+This function is used to read the whole packet or frame, and only if the size of the buffer, specified as parameter, is lower than the real size of the packet, the function will split the packet and read at first the maximum size available.\\Through this function we are going to read the message packet, with format related to the packet format, depending  on which layer we are making the call.
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=340pt, basicstyle=\footnotesize\sffamily,]
@@ -381,23 +382,29 @@ ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,
 \end{lstlisting}
 \end{tabular}
 \end{center}
-\begin{table}[h]
+\begin{table}[H]
 \centering\footnotesize
 \begin{tabular}{rl}
-\textbf{RETURN VALUE} & {\textit{number of bytes received} on success}\\
+\textbf{RETURN VALUE} & {\textit{Number of bytes received} on success}\\
 {} & {\textit{-1} if some error occurs and errno is set appropriately}\\
 {} & {(You can check value of errno including <errno.h>).}\\
 & \\
-%Checks from here
-\textbf{sockfd =} & {\textit{Listen Socket File Descriptor}}\\
+\textbf{sockfd =} & {\textit{Socket File Descriptor}}\\
 &\\
-\textbf{addr =} & {\textit{Reference to struct sockaddr}}\\
-{} & {It's going to be filled by the accept() function.}\\
+\textbf{buf =} & {\textit{Buffer in which the function will put the message}}\\
+&\\
+\textbf{len =} & {\textit{Length of the buffer buf}}\\
+&{important to fullfill the buffer in input (usually buf has size}\\
+&{equal to the MTU of the network).}\\
+&\\
+\textbf{flags =} & {\textit{Flags}}\\
+{} & {added to change the behaviour of the protocol used.}\\
+& \\
+\textbf{src\_addr =} & {\textit{Reference to struct sockaddr}}\\
+{} & {It's going to be filled by the \textbf{recvfrom()} function.}\\
 & \\
 \textbf{addrlen =} & {\textit{Length of the struct of addr.}}\\
 {} & {It's going to be filled by accept() function.}\\
-{} & {( accept() is used in different cases so it can return different}\\
-{} & {type of specific implementation of struct addr.)}\\
 &\\
 \end{tabular}
 \end{table}
@@ -405,7 +412,7 @@ ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,
 \section{sendto}
 \begin{center}
 \begin{tabular}{c}
-\begin{lstlisting}[linewidth=340pt, basicstyle=\footnotesize\sffamily,]
+\begin{lstlisting}[linewidth=360pt, basicstyle=\footnotesize\sffamily,]
 #include <sys/types.h>
 #include <sys/socket.h>
 
@@ -414,30 +421,79 @@ ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,
 \end{lstlisting}
 \end{tabular}
 \end{center}
-\begin{table}[h]
+\begin{table}[H]
 \centering\footnotesize
 \begin{tabular}{rl}
 \textbf{RETURN VALUE} & {\textit{Number of characters sent} on success}\\
 {} & {\textit{-1} if some error occurs and errno is set appropriately}\\
 {} & {(You can check value of errno including <errno.h>).}\\
 & \\
-%Checks from here
-\textbf{sockfd =} & {\textit{Listen Socket File Descriptor}}\\
+\textbf{sockfd =} & {\textit{Socket File Descriptor}}\\
 &\\
-\textbf{addr =} & {\textit{Reference to struct sockaddr}}\\
-{} & {It's going to be filled by the accept() function.}\\
+\textbf{buf =} & {\textit{Buffer in which the function will get the message}}\\
+&\\
+\textbf{len =} & {\textit{Length of the buffer buf}}\\
+&{important to read the buffer in input (usually buf has size}\\
+&{equal to the MTU of the network)}\\
+&\\
+\textbf{flags =} & {\textit{Flags}}\\
+{} & {added to change the behaviour of the protocol used.}\\
+& \\
+\textbf{dest\_addr =} & {\textit{Reference to struct sockaddr}}\\
+{} & {It's going to be filled by the \textbf{recvfrom()} function.}\\
 & \\
 \textbf{addrlen =} & {\textit{Length of the struct of addr.}}\\
-{} & {It's going to be filled by accept() function.}\\
-{} & {( accept() is used in different cases so it can return different}\\
-{} & {type of specific implementation of struct addr.)}\\
 &\\
 \end{tabular}
 \end{table}
 
 \section{Lower level connection}
-Creating a socket, we can also access to lower packet in ISO/OSI model, by selecting other types of communication semantics (Figure \ref{unix_low}). \textbf{SOCK_RAW} is used to read and write directly packets from/to device driver (Layer 1), before adding Layer-2 header. The header needs to be add by us, in writing phase.\\
-Using this communication semantics, we need to use the communication domain \textbf{AF_PACKET}. The related socket is duplicated and the user program can access packets, even if it's not working at kernel level. This domain is also used to detect messages in sniffer applications (e.g. Wireshark).}
-\end{itemize}
+Creating a socket, we can also access to lower packet in ISO/OSI model, by selecting other types of communication semantics (Figure \ref{unix_low}). \textbf{SOCK\_RAW} is used to read and write directly packets from/to device driver (Layer 1), before adding Layer-2 header. The header needs to be add by us, in writing phase.\\
+Using this communication semantics, we need to use the communication domain \textbf{AF\_PACKET}. The related socket is duplicated and the user program can access packets, even if it's not working at kernel level. This domain is also used to detect messages in sniffer applications (e.g. Wireshark).\\
+The socket will be created through the following function call (\textit{packet(}\textbf{7}\textit{)}):
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=340pt, basicstyle=\footnotesize\sffamily,]
+int packet_socket = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+\end{lstlisting}
+\end{tabular}
+\end{center}
+The \textbf{ETH\_P\_ALL} guarantees to receive all protocols packets.  
 
 \subsection{Structure of Layer 2}
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
+struct sockaddr_ll {                                                                unsigned short sll_family;   /* Always AF_PACKET */                             unsigned short sll_protocol; /* Physical-layer protocol */                      int            sll_ifindex;  /* Interface number */                             unsigned short sll_hatype;   /* ARP hardware type */                            unsigned char  sll_pkttype;  /* Packet type */                                  unsigned char  sll_halen;    /* Length of address */                            unsigned char  sll_addr[8];  /* Physical-layer address */                   };
+\end{lstlisting}
+\end{tabular}
+\end{center}
+If we want to talk directly to device driver, we need to specify only two fields:
+\begin{itemize}
+\item{\textbf{sll\_family =} \textit{AF\_PACKET}\\
+the only field common to every struct sockaddr.
+}
+\item{\textbf{sll\_ifindex =} \textit{index of ethernet interface}\\
+to obtain it, we can call the following function:
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=260pt, basicstyle=\footnotesize\sffamily,]
+#include <net/if.h>
+unsigned int if_nametoindex(const char *ifname);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Index number of the network interface}}\\
+{} & {\textit{-1} if some error occurs and errno is set appropriately}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{ifname =} & {\textit{Network interface name}}\\
+&\\
+\end{tabular}
+\end{table}
+Given in input the name of the network interface (e.g. \textit{"eth0"}), the function returns its related number.
+}
+\end{itemize}

@@ -80,7 +80,7 @@ synchronization signal \textit{10101010...1010}\textbf{011} where the last three
 MAC (Medium Access Control) addresses, that are Hardware identifiers (broadcast= \textbf{ff:ff:ff:ff:ff:ff}).  
 }
 \item{\textbf{Type}\\
-type of ethernet frame used.
+type of upper layer protocol used (e.g. Internet Protocol = \textit{0x0800})\cite{frame_type}.
 }
 \item{\textbf{Payload}\\
 payload of the ethernet frame.
@@ -147,7 +147,7 @@ It is also possible to create a VLAN over 2 different switches (Figure \ref{tunn
 \end{figure}
 
 \subsection{Address Resolution Protocol (ARP)}
-Using the Ethernet protocol and sending an Internet Protocol packet, the sender needs to know MAC address of remote node. To resolve the IP address of the remote host, we use the DNS protocol. After the IP address is found, we need to resolve the IP address of the destination host into the MAC address of corresponding machine, using the \textbf{Address Resolution Protocol (ARP)}.\\
+Using the Ethernet protocol and sending an Internet Protocol packet, the sender needs to know MAC address of remote node. To resolve the IP address of the remote host, we use the DNS protocol. After the IP address is found, we need to resolve the IP address of the destination host into the MAC address of corresponding machine, using the \textbf{Address Resolution Protocol (ARP)\cite{RFC826}}.\\
 This method works as follows (Figure \ref{ARP}):
 \begin{center}
 \begin{tabular}{c}
