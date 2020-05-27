@@ -184,3 +184,47 @@ else
 \includegraphics[scale=0.45]{Images/Layer2/ARP}
 \caption{\footnotesize{ARP.}}\label{ARP}
 \end{figure}
+
+\subsubsection{ARP message format}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{Images/Layer2/ARP_format}
+\caption{\footnotesize{ARP message format.}}\label{ARP}
+\end{figure}
+
+\begin{itemize}
+\item{\textbf{Hardware type}\\
+Hardware type (\textit{0x0001=}Ethernet protocol).}
+\item{\textbf{Protocol type}\\
+Protocol type (\textit{0x0800=}Internet protocol).}
+\item{\textbf{Hardware Address Length}\\
+Length of Hardware Address in bytes (\textit{6=} MAC address).}
+\item{\textbf{Protocol Address Length}\\
+Length of Protocol Address in bytes (\textit{4=} IP address).}
+\item{\textbf{Opcode}\\
+code representing the type of ARP message.
+\begin{table}[H]
+\centering \footnotesize
+\begin{tabular}{|c|l|}
+\hline
+\textbf{0x01}&{ARP request}\\
+\hline
+\textbf{0x02}&{ARP reply}\\
+\hline
+\textbf{0x03}&{RARP request}\\
+\hline
+\textbf{0x04}&{RARP reply}\\
+\hline
+\end{tabular}
+\end{table}
+RARP protocol works as ARP but it's used to obtain IP address from the MAC address. This is usually used trying to connect to wireless networks. In this case, the user needs to have a specific IP address to connect to Internet and through ARP he can obtain it.\\ Today RARP protocol is not used anymore because we use DHCP, an evolution of RARP.
+}
+\item{\textbf{Sender Hardware Address}\\
+Hardware Address of whom sends ARP message.}
+\item{\textbf{Sender Protocol Address}\\
+Protocol Address of whom sends ARP message.}
+\item{\textbf{Target Hardware Address}\\
+Hardware Address we want to obtaint through ARP or Hardware address we want to solve through RARP (\textit{all zeros} in ARP request).}
+\item{\textbf{Target Protocol Address}\\
+Protocol Address that we want to solve or protocol Address we want to obtain through RARP (\textit{all zeros} in ARP request).}
+\end{itemize}
