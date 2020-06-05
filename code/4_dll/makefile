@@ -4,10 +4,10 @@ CC = gcc
 
 CFLAGS = -Wall -pedantic
 
-ping : ping.c
+np : ping.c
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
-clean: ping
-	rm ping
+clean: np
+	rm np

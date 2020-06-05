@@ -44,8 +44,8 @@ int main()
 
     local.sin_family=AF_INET;
     //local.sin_port = htons(80); no possible because port 80 already used
-    local.sin_port = htons(8080); //we need to use a port not in use 
-    local.sin_addr.s_addr = 0; //By default, it 
+    local.sin_port = htons(8080); //we need to use a port not in use
+    local.sin_addr.s_addr = 0; //By default, it
 
     setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
     t = bind(sd, (struct sockaddr*) &local, sizeof(struct sockaddr_in));
@@ -79,7 +79,7 @@ int main()
     {
         f=NULL;
         remote.sin_family = AF_INET;
-        len = sizeof(struct sockaddr_in);  
+        len = sizeof(struct sockaddr_in);
         sd2 = accept(sd, (struct sockaddr*) &remote, &len);
 
         if(sd2==-1)
@@ -92,7 +92,7 @@ int main()
         {
             t = read(sd2, request, 1999);
             request[t]=0;
-        
+
             request_line(request, &method, &path, &version);
             printf("Method:  %s\n", method);
             printf("Path:  %s\n", path);
@@ -117,7 +117,7 @@ void request_line(char* request, char** method, char** path, char** version)
     *method = request;
 
     for(i=1; request[i]!=' '; i++);
-    
+
     request[i]=0;
     *path=request+i+1;
 
@@ -143,17 +143,23 @@ void manage_request(char* method, char* path, char* version, char* response, FIL
         sprintf(response,"HTTP/1.1 200 Not Found\r\nConnection: close\r\n\r\n");
     */
     else
-    { 
+    {
         char file_name[40];
         sprintf(file_name,"%s%s",ROOT_PATH,path);
 
         if(!strncmp(path, CGI_BIN, 9))
         {
-            char command[40]; 
+            char command[40];
             sprintf(command, "cd %s & %s > %s", ROOT_PATH, path+9, CGI_RESULT);
             int status = system(command);
-            
-            if(!status)        
+
+            if(status==-1)
+            {
+                //Used to manage if a program doesn't exists
+                sprintf(response,"HTTP/1.1 400 Not Found\r\nConnection:Close\r\n\r\n");
+                *f=NULL;
+            }
+            else if(!status)
             {
                 //Useless if because the file is always created, because of pipe implementation
                 if(((*f)=fopen(CGI_RESULT, "r+"))==NULL)
@@ -163,17 +169,12 @@ void manage_request(char* method, char* path, char* version, char* response, FIL
                 else
                     sprintf(response,"HTTP/1.1 200 OK\r\nConnection:Close\r\n\r\n");
             }
-            else if(status==-1)
-            {       
-                //Used to manage if a program doesn't exists
-                sprintf(response,"HTTP/1.1 400 Not Found\r\nConnection:Close\r\n\r\n");
-                *f=NULL;
-            }
+
         }
         else
         {
             printf("%s\n", file_name);
-         
+
             //"r+" because in linux directory are file so we need to specify
             //also writing rights to be sure that fopen return NULL with also directory
             if(((*f)=fopen(file_name,"r+"))==NULL) //it's GET request for a file
@@ -191,15 +192,15 @@ void send_body(int sd2, FILE* f)
     {
         while((c=fgetc(f))!=EOF)
             write(sd2, &c, 1);
-    
+
         fclose(f);
     }
 }
 
-void endDaemon(int sig) 
+void endDaemon(int sig)
 {
-    FILE* f; 
-    
+    FILE* f;
+
     if((f=fopen(CGI_RESULT,"r+"))!=NULL)
     {
         char command[40];
@@ -209,4 +210,3 @@ void endDaemon(int sig)
 
     exit(0);
 }
-
