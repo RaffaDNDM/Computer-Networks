@@ -16,6 +16,9 @@
 #define ROUTE_GATEWAY_INDEX 1
 #define ROUTE_MASK_INDEX 2
 #define ROUTE_INTERFACE_INDEX 7
+#define LINE_32_BITS "-----------------------------------------------------\n"
+#define PACKET_SIZE 1500
+#define ETH_HEADER_SIZE 14 //src_MAC + dst_MAC + type
 
 typedef struct
 {
@@ -80,10 +83,13 @@ void print_packet(unsigned char* pkt, int size);
 
 /**
  * @brief Send ARP request and analyze ARP reply, obtaining MAC address of remote machine.
- * @param dest_IP destination IP address of which we want to obtain MAC address
- * @param dest_MAC MAC address of remote that will be obtained by analyzing ARP reply
+ * @param sd socket of ethernet level
+ * @param src IP address and MAC address of the source (mine)
+ * @param dst IP address and MAC address of the destination
+ * @param interface ethernet interface used by source (e.g. eth0)
+ * @param gateway (default gateway if src and dst not in the same net or 0.0.0.0)
  */
-void arp_resolution(unsigned char* dest_IP, unsigned char* dest_MAC);
+void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char* gateway);
 
 /**
  * @brief Create Ethernet packet.

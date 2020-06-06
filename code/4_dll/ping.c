@@ -14,12 +14,12 @@ int main(int argc, char** argv)
     unsigned char network[4];
     unsigned char gateway[4];
     unsigned char mask[4];
-    const char device[5] = "dev ";
     char mac_file[30];
     char c;
     struct hostent* he;
     char* word;
     struct in_addr addr;
+    char packet[PACKET_SIZE];
 
     host src; //me
     host dst; //remote host
@@ -46,13 +46,6 @@ int main(int argc, char** argv)
                     dst.ip[i] = (unsigned char) (he->h_addr[i]);
             }
             
-            //Print the server address
-            printf("[1]Destination address = ");
-            for(i=0; i<3; i++)
-            {
-                printf("%u.", dst.ip[i]);
-            }
-            printf("%u\n", dst.ip[i]);
         }
         else
         {
@@ -60,15 +53,18 @@ int main(int argc, char** argv)
             
             for(i=0; i<4; i++)
                 dst.ip[i] = p[i];
-        
-            printf("[2]Destination address = ");
-            for(i=0; i<3; i++)
-            {
-                printf("%u.", dst.ip[i]);
-            }
-            printf("%u\n", dst.ip[i]);
         }
     }
+    
+    
+    printf("\n---------------Remote  analysis----------------------\n");
+    printf("Destination address = ");
+    for(i=0; i<3; i++)
+    {
+        printf("%u.", dst.ip[i]);
+    }
+    printf("%u\n", dst.ip[i]);
+    
     
     //Evaluation of Ethernet interface name
     sprintf(command, "route -n | tac | head --lines=-2 ");
@@ -128,7 +124,10 @@ int main(int argc, char** argv)
                 }
 
                 case ROUTE_INTERFACE_INDEX:
+                {
+                    s[strlen(s)-1]=0;
                     interface = s;
+                }
             }
         
             i++;
@@ -154,70 +153,32 @@ int main(int argc, char** argv)
 
         
         if((*(unsigned int*) &network)==((*((unsigned int*) &(dst.ip))) & (*((unsigned int*) &mask))))
-        {
-            printf("--------------------\nChecked\n------------------------\n");
-            printf("Gateway: "); 
-            for(i=0; i<3; i++)
-                printf("%u.", gateway[i]);
-            printf("%u\n", gateway[i]);
-
-            printf("Network: ");
-            for(i=0; i<3; i++)
-                printf("%u.", network[i]);
-            printf("%u\n", network[i]);
-
-            printf("Mask: ");
-            for(i=0; i<3; i++)
-                printf("%u.", mask[i]);
-            printf("%u\n", mask[i]);
-
-            printf("Interface: %s\n", interface);
-
+        {        
             break;
         }
     }
 
-    //Find where is "dev interface" (e.g. dev eth0)
+    printf("\n");
+    printf("Gateway: "); 
+    for(i=0; i<3; i++)
+        printf("%u.", gateway[i]);
+    printf("%u\n", gateway[i]);
+
+    printf("Network: ");
+    for(i=0; i<3; i++)
+        printf("%u.", network[i]);
+    printf("%u\n", network[i]);
+
+    printf("Mask: ");
+    for(i=0; i<3; i++)
+        printf("%u.", mask[i]);
+    printf("%u\n", mask[i]);
+
     eth_frame* eth;
     ip_datagram* ip;
     icmp_pkt* icmp;
     
-    
-    /*    
-    //Evaluation of default Ethernet interface name
-    sprintf(command, "ip route show to 0.0.0.0/0");
-    fd = popen(command, "r");
-
-    if(fd == NULL)
-    {
-        perror("error opening pipe..");
-        return 1;
-    }
-
-    fgets(line, LINE_SIZE, fd);
-
-    //Find where is "dev interface" (e.g. dev eth0)
-    j=0;
-    for(i=0; i<strlen(line) && j!=strlen(device); i++)
-    {
-        if(line[i]==device[j])
-            j++;
-        else if(j!=0)
-            j=0;
-    }
-
-    pclose(fd);
-    
-
-    j=0;
-    for(; line[i]!=' '; i++)
-        interface[j++]=line[i];
-    
-    interface[j]=0;
-
-    printf("%s size: %d\n", interface, (int) strlen(interface));
-    
-    //See the MAC address of eth0 looking to "/sys/class/net/eth0/address" content
+    //See the MAC address of eth0 looking to e.g. "/sys/class/net/eth0/address" content
     sprintf(mac_file, MAC_DEFAULT_FILE, interface);
    
     fd = fopen(mac_file, "r");
@@ -233,6 +194,11 @@ int main(int argc, char** argv)
 
     fclose(fd);
     
+    printf("\n");
+
+    printf("Ethernet Interface: %s\n", interface);
+
+    printf("Source MAC address: ");
     for(i=0; i<5; i++)
         printf("%x:", src.mac[i]);
     printf("%x\n", src.mac[i]);
@@ -253,14 +219,14 @@ int main(int argc, char** argv)
 
     pclose(fd);
     
+    printf("Source IP address: ");
     for(i=0; i<3; i++)
         printf("%d.", src.ip[i]);
     printf("%d\n",src.ip[i]);
 
 
-
     //Creation of the socket
-    //sd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+    sd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
 
     
     if(sd == -1)
@@ -269,9 +235,24 @@ int main(int argc, char** argv)
         perror("Socket failed");
         return 1;
     }
+
+    
+    //ARP resolution
+    /*
+        if(myip & mask == dstip & mask)
+            arp_resolution(sd, &dst, 0.0.0.0);
+        else
+            arp_resolution(sd, &dst, gateway);
     */
 
-    //ARP resolution
+    arp_resolution(sd, &src, &dst, interface, gateway);
+    
+
+    //printf("\n\n---------------Packets  analysis---------------------\n");
+    //unsigned char buff[]={1,2,3,4,5,6,7};
+    //print_packet(buff, 7);
+
+
 
     //Ping application
     
@@ -281,11 +262,60 @@ int main(int argc, char** argv)
 
 void print_packet(unsigned char* pkt, int size)
 {
+    int i=0;
+    int count = ((size%4)==0)? 4: (size%4);
+
+
+    printf(LINE_32_BITS); 
+    for(; i<size; i++)
+    {
+        printf("| 0x%02x (%03u) ", pkt[i], pkt[i]);
+        
+        if((i%4)==3 || i==(size-1))
+        {
+            printf("|\n");
+       
+            if(i!=(size-1))
+                printf(LINE_32_BITS);
+        }
+    }
+    
+    for(i=0; i<count; i++)
+    {
+        printf("-------------");
+    }
+
+    printf("-\n\n");
 
 }
 
-void arp_resolution(unsigned char* dest_IP, unsigned char* dest_MAC)
+void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char* gateway)
 {
+    unsigned char packet[PACKET_SIZE];
+    struct sockaddr_ll sll;
+    eth_frame *eth;
+    arp_pkt *arp;
+    int i=0;
+
+    //Ethernet header
+    eth = (eth_frame*) &packet;
+    
+    for(; i<6; i++)
+        eth->src[i]=src->mac[i];
+
+    for(; i<6; i++)
+        eth->src[i]=0xff; //Broadcast request
+
+    //eth->type 
+    
+    //ARP packet
+    arp = (arp_pkt*) &(eth->payload);
+
+    sll.sll_family = AF_PACKET;
+    sll.sll_ifindex = if_nametoindex(interface);
+
+    sendto(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, sizeof(sll));
+
 
 }
 
