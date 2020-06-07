@@ -250,7 +250,7 @@ void print_packet(unsigned char* pkt, int size, char* color)
     printf("\033%s%s\033[0m", color, LINE_32_BITS); 
     for(; i<size; i++)
     {
-        printf("\033%s|\033[0m 0x%02x (%03u) ", color, pkt[i], pkt[i]);
+        printf("\033%s|\033[0;33m 0x%02x (\033[0m%03u\033[0;33m)\033[0m ", color, pkt[i], pkt[i]);
         
         if((i%4)==3 || i==(size-1))
         {
@@ -429,7 +429,7 @@ void ping_application(int sd, char* interface, host src, host dst)
 
     if(n==-1)
     {
-        perror("ARP sendto ERROR");
+        perror("ECHO sendto ERROR");
         exit(1);
     }
 
@@ -439,7 +439,7 @@ void ping_application(int sd, char* interface, host src, host dst)
         n = recvfrom(sd, packet, PACKET_SIZE, 0, (struct sockaddr*) &sll, &len);   
         if(n==-1)
         {
-            perror("ARP sendto ERROR");
+            perror("ECHO sendto ERROR");
             exit(1);
         }
         
@@ -448,7 +448,7 @@ void ping_application(int sd, char* interface, host src, host dst)
            icmp->type == 0) //ECHO reply
         {
             printf("\n\033[1;32m                   ECHO reply\n\033[0m");
-            print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), "[1;32m");
+            print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+payload_size, "[1;32m");
             found = 1;
         }    
     }
