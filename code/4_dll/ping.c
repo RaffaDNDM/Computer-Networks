@@ -231,8 +231,8 @@ int main(int argc, char** argv)
     
     if(sd == -1)
     {
-        printf("errno: %d", errno);
-        perror("Socket failed");
+        printf("Socket failed\n");
+        perror("ERROR");
         return 1;
     }
 
@@ -245,7 +245,7 @@ int main(int argc, char** argv)
             arp_resolution(sd, &dst, gateway);
     */
 
-    arp_resolution(sd, &src, &dst, interface, gateway);
+    //arp_resolution(sd, &src, &dst, interface, gateway);
     
 
     //printf("\n\n---------------Packets  analysis---------------------\n");
@@ -257,7 +257,7 @@ int main(int argc, char** argv)
     //Ping application
     
 
-    //return 0;
+    return 0;
 }
 
 void print_packet(unsigned char* pkt, int size)
@@ -299,22 +299,43 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
 
     //Ethernet header
     eth = (eth_frame*) &packet;
-    
+
     for(; i<6; i++)
         eth->src[i]=src->mac[i];
 
     for(; i<6; i++)
         eth->src[i]=0xff; //Broadcast request
 
-    //eth->type 
-    
+    eth->type = htons(0x0800);
+
     //ARP packet
     arp = (arp_pkt*) &(eth->payload);
+
+    arp->hw = htons(0x0001);
+    arp->protocol = htons(0x0800);
+    arp->hw_len = 6;
+    arp->prot_len = 4;
+    arp->op = htons(0x0001);
+    
+    for(i=0; i<6; i++)
+        arp->src_MAC[i] = src->mac[i];
+
+    for(i=0; i<4; i++)
+        arp->src_IP[i] = src->ip[i];
+
+    for(i=0; i<6; i++)
+        arp->dst_MAC[i] = 0;
+
+    
+    int local = ((*(unsigned int*) gateway)==0)? 1 : 0;
+
+    for(i=0; i<4; i++)
+        arp->dst_IP[i] = (local)? dst->ip[i] : gateway[i];
 
     sll.sll_family = AF_PACKET;
     sll.sll_ifindex = if_nametoindex(interface);
 
-    sendto(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, sizeof(sll));
+    //sendto(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, sizeof(sll));
 
 
 }
