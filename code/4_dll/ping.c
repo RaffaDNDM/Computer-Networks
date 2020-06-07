@@ -1,14 +1,15 @@
 #include "ping.h"
 
+#define IP_HEADER_SIZE 20
+#define ECHO_HEADER_SIZE 8
+
 int main(int argc, char** argv)
 {
     int sd;
-    int ret;
     int i;
-    int j;
     unsigned int x;
     FILE* fd;
-    char command[50];
+    char command[60];
     char* interface;
     char line[LINE_SIZE];
     unsigned char network[4];
@@ -17,9 +18,7 @@ int main(int argc, char** argv)
     char mac_file[30];
     char c;
     struct hostent* he;
-    char* word;
     struct in_addr addr;
-    char packet[PACKET_SIZE];
 
     host src; //me
     host dst; //remote host
@@ -57,8 +56,8 @@ int main(int argc, char** argv)
     }
     
     
-    printf("\n---------------Remote  analysis----------------------\n");
-    printf("Destination address = ");
+    printf("\n\033[1;31m---------------Remote  analysis----------------------\n\033[0m");
+    printf("\033[1;32mDestination address = \033[0m");
     for(i=0; i<3; i++)
     {
         printf("%u.", dst.ip[i]);
@@ -76,8 +75,6 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    char* route_fields[8];
-    
     while(fgets(line, LINE_SIZE, fd)!=NULL)
     {
         char* s = strtok(line, " ");
@@ -89,8 +86,9 @@ int main(int argc, char** argv)
             { 
                 unsigned char *p = (unsigned char*) &(addr.s_addr);
             
-                for(j=0; j<4; j++)
-                    network[j] = p[j];
+                memcpy(network, p, 4);
+                //for(j=0; j<4; j++)
+                //    network[j] = p[j];
             } 
             i++;
         }
@@ -105,8 +103,9 @@ int main(int argc, char** argv)
                     { 
                         unsigned char *p = (unsigned char*) &(addr.s_addr);
                     
-                        for(j=0; j<4; j++)
-                            gateway[j] = p[j]; 
+                        memcpy(gateway, p, 4);
+                        //for(j=0; j<4; j++)
+                        //    gateway[j] = p[j]; 
                     }
                     break;
                 }
@@ -117,8 +116,9 @@ int main(int argc, char** argv)
                     { 
                         unsigned char *p = (unsigned char*) &(addr.s_addr);
                     
-                        for(j=0; j<4; j++)
-                            mask[j] = p[j];
+                        memcpy(mask,p, 4);
+                        //for(j=0; j<4; j++)
+                        //  mask[j] = p[j];
                     }
                     break;
                 }
@@ -131,24 +131,6 @@ int main(int argc, char** argv)
             }
         
             i++;
-            /*
-            printf("Gateway: "); 
-            for(j=0; j<3; j++)
-                printf("%u.", gateway[j]);
-            printf("%u\n", gateway[j]);
-
-            printf("Network: ");
-            for(j=0; j<3; j++)
-                printf("%u.", network[j]);
-            printf("%u\n", network[j]);
-
-            printf("Mask: ");
-            for(j=0; j<3; j++)
-                printf("%u.", mask[j]);
-            printf("%u\n", mask[j]);
-
-            printf("Interface: %s\n", interface);
-            */
         }
 
         
@@ -159,24 +141,21 @@ int main(int argc, char** argv)
     }
 
     printf("\n");
-    printf("Gateway: "); 
+    printf("\033[1;35mGateway: \033[0m"); 
     for(i=0; i<3; i++)
         printf("%u.", gateway[i]);
     printf("%u\n", gateway[i]);
 
-    printf("Network: ");
+    printf("\033[1;35mNetwork: \033[0m");
     for(i=0; i<3; i++)
         printf("%u.", network[i]);
     printf("%u\n", network[i]);
 
-    printf("Mask: ");
+    printf("\033[1;35mMask: \033[0m");
     for(i=0; i<3; i++)
         printf("%u.", mask[i]);
     printf("%u\n", mask[i]);
 
-    eth_frame* eth;
-    ip_datagram* ip;
-    icmp_pkt* icmp;
     
     //See the MAC address of eth0 looking to e.g. "/sys/class/net/eth0/address" content
     sprintf(mac_file, MAC_DEFAULT_FILE, interface);
@@ -196,9 +175,9 @@ int main(int argc, char** argv)
     
     printf("\n");
 
-    printf("Ethernet Interface: %s\n", interface);
+    printf("\033[1;36mEthernet Interface:\033[0m %s\n", interface);
 
-    printf("Source MAC address: ");
+    printf("\033[1;36mSource MAC address: \033[0m");
     for(i=0; i<5; i++)
         printf("%x:", src.mac[i]);
     printf("%x\n", src.mac[i]);
@@ -219,7 +198,7 @@ int main(int argc, char** argv)
 
     pclose(fd);
     
-    printf("Source IP address: ");
+    printf("\033[1;36mSource IP address: \033[0m");
     for(i=0; i<3; i++)
         printf("%d.", src.ip[i]);
     printf("%d\n",src.ip[i]);
@@ -245,47 +224,49 @@ int main(int argc, char** argv)
             arp_resolution(sd, &dst, gateway);
     */
 
-    //arp_resolution(sd, &src, &dst, interface, gateway);
+    printf("\n\033[1;31m-------------------ARP packets-----------------------\n\033[0m");
+    arp_resolution(sd, &src, &dst, interface, gateway);
     
-
-    //printf("\n\n---------------Packets  analysis---------------------\n");
-    //unsigned char buff[]={1,2,3,4,5,6,7};
-    //print_packet(buff, 7);
-
+    printf("\033[1;33mDestination MAC address: \033[0m");
+    for(i=0; i<5; i++)
+        printf("%x:", dst.mac[i]);
+    printf("%x\n", dst.mac[i]);
+ 
+    printf("\n\033[1;31m-----------------------Ping--------------------------\n\033[0m");
 
 
     //Ping application
-    
+    ping_application(sd, interface, src, dst); 
 
     return 0;
 }
 
-void print_packet(unsigned char* pkt, int size)
+void print_packet(unsigned char* pkt, int size, char* color)
 {
     int i=0;
     int count = ((size%4)==0)? 4: (size%4);
 
 
-    printf(LINE_32_BITS); 
+    printf("\033%s%s\033[0m", color, LINE_32_BITS); 
     for(; i<size; i++)
     {
-        printf("| 0x%02x (%03u) ", pkt[i], pkt[i]);
+        printf("\033%s|\033[0m 0x%02x (%03u) ", color, pkt[i], pkt[i]);
         
         if((i%4)==3 || i==(size-1))
         {
-            printf("|\n");
+            printf("\033%s|\033[0m\n", color);
        
             if(i!=(size-1))
-                printf(LINE_32_BITS);
+                printf("\033%s%s\033[0m", color, LINE_32_BITS); 
         }
     }
     
     for(i=0; i<count; i++)
     {
-        printf("-------------");
+        printf("\033%s-------------", color);
     }
 
-    printf("-\n\n");
+    printf("-\033[0m\n\n");
 
 }
 
@@ -295,18 +276,22 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
     struct sockaddr_ll sll;
     eth_frame *eth;
     arp_pkt *arp;
-    int i=0;
+    int i;
+    int found = 0;
+    socklen_t len;
+    int n;
 
     //Ethernet header
     eth = (eth_frame*) &packet;
 
-    for(; i<6; i++)
-        eth->src[i]=src->mac[i];
+    for(i=0; i<6; i++)
+        eth->dst[i]=0xff; //Broadcast request
 
-    for(; i<6; i++)
-        eth->src[i]=0xff; //Broadcast request
+    memcpy(eth->src, src->mac, 6);
+    //for(i=0; i<6; i++)
+    //    eth->src[i]=src->mac[i];
 
-    eth->type = htons(0x0800);
+    eth->type = htons(0x0806);
 
     //ARP packet
     arp = (arp_pkt*) &(eth->payload);
@@ -317,11 +302,13 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
     arp->prot_len = 4;
     arp->op = htons(0x0001);
     
-    for(i=0; i<6; i++)
-        arp->src_MAC[i] = src->mac[i];
+    memcpy(arp->src_MAC, src->mac, 6);
+    //for(i=0; i<6; i++)
+    //    arp->src_MAC[i] = src->mac[i];
 
-    for(i=0; i<4; i++)
-        arp->src_IP[i] = src->ip[i];
+    memcpy(arp->src_IP, src->ip, 4);
+    //for(i=0; i<4; i++)
+    //    arp->src_IP[i] = src->ip[i];
 
     for(i=0; i<6; i++)
         arp->dst_MAC[i] = 0;
@@ -329,33 +316,157 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
     
     int local = ((*(unsigned int*) gateway)==0)? 1 : 0;
 
-    for(i=0; i<4; i++)
-        arp->dst_IP[i] = (local)? dst->ip[i] : gateway[i];
+    if(local)
+    {
+        printf("        The remote host is in the same LAN\n");
+        memcpy(arp->dst_IP, dst->ip, 4);
+    }
+    else
+    {
+        printf("      The remote host is outside the network\n");
+        memcpy(arp->dst_IP, gateway, 4);
+    }
+    //for(i=0; i<4; i++)
+    //  arp->dst_IP[i] = (local)? dst->ip[i] : gateway[i];
+        
 
     sll.sll_family = AF_PACKET;
     sll.sll_ifindex = if_nametoindex(interface);
 
-    //sendto(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, sizeof(sll));
+    len = sizeof(sll);
 
+    printf("\n\033[1;34m                   ARP request\n\033[0m");
+    print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), "[1;34m");
+    n = sendto(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, sizeof(sll));
 
+    if(n==-1)
+    {
+        perror("ARP sendto ERROR");
+        exit(1);
+    }
+
+    while(!found)
+    {
+        int n = recvfrom(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, &len);
+
+        if(n==-1)
+        {
+            perror("ARP recvfrom ERROR");
+            exit(1);
+        }
+
+        if(eth->type == htons(0x0806) && //it's ARP
+           arp->op == htons(0x0002) && //it's ARP reply
+           ((!memcmp(arp->src_IP, dst->ip, 4) && local) ||
+           (!memcmp(arp->src_IP, gateway, 4) && !local))) //dst of ARP request = src of ARP reply
+        {
+            memcpy(dst->mac, arp->src_MAC, 6);
+    
+            printf("\n\033[1;34m                     ARP reply\n\033[0m");
+            print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), "[1;34m");
+            found = 1;
+        }
+    }
 }
 
-void create_eth(eth_frame* eth, unsigned char* dst_MAC, unsigned char* src_MAC)
+void ping_application(int sd, char* interface, host src, host dst)
 {
+    unsigned char packet[PACKET_SIZE];
+    struct sockaddr_ll sll;
+    eth_frame *eth;
+    ip_datagram *ip;
+    icmp_pkt *icmp;
+    int i;
+    int found = 0;
+    socklen_t len;
+    int payload_size=20;
+    int n;
 
+    eth = (eth_frame*) &packet;
+    ip = (ip_datagram*) &(eth->payload);
+    icmp = (icmp_pkt*) &(ip->payload);
+
+    //Ethernet header
+    memcpy(eth->src, src.mac, 6);
+    memcpy(eth->dst, dst.mac, 6);
+    eth->type = htons(0x0800);
+
+    //IP packet
+    ip->ver_IHL = 0x45;
+    ip->type_service = 0;
+    ip->length = htons(ECHO_HEADER_SIZE+payload_size+IP_HEADER_SIZE);
+    ip->id = htons(0xABCD);
+    ip->flag_offs = htons(0);
+    ip->ttl = 128;
+    ip->protocol = 1; //ICMP
+    ip->checksum = 0;
+    memcpy((unsigned char*) &(ip->src_IP), src.ip, 6);
+    memcpy((unsigned char*) &(ip->dst_IP), dst.ip, 6);
+    ip->checksum = htons(checksum((unsigned char*) ip, IP_HEADER_SIZE)); //Checksum of ip header
+
+
+    //Echo request (ICMP)
+    icmp->type = 8;
+    icmp->code = 0;
+    icmp->checksum = htons(0);
+    icmp->id = htons(0x1234);
+    icmp->seq = htons(1);
+    
+    for(i=0; i<payload_size; i++)
+        icmp->payload[i] = i&0xff;
+
+    icmp->checksum = htons(checksum((unsigned char*) icmp, ECHO_HEADER_SIZE+payload_size));
+    //Checksum of the entire packet
+
+
+    sll.sll_family = AF_PACKET;
+    sll.sll_ifindex = if_nametoindex(interface);
+    len = sizeof(sll);
+
+    printf("\n\033[1;32m                 ECHO request\n\033[0m");
+    print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+payload_size, "[1;32m");
+    n = sendto(sd, packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+payload_size, 0, (struct sockaddr*) &sll, len); 
+
+    if(n==-1)
+    {
+        perror("ARP sendto ERROR");
+        exit(1);
+    }
+
+
+    while(!found)
+    {
+        n = recvfrom(sd, packet, PACKET_SIZE, 0, (struct sockaddr*) &sll, &len);   
+        if(n==-1)
+        {
+            perror("ARP sendto ERROR");
+            exit(1);
+        }
+        
+        if(eth->type == htons(0x0800) && //IP datagram
+           ip->protocol == 1 && //ICMP packet
+           icmp->type == 0) //ECHO reply
+        {
+            printf("\n\033[1;32m                   ECHO reply\n\033[0m");
+            print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), "[1;32m");
+            found = 1;
+        }    
+    }
 }
 
-void create_IP(ip_datagram* ip, unsigned char* dst_IP, int payload_size, unsigned char protocol)
+unsigned short int checksum(unsigned char* buf, int size)
 {
+    int i;
+    unsigned int sum=0;
+    unsigned short* p = (unsigned short*) buf;
 
+    for(i=0; i<size/2; i++)
+    {
+        sum += htons(p[i]);
+        
+        if(sum&0x10000) 
+            sum = (sum&0xffff)+1;
+    }
+
+    return (unsigned short) ~sum;
 }
-
-void echo_request(icmp_pkt* icmp, int payload_size)
-{
-
-}
-
-void ping_application(unsigned char* src_IP, unsigned char* src_MAC, 
-                      unsigned char* dst_IP, unsigned char* dst_MAC);
-
-void checksum(char* buf, int size);

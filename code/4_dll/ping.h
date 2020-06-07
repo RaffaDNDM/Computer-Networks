@@ -56,11 +56,10 @@ typedef struct
     unsigned short id;
     unsigned short flag_offs;
     unsigned char ttl;
-    unsigned char proto;
-    unsigned short checksum;
     unsigned char protocol;
-    unsigned long src_IP;
-    unsigned long dst_IP;
+    unsigned short checksum;
+    unsigned int src_IP;
+    unsigned int dst_IP;
     unsigned char payload[1500];
 }ip_datagram;
 
@@ -78,8 +77,9 @@ typedef struct
  *  @brief Print a packet on stdin.
  *  @param pkt packet to print
  *  @param size size of packet @pkt
+ *  @param color color of the table, representing the packet 
  */
-void print_packet(unsigned char* pkt, int size);
+void print_packet(unsigned char* pkt, int size, char* color);
 
 /**
  * @brief Send ARP request and analyze ARP reply, obtaining MAC address of remote machine.
@@ -92,43 +92,17 @@ void print_packet(unsigned char* pkt, int size);
 void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char* gateway);
 
 /**
- * @brief Create Ethernet packet.
- * @param eth pointer to Ethernet packet to fullfill
- * @param dst_MAC destination MAC address to which we send the message
- * @param src_MAC source MAC address (my MAC address)
- */
-void create_eth(eth_frame* eth, unsigned char* dst_MAC, unsigned char* src_MAC);
-
-/**
- * @brief Create IP packet.
- * @param ip pointer to IP packet to fullfill
- * @param dst_IP destination IP address to which we send the message
- * @param payload_size size of the IP payload
- * @param protocol protocol to be used in IP (ICMP)
- */
-void create_IP(ip_datagram* ip, unsigned char* dst_IP, int payload_size, unsigned char protocol);
-
-
-/**
- * @brief Creation of the ICMP packet for echo request (PING).
- * @param icmp pointer to ICMP packet to fullfill
- * @param payload_size size of the ICMP payload
- */
-void echo_request(icmp_pkt* icmp, int payload_size);
-
-/**
  * @brief Ping routine.
  * @param src_IP my IP address
  * @param src_MAC my MAC address
  * @param dst_IP IP address of remote host
  * @param dst_MAC IP address of remote host
  */
-void ping_application(unsigned char* src_IP, unsigned char* src_MAC, 
-                      unsigned char* dst_IP, unsigned char* dst_MAC);
+void ping_application(int sd, char* interface, host src_IP, host dst);
 
 /**
  * @brief Computation of checksum of a set of bytes.
  * @param buf set of bytes of which we want to compute the checksum
  * @param size number of bytes of @buf
  */
-void checksum(char* buf, int size);
+unsigned short int checksum(unsigned char* buf, int size);
