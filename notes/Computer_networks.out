@@ -45,38 +45,48 @@
 \BOOKMARK [1][-]{section.6.2}{IP address}{chapter.6}% 45
 \BOOKMARK [1][-]{section.6.3}{Fragmentation}{chapter.6}% 46
 \BOOKMARK [1][-]{section.6.4}{Internet Header Format}{chapter.6}% 47
-\BOOKMARK [0][-]{chapter.7}{HTTP protocol}{}% 48
-\BOOKMARK [1][-]{section.7.1}{Terminology}{chapter.7}% 49
-\BOOKMARK [1][-]{section.7.2}{Basic rules}{chapter.7}% 50
-\BOOKMARK [1][-]{section.7.3}{Messages}{chapter.7}% 51
-\BOOKMARK [2][-]{subsection.7.3.1}{Different versions of HTTP protocol}{section.7.3}% 52
-\BOOKMARK [2][-]{subsection.7.3.2}{Headers}{section.7.3}% 53
-\BOOKMARK [2][-]{subsection.7.3.3}{Request-Line}{section.7.3}% 54
-\BOOKMARK [2][-]{subsection.7.3.4}{Request-URI}{section.7.3}% 55
-\BOOKMARK [2][-]{subsection.7.3.5}{Request Header}{section.7.3}% 56
-\BOOKMARK [2][-]{subsection.7.3.6}{Status line}{section.7.3}% 57
-\BOOKMARK [1][-]{section.7.4}{HTTP 1.0}{chapter.7}% 58
-\BOOKMARK [2][-]{subsection.7.4.1}{Other headers of HTTP/1.0 and HTTP/1.1}{section.7.4}% 59
-\BOOKMARK [2][-]{subsection.7.4.2}{Caching}{section.7.4}% 60
-\BOOKMARK [2][-]{subsection.7.4.3}{Authorization}{section.7.4}% 61
-\BOOKMARK [3][-]{subsubsection.7.4.3.1}{base64}{subsection.7.4.3}% 62
-\BOOKMARK [3][-]{subsubsection.7.4.3.2}{Auth-schemes}{subsection.7.4.3}% 63
-\BOOKMARK [1][-]{section.7.5}{HTTP 1.1}{chapter.7}% 64
-\BOOKMARK [2][-]{subsection.7.5.1}{Caching based on HASH}{section.7.5}% 65
-\BOOKMARK [2][-]{subsection.7.5.2}{URI}{section.7.5}% 66
-\BOOKMARK [2][-]{subsection.7.5.3}{HTTP URL}{section.7.5}% 67
-\BOOKMARK [1][-]{section.7.6}{Dynamic pages}{chapter.7}% 68
-\BOOKMARK [1][-]{section.7.7}{Proxy}{chapter.7}% 69
-\BOOKMARK [0][-]{chapter.8}{Resolution of names}{}% 70
-\BOOKMARK [1][-]{section.8.1}{Network Information Center \(NIC\)}{chapter.8}% 71
-\BOOKMARK [1][-]{section.8.2}{Domain Name System \(DNS\)}{chapter.8}% 72
-\BOOKMARK [2][-]{subsection.8.2.1}{Goals}{section.8.2}% 73
-\BOOKMARK [2][-]{subsection.8.2.2}{Hierarchy structure}{section.8.2}% 74
-\BOOKMARK [0][-]{chapter.9}{Shell}{}% 75
-\BOOKMARK [1][-]{section.9.1}{Commands}{chapter.9}% 76
-\BOOKMARK [1][-]{section.9.2}{UNIX Files}{chapter.9}% 77
-\BOOKMARK [0][-]{chapter.10}{vim}{}% 78
-\BOOKMARK [1][-]{section.10.1}{.vimrc}{chapter.10}% 79
-\BOOKMARK [1][-]{section.10.2}{Shortcuts}{chapter.10}% 80
-\BOOKMARK [1][-]{section.10.3}{Multiple files}{chapter.10}% 81
-\BOOKMARK [0][-]{table.caption.138}{References}{}% 82
+\BOOKMARK [0][-]{chapter.7}{ICMP}{}% 48
+\BOOKMARK [1][-]{section.7.1}{Main rules of ICMP error messages}{chapter.7}% 49
+\BOOKMARK [1][-]{section.7.2}{Types of ICMP messages}{chapter.7}% 50
+\BOOKMARK [2][-]{subsection.7.2.1}{Echo}{section.7.2}% 51
+\BOOKMARK [2][-]{subsection.7.2.2}{Destination unreachable}{section.7.2}% 52
+\BOOKMARK [2][-]{subsection.7.2.3}{Time exceeded}{section.7.2}% 53
+\BOOKMARK [2][-]{subsection.7.2.4}{Parameter problem}{section.7.2}% 54
+\BOOKMARK [2][-]{subsection.7.2.5}{Redirect}{section.7.2}% 55
+\BOOKMARK [2][-]{subsection.7.2.6}{Timestamp request e reply}{section.7.2}% 56
+\BOOKMARK [2][-]{subsection.7.2.7}{Address mask request and reply}{section.7.2}% 57
+\BOOKMARK [0][-]{chapter.8}{HTTP protocol}{}% 58
+\BOOKMARK [1][-]{section.8.1}{Terminology}{chapter.8}% 59
+\BOOKMARK [1][-]{section.8.2}{Basic rules}{chapter.8}% 60
+\BOOKMARK [1][-]{section.8.3}{Messages}{chapter.8}% 61
+\BOOKMARK [2][-]{subsection.8.3.1}{Different versions of HTTP protocol}{section.8.3}% 62
+\BOOKMARK [2][-]{subsection.8.3.2}{Headers}{section.8.3}% 63
+\BOOKMARK [2][-]{subsection.8.3.3}{Request-Line}{section.8.3}% 64
+\BOOKMARK [2][-]{subsection.8.3.4}{Request-URI}{section.8.3}% 65
+\BOOKMARK [2][-]{subsection.8.3.5}{Request Header}{section.8.3}% 66
+\BOOKMARK [2][-]{subsection.8.3.6}{Status line}{section.8.3}% 67
+\BOOKMARK [1][-]{section.8.4}{HTTP 1.0}{chapter.8}% 68
+\BOOKMARK [2][-]{subsection.8.4.1}{Other headers of HTTP/1.0 and HTTP/1.1}{section.8.4}% 69
+\BOOKMARK [2][-]{subsection.8.4.2}{Caching}{section.8.4}% 70
+\BOOKMARK [2][-]{subsection.8.4.3}{Authorization}{section.8.4}% 71
+\BOOKMARK [3][-]{subsubsection.8.4.3.1}{base64}{subsection.8.4.3}% 72
+\BOOKMARK [3][-]{subsubsection.8.4.3.2}{Auth-schemes}{subsection.8.4.3}% 73
+\BOOKMARK [1][-]{section.8.5}{HTTP 1.1}{chapter.8}% 74
+\BOOKMARK [2][-]{subsection.8.5.1}{Caching based on HASH}{section.8.5}% 75
+\BOOKMARK [2][-]{subsection.8.5.2}{URI}{section.8.5}% 76
+\BOOKMARK [2][-]{subsection.8.5.3}{HTTP URL}{section.8.5}% 77
+\BOOKMARK [1][-]{section.8.6}{Dynamic pages}{chapter.8}% 78
+\BOOKMARK [1][-]{section.8.7}{Proxy}{chapter.8}% 79
+\BOOKMARK [0][-]{chapter.9}{Resolution of names}{}% 80
+\BOOKMARK [1][-]{section.9.1}{Network Information Center \(NIC\)}{chapter.9}% 81
+\BOOKMARK [1][-]{section.9.2}{Domain Name System \(DNS\)}{chapter.9}% 82
+\BOOKMARK [2][-]{subsection.9.2.1}{Goals}{section.9.2}% 83
+\BOOKMARK [2][-]{subsection.9.2.2}{Hierarchy structure}{section.9.2}% 84
+\BOOKMARK [0][-]{chapter.10}{Shell}{}% 85
+\BOOKMARK [1][-]{section.10.1}{Commands}{chapter.10}% 86
+\BOOKMARK [1][-]{section.10.2}{UNIX Files}{chapter.10}% 87
+\BOOKMARK [0][-]{chapter.11}{vim}{}% 88
+\BOOKMARK [1][-]{section.11.1}{.vimrc}{chapter.11}% 89
+\BOOKMARK [1][-]{section.11.2}{Shortcuts}{chapter.11}% 90
+\BOOKMARK [1][-]{section.11.3}{Multiple files}{chapter.11}% 91
+\BOOKMARK [0][-]{table.caption.156}{References}{}% 92

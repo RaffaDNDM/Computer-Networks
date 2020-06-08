@@ -458,7 +458,15 @@ int packet_socket = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
 \end{lstlisting}
 \end{tabular}
 \end{center}
-The \textbf{ETH\_P\_ALL} guarantees to receive all protocols packets.  
+The \textbf{ETH\_P\_ALL} guarantees to receive all protocols packets.
+To obtain the permission from Linux systems, we need to do the following shell command before executing the program. Otherwise the socket won't be created because the operation is not permitted.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=270pt, basicstyle=\footnotesize\sffamily,]
+setcap cap_net_raw,cap_net_admin=eip ./my_exeutable
+\end{lstlisting}
+\end{tabular}
+\end{center}
 
 \subsection{Structure of Layer 2}
 \begin{center}
