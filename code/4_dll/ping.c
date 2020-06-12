@@ -1,7 +1,6 @@
 #include "ping.h"
 
-#define IP_HEADER_SIZE 20
-#define ECHO_HEADER_SIZE 8
+int verbose = MIN_VERBOSE;
 
 int main(int argc, char** argv)
 {
@@ -22,13 +21,16 @@ int main(int argc, char** argv)
 
     host src; //me
     host dst; //remote host
+    int num_pkts = DEFAULT_NUM;
+    int size_pkt = DEFAULT_SIZE;
+    double timeout = DEFAULT_TIMEOUT; 
 
     if(argc==1)
     {
-        perror("You need to specify at least destination address, type --help for info");
+        printf("You need to specify at least destination address, type --help for info");
         exit(1);
     }
-    if(argc==2)
+    else if(argc>=2)
     {
         if(inet_aton(argv[1], &addr)==0) //input argument is not a valid IP address
         {
@@ -53,11 +55,26 @@ int main(int argc, char** argv)
             for(i=0; i<4; i++)
                 dst.ip[i] = p[i];
         }
+
+        if(argc>2)
+        {
+            int i=2;
+            for(; i<argc; i++)
+            {
+                if(!strncmp(argv[i], "-n", 2))
+                    num_pkts = atoi(argv[++i]);
+                else if(!strncmp(argv[i], "-s", 2))
+                    size_pkt = atoi(argv[++i]);
+                else if(!strncmp(argv[i], "-t", 2))
+                    timeout  = atof(argv[++i]);
+                else if(!strncmp(argv[i], "-v", 2))
+                    verbose  = MAX_VERBOSE;
+            }
+        }
     }
     
-    
-    printf("\n\033[1;31m---------------Remote  analysis----------------------\n\033[0m");
-    printf("\033[1;32mDestination address = \033[0m");
+    printf("\n%s---------------Remote  analysis----------------------\n%s", BOLD_RED, DEFAULT);
+    printf("%sDestination address = %s",BOLD_GREEN, DEFAULT);
     for(i=0; i<3; i++)
     {
         printf("%u.", dst.ip[i]);
@@ -141,17 +158,17 @@ int main(int argc, char** argv)
     }
 
     printf("\n");
-    printf("\033[1;35mGateway: \033[0m"); 
+    printf("%sGateway: %s", BOLD_MAGENTA, DEFAULT); 
     for(i=0; i<3; i++)
         printf("%u.", gateway[i]);
     printf("%u\n", gateway[i]);
 
-    printf("\033[1;35mNetwork: \033[0m");
+    printf("%sNetwork: %s", BOLD_MAGENTA, DEFAULT);
     for(i=0; i<3; i++)
         printf("%u.", network[i]);
     printf("%u\n", network[i]);
 
-    printf("\033[1;35mMask: \033[0m");
+    printf("%s   Mask: %s", BOLD_MAGENTA, DEFAULT);
     for(i=0; i<3; i++)
         printf("%u.", mask[i]);
     printf("%u\n", mask[i]);
@@ -175,9 +192,9 @@ int main(int argc, char** argv)
     
     printf("\n");
 
-    printf("\033[1;36mEthernet Interface:\033[0m %s\n", interface);
+    printf("%sEthernet Interface:%s %s\n", BOLD_CYAN, DEFAULT, interface);
 
-    printf("\033[1;36mSource MAC address: \033[0m");
+    printf("%sSource MAC address: %s", BOLD_CYAN, DEFAULT);
     for(i=0; i<5; i++)
         printf("%x:", src.mac[i]);
     printf("%x\n", src.mac[i]);
@@ -198,7 +215,7 @@ int main(int argc, char** argv)
 
     pclose(fd);
     
-    printf("\033[1;36mSource IP address: \033[0m");
+    printf("%sSource IP address: %s", BOLD_CYAN, DEFAULT);
     for(i=0; i<3; i++)
         printf("%d.", src.ip[i]);
     printf("%d\n",src.ip[i]);
@@ -224,20 +241,21 @@ int main(int argc, char** argv)
             arp_resolution(sd, &dst, gateway);
     */
 
-    printf("\n\033[1;31m-------------------ARP packets-----------------------\n\033[0m");
+    printf("\n%s-------------------ARP packets-----------------------\n%s", BOLD_RED, DEFAULT);
     arp_resolution(sd, &src, &dst, interface, gateway);
     
-    printf("\033[1;33mDestination MAC address: \033[0m");
+    printf("%sDestination MAC address: %s", BOLD_YELLOW, DEFAULT);
     for(i=0; i<5; i++)
         printf("%x:", dst.mac[i]);
     printf("%x\n", dst.mac[i]);
  
-    printf("\n\033[1;31m-----------------------Ping--------------------------\n\033[0m");
+    printf("\n%s-----------------------------------Ping--------------------------------------\n%s", BOLD_RED, DEFAULT);
 
 
     //Ping application
-    ping_application(sd, interface, src, dst); 
+    ping(sd, num_pkts, size_pkt, timeout, interface, src, dst); 
 
+    printf("%s%s%s\n", BOLD_RED, LINE_32_BITS, DEFAULT);
     return 0;
 }
 
@@ -247,26 +265,26 @@ void print_packet(unsigned char* pkt, int size, char* color)
     int count = ((size%4)==0)? 4: (size%4);
 
 
-    printf("\033%s%s\033[0m", color, LINE_32_BITS); 
+    printf("%s%s%s", color, LINE_32_BITS, DEFAULT); 
     for(; i<size; i++)
     {
-        printf("\033%s|\033[0;33m 0x%02x (\033[0m%03u\033[0;33m)\033[0m ", color, pkt[i], pkt[i]);
+        printf("%s|%s 0x%02x (%s%03u%s)%s ", color, YELLOW, pkt[i], DEFAULT, pkt[i], YELLOW, DEFAULT);
         
         if((i%4)==3 || i==(size-1))
         {
-            printf("\033%s|\033[0m\n", color);
+            printf("%s|%s\n", color, DEFAULT);
        
             if(i!=(size-1))
-                printf("\033%s%s\033[0m", color, LINE_32_BITS); 
+                printf("%s%s%s", color, LINE_32_BITS, DEFAULT); 
         }
     }
     
     for(i=0; i<count; i++)
     {
-        printf("\033%s-------------", color);
+        printf("%s-------------", color);
     }
 
-    printf("-\033[0m\n\n");
+    printf("-%s\n\n", DEFAULT);
 
 }
 
@@ -335,8 +353,12 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
 
     len = sizeof(sll);
 
-    printf("\n\033[1;34m                   ARP request\n\033[0m");
-    print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), "[1;34m");
+    if(verbose>50)
+    {
+        printf("\n%s                   ARP request\n%s", BOLD_BLUE, DEFAULT);
+        print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), BOLD_BLUE);
+    }
+
     n = sendto(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, sizeof(sll));
 
     if(n==-1)
@@ -361,15 +383,20 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
            (!memcmp(arp->src_IP, gateway, 4) && !local))) //dst of ARP request = src of ARP reply
         {
             memcpy(dst->mac, arp->src_MAC, 6);
-    
-            printf("\n\033[1;34m                     ARP reply\n\033[0m");
-            print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), "[1;34m");
+
+            if(verbose>50)
+            {    
+                printf("\n%s                     ARP reply\n%s", BOLD_BLUE, DEFAULT);
+                print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), BOLD_BLUE);
+            }
+
             found = 1;
         }
     }
 }
 
-void ping_application(int sd, char* interface, host src, host dst)
+int ping_iteration(int sd, int id_pkt, int size_pkt, 
+                   double timeout, char* interface, host src, host dst)
 {
     unsigned char packet[PACKET_SIZE];
     struct sockaddr_ll sll;
@@ -379,7 +406,6 @@ void ping_application(int sd, char* interface, host src, host dst)
     int i;
     int found = 0;
     socklen_t len;
-    int payload_size=20;
     int n;
 
     eth = (eth_frame*) &packet;
@@ -394,8 +420,8 @@ void ping_application(int sd, char* interface, host src, host dst)
     //IP packet
     ip->ver_IHL = 0x45;
     ip->type_service = 0;
-    ip->length = htons(ECHO_HEADER_SIZE+payload_size+IP_HEADER_SIZE);
-    ip->id = htons(0xABCD);
+    ip->length = htons(ECHO_HEADER_SIZE+size_pkt+IP_HEADER_SIZE);
+    ip->id = htons(id_pkt);
     ip->flag_offs = htons(0);
     ip->ttl = 128;
     ip->protocol = 1; //ICMP
@@ -409,23 +435,30 @@ void ping_application(int sd, char* interface, host src, host dst)
     icmp->type = 8;
     icmp->code = 0;
     icmp->checksum = htons(0);
-    icmp->id = htons(0x1234);
+    icmp->id = htons(id_pkt);
     icmp->seq = htons(1);
     
-    for(i=0; i<payload_size; i++)
+    for(i=0; i<size_pkt; i++)
         icmp->payload[i] = i&0xff;
 
-    icmp->checksum = htons(checksum((unsigned char*) icmp, ECHO_HEADER_SIZE+payload_size));
+    icmp->checksum = htons(checksum((unsigned char*) icmp, ECHO_HEADER_SIZE+size_pkt));
     //Checksum of the entire packet
 
+
+    for(i=0; i<sizeof(sll); i++)
+        ((char*) &sll)[i]=0;
 
     sll.sll_family = AF_PACKET;
     sll.sll_ifindex = if_nametoindex(interface);
     len = sizeof(sll);
 
-    printf("\n\033[1;32m                 ECHO request\n\033[0m");
-    print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+payload_size, "[1;32m");
-    n = sendto(sd, packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+payload_size, 0, (struct sockaddr*) &sll, len); 
+    if(verbose>50)
+    {
+        printf("\n%s                 ECHO request\n%s", BOLD_BLUE, DEFAULT);
+        print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+size_pkt, BOLD_BLUE);
+    }
+
+    n = sendto(sd, packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+size_pkt, 0, (struct sockaddr*) &sll, len); 
 
     if(n==-1)
     {
@@ -433,28 +466,50 @@ void ping_application(int sd, char* interface, host src, host dst)
         exit(1);
     }
 
-
-    while(!found)
+    time_t start = clock();
+    double remaining_time = timeout;
+    
+    while(!found && remaining_time > 0.0)
     {
-        n = recvfrom(sd, packet, PACKET_SIZE, 0, (struct sockaddr*) &sll, &len);   
+        len = sizeof(sll);
+        n = recvfrom(sd, packet, PACKET_SIZE, 0, (struct sockaddr*) &sll, &len);
+        
         if(n==-1)
         {
-            perror("ECHO sendto ERROR");
+            perror("ECHO recvfrom ERROR");
             exit(1);
         }
         
+        time_t end = clock();
+        remaining_time -= ((double) (end-start)/(double) CLOCKS_PER_SEC)*1000.0;
+
+        
+        if(remaining_time < 0)
+        {
+            printf("TIME EXCEEDED\n");
+            return 0;
+        }
+
         if(eth->type == htons(0x0800) && //IP datagram
            ip->protocol == 1 && //ICMP packet
-           icmp->type == 0) //ECHO reply
+           icmp->type == 0 &&
+           icmp->id == htons(id_pkt)) //ECHO reply
         {
-            printf("\n\033[1;32m                   ECHO reply\n\033[0m");
-            print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+payload_size, "[1;32m");
+            if(verbose>50)
+            {
+                printf("\n%s                   ECHO reply\n%s", BOLD_BLUE, DEFAULT);
+                print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+size_pkt, BOLD_BLUE);
+            }
+
             found = 1;
-        }    
+            print_ping(id_pkt, ip->ttl, size_pkt, timeout-remaining_time);
+        }
     }
+
+    return 1;
 }
 
-unsigned short int checksum(unsigned char* buf, int size)
+unsigned short checksum(unsigned char* buf, int size)
 {
     int i;
     unsigned int sum=0;
@@ -469,4 +524,24 @@ unsigned short int checksum(unsigned char* buf, int size)
     }
 
     return (unsigned short) ~sum;
+}
+
+void print_ping(int id, int ttl, int size, double elapsed_time)
+{
+    printf("%s[Packet %3d]%s ttl:%s %3d hops left     %ssize:%s %3d bytes    %selapsed_time:%s %.3lf ms\n", BOLD_CYAN, id, MAGENTA, DEFAULT, ttl, GREEN, DEFAULT, size, YELLOW, DEFAULT, elapsed_time);
+}
+
+void ping(int sd, int num_pkts, int size_pkt, double timeout,
+          char* interface, host src, host dst)
+{
+    int i=0;
+    int count_done = 0; 
+
+    while(i<num_pkts)
+    {
+        count_done += ping_iteration(sd, i+1, size_pkt, timeout, interface, src, dst);
+        i++;
+    }
+    
+    printf("\n %sCOMPLETED:%s %d/%d\n", BOLD_YELLOW, DEFAULT, count_done, num_pkts);
 }
