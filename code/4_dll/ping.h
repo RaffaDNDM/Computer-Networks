@@ -160,9 +160,10 @@ unsigned short int checksum(unsigned char* buf, int size);
 void ping(int sd, int num_pkts, int size_pkt, double timeout, char* interface, host src, host dst);
 
 /**
- *
- *
- *
- *
+ * @brief Print info obtained by ECHO reply.
+ * @param id identifier of the packet
+ * @param ttl time to live from ECHO reply
+ * @param size size of the packet
+ * @elapsed time of the packet
  */
 void print_ping(int id, int ttl, int size, double elapsed_time);
