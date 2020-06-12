@@ -65,47 +65,47 @@ typedef struct
 
 typedef struct
 {
-    unsigned char dst[6];
-    unsigned char src[6];
-    unsigned short int type;
-    unsigned char payload[1500];
+    unsigned char dst[6]; //dst MAC address
+    unsigned char src[6]; //src MAC address
+    unsigned short int type; //type of upper layer protocol (e.g. IP, ARP,...)
+    unsigned char payload[1500]; //payload
 }eth_frame;
 
 typedef struct
 {
-    unsigned short hw;
-    unsigned short protocol;
-    unsigned char hw_len;
-    unsigned char prot_len;
-    unsigned short op;
-    unsigned char src_MAC[6];
-    unsigned char src_IP[4];
-    unsigned char dst_MAC[6];
-    unsigned char dst_IP[4];
+    unsigned short hw; //code for HW protocol (e.g. Ethernet)
+    unsigned short protocol; //code for upper layer protocol (e.g. IP)
+    unsigned char hw_len; //length of HW address (6 for MAC)
+    unsigned char prot_len; // length of protocol address (4 for IP)
+    unsigned short op; //operation we want to do (e.g. ARP request or reply, rARP request or reply, ...)
+    unsigned char src_MAC[6]; //src HW address
+    unsigned char src_IP[4]; //src protocol address
+    unsigned char dst_MAC[6]; //dst HW address
+    unsigned char dst_IP[4]; //dst protocol address
 }arp_pkt;
 
 typedef struct
 {
-    unsigned char ver_IHL;
-    unsigned char type_service;
-    unsigned short length;
-    unsigned short id;
-    unsigned short flag_offs;
-    unsigned char ttl;
-    unsigned char protocol;
-    unsigned short checksum;
-    unsigned int src_IP;
-    unsigned int dst_IP;
+    unsigned char ver_IHL; //version (8 Bytes) = 4  +  IHL (8 Bytes) = number of 32 words used in header = 5
+    unsigned char type_service; //type of service
+    unsigned short length; // length of the entire IP datagram
+    unsigned short id; //identifier of the packet
+    unsigned short flag_offs; // flags (Don't fragment,...)
+    unsigned char ttl; //Time to live
+    unsigned char protocol; //upper layer protocol (e.g. ICMP)
+    unsigned short checksum; //checksum of IP header 
+    unsigned int src_IP; //src IP address
+    unsigned int dst_IP; //dst IP address
     unsigned char payload[1500];
 }ip_datagram;
 
 typedef struct
 {
-    unsigned char type;
-    unsigned char code;
-    unsigned short checksum;
-    unsigned short id;
-    unsigned short seq;
+    unsigned char type; //type of ICMP packet (8=ECHO request,  0=ECHO reply)
+    unsigned char code; //additional specifier of type
+    unsigned short checksum; //checksum of entire ICMP packet (Header+Payload)
+    unsigned short id; //identifier of the packet
+    unsigned short seq; //usefull to identify packet together with id
     unsigned char payload[1500];
 }icmp_pkt;
 
@@ -128,11 +128,14 @@ void print_packet(unsigned char* pkt, int size, char* color);
 void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char* gateway);
 
 /**
- * @brief Ping single iteration.
- * @param src_IP my IP address
- * @param src_MAC my MAC address
- * @param dst_IP IP address of remote host
- * @param dst_MAC IP address of remote host
+ * @brief Ping single iteration (it sends ECHO request and wait for reply).
+ * @param sd socket descriptor
+ * @param id_pkt identifier for the packet
+ * @param size_pkt size of the packet
+ * @param timeout timeout for which the function waits a reply
+ * @param interface name of the network interface to use
+ * @param src addresses of source host
+ * @param dst addresses of remote host
  */
 int ping_iteration(int sd, int id_pkt, int size_pkts,
                     double timeout, char* interface, host src, host dst);
@@ -144,8 +147,22 @@ int ping_iteration(int sd, int id_pkt, int size_pkts,
  */
 unsigned short int checksum(unsigned char* buf, int size);
 
-
+/**
+ * @brief Compute multiple ECHO requests and replies.
+ * @param sd socket descriptor
+ * @param num_pkt number of packets to manage
+ * @param size_pkt size of the packet
+ * @param timeout timeout for which the function waits a reply
+ * @param interface name of the network interface to use
+ * @param src addresses of source host
+ * @param dst addresses of remote host
+ */
 void ping(int sd, int num_pkts, int size_pkt, double timeout, char* interface, host src, host dst);
 
-
+/**
+ *
+ *
+ *
+ *
+ */
 void print_ping(int id, int ttl, int size, double elapsed_time);

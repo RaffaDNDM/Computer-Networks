@@ -432,7 +432,7 @@ int ping_iteration(int sd, int id_pkt, int size_pkt,
 
 
     //Echo request (ICMP)
-    icmp->type = 8;
+    icmp->type = 8; //ECHO request
     icmp->code = 0;
     icmp->checksum = htons(0);
     icmp->id = htons(id_pkt);
@@ -492,8 +492,8 @@ int ping_iteration(int sd, int id_pkt, int size_pkt,
 
         if(eth->type == htons(0x0800) && //IP datagram
            ip->protocol == 1 && //ICMP packet
-           icmp->type == 0 &&
-           icmp->id == htons(id_pkt)) //ECHO reply
+           icmp->type == 0 && //ECHO reply
+           icmp->id == htons(id_pkt))
         {
             if(verbose>50)
             {
