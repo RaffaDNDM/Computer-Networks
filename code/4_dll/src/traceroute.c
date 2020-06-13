@@ -1,6 +1,9 @@
-#include "ping.h"
+#include "traceroute.h"
+#include "utility.h"
+#include "arp.h"
 
 int verbose = MIN_VERBOSE;
+double precision = 1000000.0; //ms=1000 ns=1000000
 
 int main(int argc, char** argv)
 {
@@ -21,9 +24,7 @@ int main(int argc, char** argv)
 
     host src; //me
     host dst; //remote host
-    int num_pkts = DEFAULT_NUM;
     int size_pkt = DEFAULT_SIZE;
-    double timeout = DEFAULT_TIMEOUT; 
 
     if(argc==1)
     {
@@ -61,12 +62,8 @@ int main(int argc, char** argv)
             int i=2;
             for(; i<argc; i++)
             {
-                if(!strncmp(argv[i], "-n", 2))
-                    num_pkts = atoi(argv[++i]);
-                else if(!strncmp(argv[i], "-s", 2))
+                if(!strncmp(argv[i], "-s", 2))
                     size_pkt = atoi(argv[++i]);
-                else if(!strncmp(argv[i], "-t", 2))
-                    timeout  = atof(argv[++i]);
                 else if(!strncmp(argv[i], "-v", 2))
                     verbose  = MAX_VERBOSE;
             }
@@ -242,161 +239,38 @@ int main(int argc, char** argv)
     */
 
     printf("\n%s-------------------ARP packets-----------------------\n%s", BOLD_RED, DEFAULT);
-    arp_resolution(sd, &src, &dst, interface, gateway);
+    arp_resolution(sd, &src, &dst, interface, gateway, verbose);
     
     printf("%sDestination MAC address: %s", BOLD_YELLOW, DEFAULT);
     for(i=0; i<5; i++)
         printf("%x:", dst.mac[i]);
     printf("%x\n", dst.mac[i]);
  
-    printf("\n%s-----------------------------------Ping--------------------------------------\n%s", BOLD_RED, DEFAULT);
+    printf("\n%s--------------------------------Traceroute-----------------------------------\n%s", BOLD_RED, DEFAULT);
 
 
-    //Ping application
-    ping(sd, num_pkts, size_pkt, timeout, interface, src, dst); 
+    //Traceroute application
+    traceroute(sd, size_pkt, interface, src, dst); 
 
     printf("%s%s%s\n", BOLD_RED, LINE_32_BITS, DEFAULT);
     return 0;
 }
 
-void print_packet(unsigned char* pkt, int size, char* color)
+void traceroute(int sd, int size_pkt, char* interface, host src, host dst)
 {
     int i=0;
-    int count = ((size%4)==0)? 4: (size%4);
+    int time_exceeded = 1; 
 
-
-    printf("%s%s%s", color, LINE_32_BITS, DEFAULT); 
-    for(; i<size; i++)
+    while(time_exceeded)
     {
-        printf("%s|%s 0x%02x (%s%03u%s)%s ", color, YELLOW, pkt[i], DEFAULT, pkt[i], YELLOW, DEFAULT);
-        
-        if((i%4)==3 || i==(size-1))
-        {
-            printf("%s|%s\n", color, DEFAULT);
-       
-            if(i!=(size-1))
-                printf("%s%s%s", color, LINE_32_BITS, DEFAULT); 
-        }
+        time_exceeded = traceroute_iteration(sd, i+1, size_pkt, interface, src, dst);
+        i++;
     }
     
-    for(i=0; i<count; i++)
-    {
-        printf("%s-------------", color);
-    }
-
-    printf("-%s\n\n", DEFAULT);
-
+    printf("\n %sNUMBER OF HOPS:%s %d\n", BOLD_YELLOW, DEFAULT, time_exceeded);
 }
 
-void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char* gateway)
-{
-    unsigned char packet[PACKET_SIZE];
-    struct sockaddr_ll sll;
-    eth_frame *eth;
-    arp_pkt *arp;
-    int i;
-    int found = 0;
-    socklen_t len;
-    int n;
-
-    //Ethernet header
-    eth = (eth_frame*) &packet;
-
-    for(i=0; i<6; i++)
-        eth->dst[i]=0xff; //Broadcast request
-
-    memcpy(eth->src, src->mac, 6);
-    //for(i=0; i<6; i++)
-    //    eth->src[i]=src->mac[i];
-
-    eth->type = htons(0x0806);
-
-    //ARP packet
-    arp = (arp_pkt*) &(eth->payload);
-
-    arp->hw = htons(0x0001);
-    arp->protocol = htons(0x0800);
-    arp->hw_len = 6;
-    arp->prot_len = 4;
-    arp->op = htons(0x0001);
-    
-    memcpy(arp->src_MAC, src->mac, 6);
-    //for(i=0; i<6; i++)
-    //    arp->src_MAC[i] = src->mac[i];
-
-    memcpy(arp->src_IP, src->ip, 4);
-    //for(i=0; i<4; i++)
-    //    arp->src_IP[i] = src->ip[i];
-
-    for(i=0; i<6; i++)
-        arp->dst_MAC[i] = 0;
-
-    
-    int local = ((*(unsigned int*) gateway)==0)? 1 : 0;
-
-    if(local)
-    {
-        printf("        The remote host is in the same LAN\n");
-        memcpy(arp->dst_IP, dst->ip, 4);
-    }
-    else
-    {
-        printf("      The remote host is outside the network\n");
-        memcpy(arp->dst_IP, gateway, 4);
-    }
-    //for(i=0; i<4; i++)
-    //  arp->dst_IP[i] = (local)? dst->ip[i] : gateway[i];
-        
-
-    sll.sll_family = AF_PACKET;
-    sll.sll_ifindex = if_nametoindex(interface);
-
-    len = sizeof(sll);
-
-    if(verbose>50)
-    {
-        printf("\n%s                   ARP request\n%s", BOLD_BLUE, DEFAULT);
-        print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), BOLD_BLUE);
-    }
-
-    n = sendto(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, sizeof(sll));
-
-    if(n==-1)
-    {
-        perror("ARP sendto ERROR");
-        exit(1);
-    }
-
-    while(!found)
-    {
-        int n = recvfrom(sd, packet, ETH_HEADER_SIZE+sizeof(arp_pkt), 0, (struct sockaddr*) &sll, &len);
-
-        if(n==-1)
-        {
-            perror("ARP recvfrom ERROR");
-            exit(1);
-        }
-
-        if(eth->type == htons(0x0806) && //it's ARP
-           arp->op == htons(0x0002) && //it's ARP reply
-           ((!memcmp(arp->src_IP, dst->ip, 4) && local) ||
-           (!memcmp(arp->src_IP, gateway, 4) && !local))) //dst of ARP request = src of ARP reply
-        {
-            memcpy(dst->mac, arp->src_MAC, 6);
-
-            if(verbose>50)
-            {    
-                printf("\n%s                     ARP reply\n%s", BOLD_BLUE, DEFAULT);
-                print_packet(packet, ETH_HEADER_SIZE+sizeof(arp_pkt), BOLD_BLUE);
-            }
-
-            found = 1;
-        }
-    }
-}
-
-int ping_iteration(int sd, int id_pkt, int size_pkt, 
-                   double timeout, char* interface, host src, host dst)
+int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host src, host dst)
 {
     unsigned char packet[PACKET_SIZE];
     struct sockaddr_ll sll;
@@ -423,7 +297,7 @@ int ping_iteration(int sd, int id_pkt, int size_pkt,
     ip->length = htons(ECHO_HEADER_SIZE+size_pkt+IP_HEADER_SIZE);
     ip->id = htons(id_pkt);
     ip->flag_offs = htons(0);
-    ip->ttl = 128;
+    ip->ttl = id_pkt;
     ip->protocol = 1; //ICMP
     ip->checksum = 0;
     memcpy((unsigned char*) &(ip->src_IP), src.ip, 6);
@@ -467,9 +341,8 @@ int ping_iteration(int sd, int id_pkt, int size_pkt,
     }
 
     time_t start = clock();
-    double remaining_time = timeout;
     
-    while(!found && remaining_time > 0.0)
+    while(!found)
     {
         len = sizeof(sll);
         n = recvfrom(sd, packet, PACKET_SIZE, 0, (struct sockaddr*) &sll, &len);
@@ -481,14 +354,6 @@ int ping_iteration(int sd, int id_pkt, int size_pkt,
         }
         
         time_t end = clock();
-        remaining_time -= ((double) (end-start)/(double) CLOCKS_PER_SEC)*1000.0;
-
-        
-        if(remaining_time < 0)
-        {
-            printf("TIME EXCEEDED\n");
-            return 0;
-        }
 
         if(eth->type == htons(0x0800) && //IP datagram
            ip->protocol == 1 && //ICMP packet
@@ -498,50 +363,70 @@ int ping_iteration(int sd, int id_pkt, int size_pkt,
             if(verbose>50)
             {
                 printf("\n%s                   ECHO reply\n%s", BOLD_BLUE, DEFAULT);
-                print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+size_pkt, BOLD_BLUE);
+                print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+IP_HEADER_SIZE+8, BOLD_BLUE);
             }
 
+            host hop;
+            memcpy(hop.ip, (unsigned char*) &(ip->src_IP), 4);
+            memcpy(hop.mac, eth->src, 6);
+
             found = 1;
-            print_ping(id_pkt, ip->ttl, size_pkt, timeout-remaining_time);
+            double elapsed_time = ((double) (end-start)/(double) CLOCKS_PER_SEC)*precision;
+            print_route(id_pkt, hop, elapsed_time);
+        }
+        else if(eth->type == htons(0x0800) && //IP datagram
+           ip->protocol == 1 && //ICMP packet
+           icmp->type == 11 && //ICMP Time Exceeded
+           icmp->code == 0 && //TTL exceeded (1 for fragment)
+           icmp->id == htons(id_pkt))
+        {
+            if(verbose>50)
+            {
+                printf("\n%s                   Time Exceeded\n%s", BOLD_BLUE, DEFAULT);
+                print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+IP_HEADER_SIZE+8, BOLD_BLUE);
+            }
+
+            host hop;
+            memcpy(hop.ip, (unsigned char*) &(ip->src_IP), 4);
+            memcpy(hop.mac, eth->src, 6);
+            double elapsed_time = ((double) (end-start)/(double) CLOCKS_PER_SEC)*precision;
+            print_route(id_pkt, hop, elapsed_time);
+            return 1;
         }
     }
-
-    return 1;
+    
+    return 0;
 }
 
-unsigned short checksum(unsigned char* buf, int size)
+void print_route(int id, host hop, double elapsed_time)
 {
     int i;
-    unsigned int sum=0;
-    unsigned short* p = (unsigned short*) buf;
+    struct hostent *host_info;
+    struct in_addr addr; 
 
-    for(i=0; i<size/2; i++)
-    {
-        sum += htons(p[i]);
-        
-        if(sum&0x10000) 
-            sum = (sum&0xffff)+1;
-    }
-
-    return (unsigned short) ~sum;
-}
-
-void print_ping(int id, int ttl, int size, double elapsed_time)
-{
-    printf("%s[Packet %3d]%s ttl:%s %3d hops left     %ssize:%s %3d bytes    %selapsed_time:%s %.3lf ms\n", BOLD_CYAN, id, MAGENTA, DEFAULT, ttl, GREEN, DEFAULT, size, YELLOW, DEFAULT, elapsed_time);
-}
-
-void ping(int sd, int num_pkts, int size_pkt, double timeout,
-          char* interface, host src, host dst)
-{
-    int i=0;
-    int count_done = 0; 
-
-    while(i<num_pkts)
-    {
-        count_done += ping_iteration(sd, i+1, size_pkt, timeout, interface, src, dst);
-        i++;
-    }
+    printf("%s[Hop %3d]%s at %s", BOLD_CYAN, id, DEFAULT, MAGENTA);
     
-    printf("\n %sCOMPLETED:%s %d/%d\n", BOLD_YELLOW, DEFAULT, count_done, num_pkts);
+    for(i=0; i<3; i++)
+        printf("%u.", hop.ip[i]);
+    printf("%u ", hop.ip[i]);
+   
+    printf("%s", GREEN);
+
+    for(i=0; i<5; i++)
+        printf("%x:", hop.mac[i]);
+    printf("%x  ", hop.mac[i]);
+
+    //Host name
+    addr.s_addr = *(uint32_t*) &(hop.ip);
+    host_info = gethostbyaddr((const void*) &addr, sizeof(addr), AF_INET);
+
+    if(host_info ==NULL)
+    {
+        perror("Problem with detection of hop name");
+        exit(1);
+    }
+
+    printf("%s (%s)     ", DEFAULT, host_info->h_name);
+
+    printf("%selapsed_time:%s %.3lf ms\n", YELLOW, DEFAULT, elapsed_time);
 }

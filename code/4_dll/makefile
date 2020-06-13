@@ -4,11 +4,17 @@ CC = gcc
 
 CFLAGS = -Wall -pedantic
 
+all: np nt
+
 np : ping.c
 	$(CC) -o $@ $^ $(CFLAGS)
-	sudo setcap cap_net_raw,cap_net_admin=eip ./np	
+	sudo setcap cap_net_raw,cap_net_admin=eip ./$@	
+
+nt: traceroute.c
+	$(CC) -o $@ $^ $(CFLAGS)
+	sudo setcap cap_net_raw,cap_net_admin=eip ./$@
 
 .PHONY: clean
 
-clean: np
-	rm np
+clean:
+	rm np nt
