@@ -1,21 +1,40 @@
 \begin{thebibliography}{1}
 
-\bibitem{RFC1945}
-\url{https://tools.ietf.org/html/rfc1945}.
-
-\bibitem{RFC2616}
-\url{https://tools.ietf.org/html/rfc2616}.
-
-\bibitem{RFC3986}
-\url{https://tools.ietf.org/html/rfc3986}.
-
-\bibitem{URIschemes}
-\url{https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml}.
-
-\bibitem{RFC2817}
-\url{https://tools.ietf.org/html/rfc2817}.
+\bibitem{RFC826}
+Arp.
+\newblock \url{https://tools.ietf.org/html/rfc826}.
 
 \bibitem{RFC1034}
-\url{https://tools.ietf.org/html/rfc1034}.
+Dns.
+\newblock \url{https://tools.ietf.org/html/rfc1034}.
+
+\bibitem{frame_type}
+Ethernet types.
+\newblock
+  \url{https://www.iana.org/assignments/ieee-802-numbers/ieee-802-numbers.xhtml}.
+
+\bibitem{RFC1945}
+Http/1.0.
+\newblock \url{https://tools.ietf.org/html/rfc1945}.
+
+\bibitem{RFC2616}
+Http/1.1.
+\newblock \url{https://tools.ietf.org/html/rfc2616}.
+
+\bibitem{RFC2817}
+Https.
+\newblock \url{https://tools.ietf.org/html/rfc2817}.
+
+\bibitem{RFC791}
+Internet protocol.
+\newblock \url{https://tools.ietf.org/html/rfc791}.
+
+\bibitem{RFC3986}
+Uri.
+\newblock \url{https://tools.ietf.org/html/rfc3986}.
+
+\bibitem{URIschemes}
+Uri schemes.
+\newblock \url{https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml}.
 
 \end{thebibliography}

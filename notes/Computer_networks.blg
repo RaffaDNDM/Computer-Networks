@@ -1,77 +1,40 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: Computer_networks.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: Computer_networks.aux
 The style file: plain.bst
 Database file #1: Chapters/biblio.bib
+Warning--to sort, need author or key in frame_type
+Warning--to sort, need author or key in RFC826
+Warning--to sort, need author or key in RFC791
 Warning--to sort, need author or key in RFC1945
 Warning--to sort, need author or key in RFC2616
 Warning--to sort, need author or key in RFC3986
 Warning--to sort, need author or key in URIschemes
 Warning--to sort, need author or key in RFC2817
 Warning--to sort, need author or key in RFC1034
+Warning--empty author in RFC826
+Warning--empty booktitle in RFC826
+Warning--empty year in RFC826
+Warning--empty author in RFC1034
+Warning--empty booktitle in RFC1034
+Warning--empty year in RFC1034
+Warning--empty author in frame_type
+Warning--empty booktitle in frame_type
+Warning--empty year in frame_type
 Warning--empty author in RFC1945
-Warning--empty title in RFC1945
 Warning--empty booktitle in RFC1945
 Warning--empty year in RFC1945
 Warning--empty author in RFC2616
-Warning--empty title in RFC2616
 Warning--empty booktitle in RFC2616
 Warning--empty year in RFC2616
+Warning--empty author in RFC2817
+Warning--empty booktitle in RFC2817
+Warning--empty year in RFC2817
+Warning--empty author in RFC791
+Warning--empty booktitle in RFC791
+Warning--empty year in RFC791
 Warning--empty author in RFC3986
-Warning--empty title in RFC3986
 Warning--empty booktitle in RFC3986
 Warning--empty year in RFC3986
 Warning--empty author in URIschemes
-Warning--empty title in URIschemes
 Warning--empty booktitle in URIschemes
 Warning--empty year in URIschemes
-Warning--empty author in RFC2817
-Warning--empty title in RFC2817
-Warning--empty booktitle in RFC2817
-Warning--empty year in RFC2817
-Warning--empty author in RFC1034
-Warning--empty title in RFC1034
-Warning--empty booktitle in RFC1034
-Warning--empty year in RFC1034
-You've used 6 entries,
-            2118 wiz_defined-function locations,
-            515 strings with 4385 characters,
-and the built_in function-call counts, 1148 in all, are:
-= -- 78
-> -- 6
-< -- 0
-+ -- 6
-- -- 0
-* -- 104
-:= -- 111
-add.period$ -- 6
-call.type$ -- 6
-change.case$ -- 12
-chr.to.int$ -- 0
-cite$ -- 36
-duplicate$ -- 78
-empty$ -- 163
-format.name$ -- 0
-if$ -- 253
-int.to.chr$ -- 0
-int.to.str$ -- 6
-missing$ -- 6
-newline$ -- 21
-num.names$ -- 0
-pop$ -- 72
-preamble$ -- 1
-purify$ -- 12
-quote$ -- 0
-skip$ -- 42
-stack$ -- 0
-substring$ -- 30
-swap$ -- 6
-text.length$ -- 0
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 24
-warning$ -- 30
-while$ -- 0
-width$ -- 7
-write$ -- 32
-(There were 30 warnings)
+(There were 36 warnings)
