@@ -1,9 +1,8 @@
 #include "traceroute.h"
-#include "utility.h"
 #include "arp.h"
 
 int verbose = MIN_VERBOSE;
-double precision = 1000000.0; //ms=1000 ns=1000000
+double precision = 1000.0; //ms=1000 ns=1000000
 
 int main(int argc, char** argv)
 {
@@ -258,7 +257,7 @@ int main(int argc, char** argv)
 
 void traceroute(int sd, int size_pkt, char* interface, host src, host dst)
 {
-    int i=0;
+    unsigned char i=0;
     int time_exceeded = 1; 
 
     while(time_exceeded)
@@ -270,7 +269,7 @@ void traceroute(int sd, int size_pkt, char* interface, host src, host dst)
     printf("\n %sNUMBER OF HOPS:%s %d\n", BOLD_YELLOW, DEFAULT, time_exceeded);
 }
 
-int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host src, host dst)
+int traceroute_iteration(int sd, unsigned char id_pkt, int size_pkt, char* interface, host src, host dst)
 {
     unsigned char packet[PACKET_SIZE];
     struct sockaddr_ll sll;
@@ -292,6 +291,7 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
     eth->type = htons(0x0800);
 
     //IP packet
+    printf("ID: %d\n", id_pkt);
     ip->ver_IHL = 0x45;
     ip->type_service = 0;
     ip->length = htons(ECHO_HEADER_SIZE+size_pkt+IP_HEADER_SIZE);
@@ -300,8 +300,8 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
     ip->ttl = id_pkt;
     ip->protocol = 1; //ICMP
     ip->checksum = 0;
-    memcpy((unsigned char*) &(ip->src_IP), src.ip, 6);
-    memcpy((unsigned char*) &(ip->dst_IP), dst.ip, 6);
+    memcpy((unsigned char*) &(ip->src_IP), src.ip, 4);
+    memcpy((unsigned char*) &(ip->dst_IP), dst.ip, 4);
     ip->checksum = htons(checksum((unsigned char*) ip, IP_HEADER_SIZE)); //Checksum of ip header
 
 
@@ -319,7 +319,7 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
     //Checksum of the entire packet
 
 
-    for(i=0; i<sizeof(sll); i++)
+    for(i=0; i<sizeof(sll);i++) 
         ((char*) &sll)[i]=0;
 
     sll.sll_family = AF_PACKET;
@@ -335,7 +335,7 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
     n = sendto(sd, packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+size_pkt, 0, (struct sockaddr*) &sll, len); 
 
     if(n==-1)
-    {
+    { 
         perror("ECHO sendto ERROR");
         exit(1);
     }
@@ -345,6 +345,7 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
     while(!found)
     {
         len = sizeof(sll);
+        printf("Receiving\n");
         n = recvfrom(sd, packet, PACKET_SIZE, 0, (struct sockaddr*) &sll, &len);
         
         if(n==-1)
@@ -352,7 +353,10 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
             perror("ECHO recvfrom ERROR");
             exit(1);
         }
-        
+        printf(" ETH type: 0x%0x%0x\n", ((unsigned char*) &eth->type)[0], ((unsigned char*) &eth->type)[1]);        
+        printf(" IP proto: %d\n", ip->protocol);        
+        printf("ICMP type: %d\n", icmp->type);        
+        printf("  ICMP id: %u\n", icmp->id);        
         time_t end = clock();
 
         if(eth->type == htons(0x0800) && //IP datagram
@@ -363,7 +367,7 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
             if(verbose>50)
             {
                 printf("\n%s                   ECHO reply\n%s", BOLD_BLUE, DEFAULT);
-                print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+IP_HEADER_SIZE+8, BOLD_BLUE);
+                print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+IP_HEADER_SIZE, BOLD_BLUE);
             }
 
             host hop;
@@ -376,14 +380,14 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
         }
         else if(eth->type == htons(0x0800) && //IP datagram
            ip->protocol == 1 && //ICMP packet
-           icmp->type == 11 && //ICMP Time Exceeded
-           icmp->code == 0 && //TTL exceeded (1 for fragment)
-           icmp->id == htons(id_pkt))
+           icmp->type == 11 &&
+           icmp->code==0) //ICMP Time Exceeded
         {
+            printf("hop %d \n", id_pkt);
             if(verbose>50)
             {
                 printf("\n%s                   Time Exceeded\n%s", BOLD_BLUE, DEFAULT);
-                print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+IP_HEADER_SIZE+8, BOLD_BLUE);
+                print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE, BOLD_BLUE);
             }
 
             host hop;
@@ -393,6 +397,10 @@ int traceroute_iteration(int sd, int id_pkt, int size_pkt, char* interface, host
             print_route(id_pkt, hop, elapsed_time);
             return 1;
         }
+        
+        double elapsed_time = ((double) (end-start)/(double) CLOCKS_PER_SEC)*precision;
+        if(elapsed_time>10000.0)
+            return 1;
     }
     
     return 0;

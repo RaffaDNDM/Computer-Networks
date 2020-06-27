@@ -1,6 +1,8 @@
 #ifndef ARP
 #define ARP
 
+#include "utility.h"
+
 typedef struct
 {
     unsigned short hw; //code for HW protocol (e.g. Ethernet)

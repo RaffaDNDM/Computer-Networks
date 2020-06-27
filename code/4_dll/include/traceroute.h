@@ -26,7 +26,7 @@
  * @param src addresses of source host
  * @param dst addresses of remote host
  */
-int traceroute_iteration(int sd, int id_pkt, int size_pkts, char* interface, host src, host dst);
+int traceroute_iteration(int sd, unsigned char id_pkt, int size_pkts, char* interface, host src, host dst);
 
 /**
  * @brief Compute multiple ECHO requests and replies.

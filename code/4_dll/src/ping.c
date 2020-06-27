@@ -303,8 +303,8 @@ int ping_iteration(int sd, int id_pkt, int size_pkt, char* interface, host src, 
     ip->ttl = 128;
     ip->protocol = 1; //ICMP
     ip->checksum = 0;
-    memcpy((unsigned char*) &(ip->src_IP), src.ip, 6);
-    memcpy((unsigned char*) &(ip->dst_IP), dst.ip, 6);
+    memcpy((unsigned char*) &(ip->src_IP), src.ip, 4);
+    memcpy((unsigned char*) &(ip->dst_IP), dst.ip, 4);
     ip->checksum = htons(checksum((unsigned char*) ip, IP_HEADER_SIZE)); //Checksum of ip header
 
 
