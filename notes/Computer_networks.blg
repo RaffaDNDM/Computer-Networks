@@ -4,6 +4,9 @@ Database file #1: Chapters/biblio.bib
 Warning--to sort, need author or key in frame_type
 Warning--to sort, need author or key in RFC826
 Warning--to sort, need author or key in RFC791
+Warning--to sort, need author or key in RFC792
+Warning--to sort, need author or key in RFC768
+Warning--to sort, need author or key in RFC793
 Warning--to sort, need author or key in RFC1945
 Warning--to sort, need author or key in RFC2616
 Warning--to sort, need author or key in RFC3986
@@ -28,13 +31,22 @@ Warning--empty year in RFC2616
 Warning--empty author in RFC2817
 Warning--empty booktitle in RFC2817
 Warning--empty year in RFC2817
+Warning--empty author in RFC792
+Warning--empty booktitle in RFC792
+Warning--empty year in RFC792
 Warning--empty author in RFC791
 Warning--empty booktitle in RFC791
 Warning--empty year in RFC791
+Warning--empty author in RFC793
+Warning--empty booktitle in RFC793
+Warning--empty year in RFC793
+Warning--empty author in RFC768
+Warning--empty booktitle in RFC768
+Warning--empty year in RFC768
 Warning--empty author in RFC3986
 Warning--empty booktitle in RFC3986
 Warning--empty year in RFC3986
 Warning--empty author in URIschemes
 Warning--empty booktitle in URIschemes
 Warning--empty year in URIschemes
-(There were 36 warnings)
+(There were 48 warnings)

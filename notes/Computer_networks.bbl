@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{RFC826}
 Arp.
@@ -25,9 +25,21 @@ Http/1.1.
 Https.
 \newblock \url{https://tools.ietf.org/html/rfc2817}.
 
+\bibitem{RFC792}
+Icmp.
+\newblock \url{https://tools.ietf.org/html/rfc792}.
+
 \bibitem{RFC791}
 Internet protocol.
 \newblock \url{https://tools.ietf.org/html/rfc791}.
+
+\bibitem{RFC793}
+Tcp.
+\newblock \url{https://tools.ietf.org/html/rfc793}.
+
+\bibitem{RFC768}
+Udp.
+\newblock \url{https://tools.ietf.org/html/rfc768}.
 
 \bibitem{RFC3986}
 Uri.

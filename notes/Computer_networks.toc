@@ -56,38 +56,56 @@
 \contentsline {subsection}{\numberline {7.2.5}Redirect}{53}{subsection.7.2.5}% 
 \contentsline {subsection}{\numberline {7.2.6}Timestamp request e reply}{53}{subsection.7.2.6}% 
 \contentsline {subsection}{\numberline {7.2.7}Address mask request and reply}{54}{subsection.7.2.7}% 
-\contentsline {chapter}{\numberline {8}HTTP protocol}{55}{chapter.8}% 
-\contentsline {section}{\numberline {8.1}Terminology}{55}{section.8.1}% 
-\contentsline {section}{\numberline {8.2}Basic rules}{56}{section.8.2}% 
-\contentsline {section}{\numberline {8.3}Messages}{57}{section.8.3}% 
-\contentsline {subsection}{\numberline {8.3.1}Different versions of HTTP protocol}{57}{subsection.8.3.1}% 
-\contentsline {subsection}{\numberline {8.3.2}Headers}{57}{subsection.8.3.2}% 
-\contentsline {subsection}{\numberline {8.3.3}Request-Line}{57}{subsection.8.3.3}% 
-\contentsline {subsection}{\numberline {8.3.4}Request-URI}{58}{subsection.8.3.4}% 
-\contentsline {subsection}{\numberline {8.3.5}Request Header}{58}{subsection.8.3.5}% 
-\contentsline {subsection}{\numberline {8.3.6}Status line}{58}{subsection.8.3.6}% 
-\contentsline {section}{\numberline {8.4}HTTP 1.0}{58}{section.8.4}% 
-\contentsline {subsection}{\numberline {8.4.1}Other headers of HTTP/1.0 and HTTP/1.1}{59}{subsection.8.4.1}% 
-\contentsline {subsection}{\numberline {8.4.2}Caching}{60}{subsection.8.4.2}% 
-\contentsline {subsection}{\numberline {8.4.3}Authorization}{66}{subsection.8.4.3}% 
-\contentsline {subsubsection}{\numberline {8.4.3.1}base64}{67}{subsubsection.8.4.3.1}% 
-\contentsline {subsubsection}{\numberline {8.4.3.2}Auth-schemes}{68}{subsubsection.8.4.3.2}% 
-\contentsline {section}{\numberline {8.5}HTTP 1.1}{68}{section.8.5}% 
-\contentsline {subsection}{\numberline {8.5.1}Caching based on HASH}{69}{subsection.8.5.1}% 
-\contentsline {subsection}{\numberline {8.5.2}URI}{70}{subsection.8.5.2}% 
-\contentsline {subsection}{\numberline {8.5.3}HTTP URL}{71}{subsection.8.5.3}% 
-\contentsline {section}{\numberline {8.6}Dynamic pages}{71}{section.8.6}% 
-\contentsline {section}{\numberline {8.7}Proxy}{72}{section.8.7}% 
-\contentsline {chapter}{\numberline {9}Resolution of names}{75}{chapter.9}% 
-\contentsline {section}{\numberline {9.1}Network Information Center (NIC)}{75}{section.9.1}% 
-\contentsline {section}{\numberline {9.2}Domain Name System (DNS)}{75}{section.9.2}% 
-\contentsline {subsection}{\numberline {9.2.1}Goals}{76}{subsection.9.2.1}% 
-\contentsline {subsection}{\numberline {9.2.2}Hierarchy structure}{76}{subsection.9.2.2}% 
-\contentsline {chapter}{\numberline {10}Shell}{81}{chapter.10}% 
-\contentsline {section}{\numberline {10.1}Commands}{81}{section.10.1}% 
-\contentsline {section}{\numberline {10.2}UNIX Files}{81}{section.10.2}% 
-\contentsline {chapter}{\numberline {11}vim}{83}{chapter.11}% 
-\contentsline {section}{\numberline {11.1}.vimrc}{83}{section.11.1}% 
-\contentsline {section}{\numberline {11.2}Shortcuts}{83}{section.11.2}% 
-\contentsline {section}{\numberline {11.3}Multiple files}{86}{section.11.3}% 
-\contentsline {chapter}{References}{87}{table.caption.156}% 
+\contentsline {chapter}{\numberline {8}Transport layer}{55}{chapter.8}% 
+\contentsline {section}{\numberline {8.1}UDP (User Data protocol)}{55}{section.8.1}% 
+\contentsline {subsection}{\numberline {8.1.1}UDP packet format}{55}{subsection.8.1.1}% 
+\contentsline {section}{\numberline {8.2}TCP (Transmission Control protocol)}{56}{section.8.2}% 
+\contentsline {subsection}{\numberline {8.2.1}TCP packet format}{56}{subsection.8.2.1}% 
+\contentsline {subsection}{\numberline {8.2.2}Connection state diagram}{59}{subsection.8.2.2}% 
+\contentsline {subsection}{\numberline {8.2.3}Management packet loss}{61}{subsection.8.2.3}% 
+\contentsline {subsection}{\numberline {8.2.4}Segmentation of the stream}{63}{subsection.8.2.4}% 
+\contentsline {subsection}{\numberline {8.2.5}Automatic Repeat-reQuest (ARQ)}{63}{subsection.8.2.5}% 
+\contentsline {subsection}{\numberline {8.2.6}TCP window}{65}{subsection.8.2.6}% 
+\contentsline {chapter}{\numberline {9}HTTP protocol}{67}{chapter.9}% 
+\contentsline {section}{\numberline {9.1}Terminology}{67}{section.9.1}% 
+\contentsline {section}{\numberline {9.2}Basic rules}{68}{section.9.2}% 
+\contentsline {section}{\numberline {9.3}Messages}{69}{section.9.3}% 
+\contentsline {subsection}{\numberline {9.3.1}Different versions of HTTP protocol}{69}{subsection.9.3.1}% 
+\contentsline {subsection}{\numberline {9.3.2}Headers}{69}{subsection.9.3.2}% 
+\contentsline {subsection}{\numberline {9.3.3}Request-Line}{69}{subsection.9.3.3}% 
+\contentsline {subsection}{\numberline {9.3.4}Request-URI}{70}{subsection.9.3.4}% 
+\contentsline {subsection}{\numberline {9.3.5}Request Header}{70}{subsection.9.3.5}% 
+\contentsline {subsection}{\numberline {9.3.6}Status line}{70}{subsection.9.3.6}% 
+\contentsline {section}{\numberline {9.4}HTTP 1.0}{70}{section.9.4}% 
+\contentsline {subsection}{\numberline {9.4.1}Other headers of HTTP/1.0 and HTTP/1.1}{71}{subsection.9.4.1}% 
+\contentsline {subsection}{\numberline {9.4.2}Caching}{72}{subsection.9.4.2}% 
+\contentsline {subsection}{\numberline {9.4.3}Authorization}{78}{subsection.9.4.3}% 
+\contentsline {subsubsection}{\numberline {9.4.3.1}base64}{79}{subsubsection.9.4.3.1}% 
+\contentsline {subsubsection}{\numberline {9.4.3.2}Auth-schemes}{80}{subsubsection.9.4.3.2}% 
+\contentsline {section}{\numberline {9.5}HTTP 1.1}{80}{section.9.5}% 
+\contentsline {subsection}{\numberline {9.5.1}Caching based on HASH}{81}{subsection.9.5.1}% 
+\contentsline {subsection}{\numberline {9.5.2}URI}{82}{subsection.9.5.2}% 
+\contentsline {subsection}{\numberline {9.5.3}HTTP URL}{83}{subsection.9.5.3}% 
+\contentsline {section}{\numberline {9.6}Dynamic pages}{83}{section.9.6}% 
+\contentsline {section}{\numberline {9.7}Proxy}{84}{section.9.7}% 
+\contentsline {chapter}{\numberline {10}Resolution of names}{87}{chapter.10}% 
+\contentsline {section}{\numberline {10.1}Network Information Center (NIC)}{87}{section.10.1}% 
+\contentsline {section}{\numberline {10.2}Domain Name System (DNS)}{87}{section.10.2}% 
+\contentsline {subsection}{\numberline {10.2.1}Goals}{88}{subsection.10.2.1}% 
+\contentsline {subsection}{\numberline {10.2.2}Hierarchy structure}{88}{subsection.10.2.2}% 
+\contentsline {chapter}{\numberline {11}Shell}{93}{chapter.11}% 
+\contentsline {section}{\numberline {11.1}Commands}{93}{section.11.1}% 
+\contentsline {section}{\numberline {11.2}UNIX Files}{93}{section.11.2}% 
+\contentsline {chapter}{\numberline {12}vim}{95}{chapter.12}% 
+\contentsline {section}{\numberline {12.1}.vimrc}{95}{section.12.1}% 
+\contentsline {section}{\numberline {12.2}Shortcuts}{95}{section.12.2}% 
+\contentsline {section}{\numberline {12.3}Multiple files}{98}{section.12.3}% 
+\contentsline {chapter}{\numberline {13}Gnu Project Debugger (GDB)}{101}{chapter.13}% 
+\contentsline {section}{\numberline {13.1}GDB commands}{101}{section.13.1}% 
+\contentsline {subsection}{\numberline {13.1.1}Breakpoints}{101}{subsection.13.1.1}% 
+\contentsline {subsection}{\numberline {13.1.2}Conditional breakpoints}{102}{subsection.13.1.2}% 
+\contentsline {subsection}{\numberline {13.1.3}Examine memory}{102}{subsection.13.1.3}% 
+\contentsline {subsection}{\numberline {13.1.4}Automate tasks in gdb}{102}{subsection.13.1.4}% 
+\contentsline {subsection}{\numberline {13.1.5}Debugging with fork() and exec()}{102}{subsection.13.1.5}% 
+\contentsline {subsection}{\numberline {13.1.6}Debugging with multiple threads}{103}{subsection.13.1.6}% 
+\contentsline {chapter}{References}{103}{table.caption.175}% 
