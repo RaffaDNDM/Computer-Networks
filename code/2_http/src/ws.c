@@ -149,8 +149,39 @@ void manage_request(char* method, char* path, char* version, char* response, FIL
 
         if(!strncmp(path, CGI_BIN, 9))
         {
-            char command[40];
-            sprintf(command, "cd %s & %s > %s", ROOT_PATH, path+9, CGI_RESULT);
+            int i=0;
+            char* arguments[10];
+
+            int size_path =strlen(path);
+            for(i=9; i<size_path && path[i]!='?'; i++);
+           
+            printf("%d\n", i);
+            path[i]=0; 
+            int j=0;
+            for(i=i+1; i<size_path && j<10; i++)
+            {
+                if(path[i]=='=')
+                    arguments[j++]=path+i+1;
+
+                if(path[i]=='&')
+                    path[i]=0;
+            }
+
+            char command[60];
+            sprintf(command, "cd %s ; %s", ROOT_PATH, path+9);
+            
+            for(i=0; i<j; i++)
+            {
+                int size = strlen(command);
+                sprintf(command+size, " %s", arguments[i]);
+            
+                printf("%s", arguments[i]);
+            }
+
+            int size = strlen(command);
+            sprintf(command+size, " > %s", CGI_RESULT);
+            printf("%s\n", command); 
+
             int status = system(command);
 
             if(status==-1)
