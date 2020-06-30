@@ -3,7 +3,7 @@
 #include "arp.h"
 
 int verbose = MIN_VERBOSE;
-double precision = 1000000.0; //ms=1000 ns=1000000
+double precision = 1000.0; //s=1.0 ms=1000.0 ns=1000000.0
 
 int main(int argc, char** argv)
 {
@@ -48,12 +48,12 @@ int main(int argc, char** argv)
                 for(i=0; i<4; i++)
                     dst.ip[i] = (unsigned char) (he->h_addr[i]);
             }
-            
+
         }
         else
         {
             unsigned char *p = (unsigned char*) &(addr.s_addr);
-            
+
             for(i=0; i<4; i++)
                 dst.ip[i] = p[i];
         }
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
             }
         }
     }
-    
+
     printf("\n%s---------------Remote  analysis----------------------\n%s", BOLD_RED, DEFAULT);
     printf("%sDestination address = %s",BOLD_GREEN, DEFAULT);
     for(i=0; i<3; i++)
@@ -80,8 +80,8 @@ int main(int argc, char** argv)
         printf("%u.", dst.ip[i]);
     }
     printf("%u\n", dst.ip[i]);
-    
-    
+
+
     //Evaluation of Ethernet interface name
     sprintf(command, "route -n | tac | head --lines=-2 ");
     fd = popen(command, "r");
@@ -96,17 +96,17 @@ int main(int argc, char** argv)
     {
         char* s = strtok(line, " ");
         i=0;
-        
+
         if(s!=NULL)
         {
             if (inet_aton(s, &addr)!=0)
-            { 
+            {
                 unsigned char *p = (unsigned char*) &(addr.s_addr);
-            
+
                 memcpy(network, p, 4);
                 //for(j=0; j<4; j++)
                 //    network[j] = p[j];
-            } 
+            }
             i++;
         }
 
@@ -117,12 +117,12 @@ int main(int argc, char** argv)
                 case ROUTE_GATEWAY_INDEX:
                 {
                     if (inet_aton(s, &addr)!=0)
-                    { 
+                    {
                         unsigned char *p = (unsigned char*) &(addr.s_addr);
-                    
+
                         memcpy(gateway, p, 4);
                         //for(j=0; j<4; j++)
-                        //    gateway[j] = p[j]; 
+                        //    gateway[j] = p[j];
                     }
                     break;
                 }
@@ -130,9 +130,9 @@ int main(int argc, char** argv)
                 case ROUTE_MASK_INDEX:
                 {
                     if (inet_aton(s, &addr)!=0)
-                    { 
+                    {
                         unsigned char *p = (unsigned char*) &(addr.s_addr);
-                    
+
                         memcpy(mask,p, 4);
                         //for(j=0; j<4; j++)
                         //  mask[j] = p[j];
@@ -146,19 +146,19 @@ int main(int argc, char** argv)
                     interface = s;
                 }
             }
-        
+
             i++;
         }
 
-        
+
         if((*(unsigned int*) &network)==((*((unsigned int*) &(dst.ip))) & (*((unsigned int*) &mask))))
-        {        
+        {
             break;
         }
     }
 
     printf("\n");
-    printf("%sGateway: %s", BOLD_MAGENTA, DEFAULT); 
+    printf("%sGateway: %s", BOLD_MAGENTA, DEFAULT);
     for(i=0; i<3; i++)
         printf("%u.", gateway[i]);
     printf("%u\n", gateway[i]);
@@ -173,10 +173,10 @@ int main(int argc, char** argv)
         printf("%u.", mask[i]);
     printf("%u\n", mask[i]);
 
-    
+
     //See the MAC address of eth0 looking to e.g. "/sys/class/net/eth0/address" content
     sprintf(mac_file, MAC_DEFAULT_FILE, interface);
-   
+
     fd = fopen(mac_file, "r");
 
     for(i=0; i<5; i++)
@@ -184,12 +184,12 @@ int main(int argc, char** argv)
         fscanf(fd, "%x:", &x);
         src.mac[i]=(unsigned char) x;
     }
-    
+
     fscanf(fd, "%x\n", &x);
     src.mac[i]=(unsigned char) x;
 
     fclose(fd);
-    
+
     printf("\n");
 
     printf("%sEthernet Interface:%s %s\n", BOLD_CYAN, DEFAULT, interface);
@@ -198,9 +198,9 @@ int main(int argc, char** argv)
     for(i=0; i<5; i++)
         printf("%x:", src.mac[i]);
     printf("%x\n", src.mac[i]);
-    
-    
-    //Evaluation of IPv4 address of ethernet interface in input 
+
+
+    //Evaluation of IPv4 address of ethernet interface in input
     sprintf(command, "ip -4 addr show %s | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}'", interface);
     fd = popen(command, "r");
 
@@ -209,12 +209,12 @@ int main(int argc, char** argv)
         fscanf(fd, "%u%c", &x, &c);
         src.ip[i]=x;
     }
-    
+
     fscanf(fd, "%u", &x);
     src.ip[i]=x;
 
     pclose(fd);
-    
+
     printf("%sSource IP address: %s", BOLD_CYAN, DEFAULT);
     for(i=0; i<3; i++)
         printf("%d.", src.ip[i]);
@@ -224,7 +224,7 @@ int main(int argc, char** argv)
     //Creation of the socket
     sd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
 
-    
+
     if(sd == -1)
     {
         printf("Socket failed\n");
@@ -232,7 +232,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    
+
     //ARP resolution
     /*
         if(myip & mask == dstip & mask)
@@ -243,17 +243,17 @@ int main(int argc, char** argv)
 
     printf("\n%s-------------------ARP packets-----------------------\n%s", BOLD_RED, DEFAULT);
     arp_resolution(sd, &src, &dst, interface, gateway, verbose);
-    
+
     printf("%sDestination MAC address: %s", BOLD_YELLOW, DEFAULT);
     for(i=0; i<5; i++)
         printf("%x:", dst.mac[i]);
     printf("%x\n", dst.mac[i]);
- 
+
     printf("\n%s-----------------------------------Ping--------------------------------------\n%s", BOLD_RED, DEFAULT);
 
 
     //Ping application
-    ping(sd, num_pkts, size_pkt, interface, src, dst); 
+    ping(sd, num_pkts, size_pkt, interface, src, dst);
 
     printf("%s%s%s\n", BOLD_RED, LINE_32_BITS, DEFAULT);
     return 0;
@@ -262,14 +262,14 @@ int main(int argc, char** argv)
 void ping(int sd, int num_pkts, int size_pkt, char* interface, host src, host dst)
 {
     int i=0;
-    int count_done = 0; 
+    int count_done = 0;
 
     while(i<num_pkts)
     {
         count_done += ping_iteration(sd, i+1, size_pkt, interface, src, dst);
         i++;
     }
-    
+
     printf("\n %sCOMPLETED:%s %d/%d\n", BOLD_YELLOW, DEFAULT, count_done, num_pkts);
 }
 
@@ -285,9 +285,9 @@ int ping_iteration(int sd, int id_pkt, int size_pkt, char* interface, host src, 
     socklen_t len;
     int n;
 
-    eth = (eth_frame*) &packet;
-    ip = (ip_datagram*) &(eth->payload);
-    icmp = (icmp_pkt*) &(ip->payload);
+    eth = (eth_frame*) packet;
+    ip = (ip_datagram*) (eth->payload);
+    icmp = (icmp_pkt*) (ip->payload);
 
     //Ethernet header
     memcpy(eth->src, src.mac, 6);
@@ -314,7 +314,7 @@ int ping_iteration(int sd, int id_pkt, int size_pkt, char* interface, host src, 
     icmp->checksum = htons(0);
     icmp->id = htons(id_pkt);
     icmp->seq = htons(1);
-    
+
     for(i=0; i<size_pkt; i++)
         icmp->payload[i] = i&0xff;
 
@@ -335,7 +335,7 @@ int ping_iteration(int sd, int id_pkt, int size_pkt, char* interface, host src, 
         print_packet(packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+size_pkt, BOLD_BLUE);
     }
 
-    n = sendto(sd, packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+size_pkt, 0, (struct sockaddr*) &sll, len); 
+    n = sendto(sd, packet, ETH_HEADER_SIZE+IP_HEADER_SIZE+ECHO_HEADER_SIZE+size_pkt, 0, (struct sockaddr*) &sll, len);
 
     if(n==-1)
     {
@@ -344,18 +344,18 @@ int ping_iteration(int sd, int id_pkt, int size_pkt, char* interface, host src, 
     }
 
     time_t start = clock();
-    
+
     while(!found)
     {
         len = sizeof(sll);
         n = recvfrom(sd, packet, PACKET_SIZE, 0, (struct sockaddr*) &sll, &len);
-        
+
         if(n==-1)
         {
             perror("ECHO recvfrom ERROR");
             exit(1);
         }
-        
+
         time_t end = clock();
 
         if(eth->type == htons(0x0800) && //IP datagram
@@ -380,6 +380,13 @@ int ping_iteration(int sd, int id_pkt, int size_pkt, char* interface, host src, 
 
 void print_ping(int id, int ttl, int size, double elapsed_time)
 {
-    printf("%s[Packet %3d]%s ttl:%s %3d hops left     %ssize:%s %3d bytes    %selapsed_time:%s %.3lf ms\n", 
+    printf("%s[Packet %3d]%s ttl:%s %3d hops left     %ssize:%s %3d bytes    %selapsed_time:%s %.3lf ",
             BOLD_CYAN, id, MAGENTA, DEFAULT, ttl, GREEN, DEFAULT, size, YELLOW, DEFAULT, elapsed_time);
+
+    if(precision==1.0)
+        printf("%s\n",TIME_s);
+    else if(precision==1000.0)
+        printf("%s\n",TIME_ms);
+    else if(precision==1000000.0)
+        printf("%s\n",TIME_ns);
 }

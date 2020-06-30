@@ -22,7 +22,7 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
     int n;
 
     //Ethernet header
-    eth = (eth_frame*) &packet;
+    eth = (eth_frame*) packet;
 
     for(i=0; i<6; i++)
         eth->dst[i]=0xff; //Broadcast request
@@ -34,7 +34,7 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
     eth->type = htons(0x0806);
 
     //ARP packet
-    arp = (arp_pkt*) &(eth->payload);
+    arp = (arp_pkt *) (eth->payload);
 
     arp->hw = htons(0x0001);
     arp->protocol = htons(0x0800);
@@ -102,7 +102,8 @@ void arp_resolution(int sd, host* src, host* dst, char* interface, unsigned char
         if(eth->type == htons(0x0806) && //it's ARP
            arp->op == htons(0x0002) && //it's ARP reply
            ((!memcmp(arp->src_IP, dst->ip, 4) && local) ||
-           (!memcmp(arp->src_IP, gateway, 4) && !local))) //dst of ARP request = src of ARP reply
+           (!memcmp(arp->src_IP, gateway, 4) && !local)))
+           //dst of ARP request = src of ARP reply
         {
             memcpy(dst->mac, arp->src_MAC, 6);
 

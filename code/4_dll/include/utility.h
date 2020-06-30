@@ -23,6 +23,11 @@
 #define MIN_VERBOSE 0
 #define MAX_VERBOSE 100
 
+//Unit of measurement of time
+#define TIME_s "s"
+#define TIME_ms "ms"
+#define TIME_ns "ns"
+
 //Utility macros
 #define MAC_DEFAULT_FILE "/sys/class/net/%s/address"
 #define LINE_SIZE 100
