@@ -1,8 +1,8 @@
 \chapter{HTTP protocol}
-HTTP protocol was presented for the first time in the RFC 1945\cite{RFC1945} (Request for Comment).\\
-The Hypertext Transfer Protocol (HTTP) is an application-level protocol with the lightness and speed necessary for distributed, collaborative, hypermedia information systems. It is a generic, stateless, object-oriented protocol which can be used for many tasks, such as name servers and distributed object management systems, through extension of its request methods (commands).\\
-It's not the first Hypertext protocol in history because there was Hypertalk, made by Apple before. \\
-A feature of HTTP is the typing of data representation, allowing systems to be built independently f the data being transferred. HTTP has been in use by the World-Wide Web global information initiative since 1990.
+HTTP protocol was presented for the first time in the RFC1945\cite{RFC1945}.\\
+The Hypertext Transfer Protocol (HTTP) is an application-level protocol with the simplicity and the speed needed for distributed, collaborative, hypermedia information systems. It is a generic, stateless, object-oriented protocol which can be used for many tasks, such as name servers and distributed object management systems, through extension of its request methods (commands).\\
+It's not the first Hypertext protocol in history because before it there was Hypertalk, made by Apple. \\
+A feature of HTTP is typing the data representation, allowing systems to be built independently w.r.t data being transferred. HTTP has been in use by the World-Wide Web global information initiative since 1990.
 
 \section{Terminology}
 \begin{itemize}
@@ -67,7 +67,8 @@ The following rules are used throughout are used to describe the grammar used in
 \subsection{Different versions of HTTP protocol}
 \begin{itemize}
 \item{\textbf{HTTP/0.9 Messages}\\
-Simple-Request and Simple-Response do not allow the use of any header information and are limited to a single request method (GET).\\ Use of the Simple-Request format is discouraged because it prevents the server from identifying the media type of the returned entity.
+Simple-Request and Simple-Response don't allow the use of any header information and are limited to a single request method (GET).\\
+Use of the Simple-Request format is discouraged because it prevents the server from identifying the media type of the returned entity.
 \begin{center}
 \begin{tabular}{c}
 \begin{lstlisting}[linewidth=240pt, basicstyle=\footnotesize\sffamily,]

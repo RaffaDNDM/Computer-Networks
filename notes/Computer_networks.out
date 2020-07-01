@@ -92,19 +92,19 @@
 \BOOKMARK [1][-]{section.10.2}{Domain Name System \(DNS\)}{chapter.10}% 92
 \BOOKMARK [2][-]{subsection.10.2.1}{Goals}{section.10.2}% 93
 \BOOKMARK [2][-]{subsection.10.2.2}{Hierarchy structure}{section.10.2}% 94
-\BOOKMARK [0][-]{chapter.11}{Shell}{}% 95
-\BOOKMARK [1][-]{section.11.1}{Commands}{chapter.11}% 96
-\BOOKMARK [1][-]{section.11.2}{UNIX Files}{chapter.11}% 97
-\BOOKMARK [0][-]{chapter.12}{vim}{}% 98
-\BOOKMARK [1][-]{section.12.1}{.vimrc}{chapter.12}% 99
-\BOOKMARK [1][-]{section.12.2}{Shortcuts}{chapter.12}% 100
-\BOOKMARK [1][-]{section.12.3}{Multiple files}{chapter.12}% 101
-\BOOKMARK [0][-]{chapter.13}{Gnu Project Debugger \(GDB\)}{}% 102
-\BOOKMARK [1][-]{section.13.1}{GDB commands}{chapter.13}% 103
-\BOOKMARK [2][-]{subsection.13.1.1}{Breakpoints}{section.13.1}% 104
-\BOOKMARK [2][-]{subsection.13.1.2}{Conditional breakpoints}{section.13.1}% 105
-\BOOKMARK [2][-]{subsection.13.1.3}{Examine memory}{section.13.1}% 106
-\BOOKMARK [2][-]{subsection.13.1.4}{Automate tasks in gdb}{section.13.1}% 107
-\BOOKMARK [2][-]{subsection.13.1.5}{Debugging with fork\(\) and exec\(\)}{section.13.1}% 108
-\BOOKMARK [2][-]{subsection.13.1.6}{Debugging with multiple threads}{section.13.1}% 109
+\BOOKMARK [0][-]{appendix.A}{Shell}{}% 95
+\BOOKMARK [1][-]{section.A.1}{Commands}{appendix.A}% 96
+\BOOKMARK [1][-]{section.A.2}{UNIX Files}{appendix.A}% 97
+\BOOKMARK [0][-]{appendix.B}{vim}{}% 98
+\BOOKMARK [1][-]{section.B.1}{.vimrc}{appendix.B}% 99
+\BOOKMARK [1][-]{section.B.2}{Shortcuts}{appendix.B}% 100
+\BOOKMARK [1][-]{section.B.3}{Multiple files}{appendix.B}% 101
+\BOOKMARK [0][-]{appendix.C}{Gnu Project Debugger \(GDB\)}{}% 102
+\BOOKMARK [1][-]{section.C.1}{GDB commands}{appendix.C}% 103
+\BOOKMARK [2][-]{subsection.C.1.1}{Breakpoints}{section.C.1}% 104
+\BOOKMARK [2][-]{subsection.C.1.2}{Conditional breakpoints}{section.C.1}% 105
+\BOOKMARK [2][-]{subsection.C.1.3}{Examine memory}{section.C.1}% 106
+\BOOKMARK [2][-]{subsection.C.1.4}{Automate tasks in gdb}{section.C.1}% 107
+\BOOKMARK [2][-]{subsection.C.1.5}{Debugging with fork\(\) and exec\(\)}{section.C.1}% 108
+\BOOKMARK [2][-]{subsection.C.1.6}{Debugging with multiple threads}{section.C.1}% 109
 \BOOKMARK [0][-]{table.caption.175}{References}{}% 110

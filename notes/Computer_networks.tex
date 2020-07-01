@@ -69,7 +69,18 @@
 %------------------------------ active url
 \usepackage{url}
 \renewcommand{\UrlFont}{\color{black}\small\ttfamily}
-\usepackage{hyperref} % active ref
+
+\usepackage[
+	hidelinks, %no box around the reference
+	colorlinks=true, %change color of number
+]{hyperref} % active ref
+
+\hypersetup{
+    urlcolor=purple,
+    citecolor=green,
+    linkcolor=blue,
+}
+
 %------------------------------ macros
 \newcommand{\sectionname}{Section} % define Section ref
 \newcommand{\subsectionname}{Sub-section} % define Sub-section ref
@@ -166,6 +177,7 @@ Raffaele Di Nardo Di Maio
 \input{Chapters/Layer4}
 \input{Chapters/HTTP}
 \input{Chapters/Resolution}
+\appendix
 \input{Chapters/Shell}
 \input{Chapters/Vim}
 \input{Chapters/GDB}

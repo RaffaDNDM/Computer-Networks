@@ -98,7 +98,7 @@ The default address \textbf{0.0.0.0} is associated with a net mask, composed by 
 \item{\textbf{Switching}\\
 it sends the packet to the link previously selected.}
 \end{enumerate}
-Each router manages all the incoming packets, storing them in a input \textbf{FIFO buffer} (\textit{Standard Service Local}).By default, if packets arrive too fast to in the buffer, w.r.t. velocity of incoming data processing, new packets are dropped if buffer is already full according to some policy (Figure \ref{}).\\
+Each router manages all the incoming packets, storing them in a input \textbf{FIFO buffer} (\textit{Standard Service Layer}). By default, if packets arrive too fast to in the buffer, w.r.t. velocity of incoming data processing, new packets are dropped if buffer is already full according to some policy (Figure \ref{SEEEEEEEEE}).\\
 Hence routers has not responsability if some packets are dropped because of it declares it in advance and its goal is to give user the best effort. The behaviour of the router management of the input buffer is based on different policy, according to a goal:\\
 \begin{itemize}
 \item{\textit{To reduce} \textbf{latency}\\

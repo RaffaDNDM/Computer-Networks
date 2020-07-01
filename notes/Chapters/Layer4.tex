@@ -193,7 +193,7 @@ We send in optimistic way more packets to fit the network capacity (pipeline), b
 
 \subsection{Segmentation of the stream}
 The buffer is split into segments of bytes and the numbers identify the byte positions. The identifier of the packet is the offset of the stream.\\
-The \textbf{sequence number} is the position(offset of the first byte in the segment. The ACK number is the first empty (not yet received) position in the stream (e.g. in Figure \ref{segmentation} if segment 1, segment 2 and segment 4 have been received all the ACK number is 21).\\
+The \textbf{sequence number} is the position (offset of the first byte in the segment). The ACK number is the first empty (not yet received) position in the stream (e.g. in Figure \ref{segmentation} if segment 1, segment 2 and segment 4 have been received all the ACK number is 21).\\
 
 \begin{figure}[H]
 \centering\footnotesize
