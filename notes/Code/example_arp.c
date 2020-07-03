@@ -1,13 +1,13 @@
 #include "utility.h"
 #include "arp.h"
-#include <sys/socket.h> //Socket for packet (see man packet)
-#include <linux/if_packet.h> //..
-#include <net/ethernet.h> //..
-#include <string.h> //memcmp, memvpy and string elaboration
-#include <stdio.h> //print and reading functions
-#include <stdlib.h> //exit()
-#include <net/if.h> //if_nametoindex
-#include <arpa/inet.h> //htons()
+#include <sys/socket.h>
+#include <linux/if_packet.h>
+#include <net/ethernet.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <net/if.h>
+#include <arpa/inet.h>
 
 void arp_resolution(int sd, host* src, host* dst, char* interface,
                     unsigned char* gateway, int verbose)

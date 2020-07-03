@@ -1,4 +1,3 @@
-#include "utility.h"
 #include "traceroute.h"
 #include "arp.h"
 

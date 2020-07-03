@@ -197,7 +197,7 @@ When a node, decrementing this field, reaches zero value for Time To Live, it dr
 Time To Live prevents that a packet stays in the network too much time compromising infrustructure efficiency.
 }
 \item{\textbf{Protocol}\\
-the next level protocol (Layer 4) used in the data portion of the internet datagram. In general it's called ULP (Upper Layer Protocol). This is useful and was done also at upper layer, using port numbers, because it's a way to communicate future use to upper layer. This field is the upper layer protocol type (\textbf{/etc/protocols} on UNIX) and it's used by Operating System to understand to which module send a specific part of the packet.
+the next level protocol (Layer 4) used in the data portion of the internet datagram. In general it's called ULP (Upper Layer Protocol). This is useful and was done also at upper layer, using port numbers, because it's a way to communicate future use to upper layer. This field is the upper layer protocol type (\textbf{/etc/protocols} on UNIX) and it's used by Operating System to understand to which module send a specific part of the packet. You can also find them in IANA site\cite{IANA_IP_protocol}.
 }
 \item{\textbf{Header Checksum}\\
 a checksum on the header only.\\\\

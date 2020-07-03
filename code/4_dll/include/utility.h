@@ -2,19 +2,19 @@
 #define UTILITY
 
 //Colors
-#define DEFAULT "\033[0m" 
+#define DEFAULT "\033[0m"
 
 #define BLUE "\033[0;34m"
 #define CYAN "\033[0;36m"
 #define GREEN "\033[0;32m"
-#define MAGENTA "\033[0;35m" 
+#define MAGENTA "\033[0;35m"
 #define RED "\033[0;31m"
 #define YELLOW "\033[0;33m"
 
 #define BOLD_BLUE "\033[1;34m"
 #define BOLD_CYAN "\033[1;36m"
 #define BOLD_GREEN "\033[1;32m"
-#define BOLD_MAGENTA "\033[1;35m" 
+#define BOLD_MAGENTA "\033[1;35m"
 #define BOLD_RED "\033[1;31m"
 #define BOLD_YELLOW "\033[1;33m"
 
@@ -74,7 +74,7 @@ typedef struct
     unsigned short flag_offs; // flags (Don't fragment,...)
     unsigned char ttl; //Time to live
     unsigned char protocol; //upper layer protocol (e.g. ICMP)
-    unsigned short checksum; //checksum of IP header 
+    unsigned short checksum; //checksum of IP header
     unsigned int src_IP; //src IP address
     unsigned int dst_IP; //dst IP address
     unsigned char payload[1500];
@@ -101,8 +101,14 @@ unsigned short int checksum(unsigned char* buf, int size);
  *  @brief Print a packet on stdin.
  *  @param pkt packet to print
  *  @param size size of packet @pkt
- *  @param color color of the table, representing the packet 
+ *  @param color color of the table, representing the packet
  */
 void print_packet(unsigned char* pkt, int size, char* color);
 
+/**
+ *  @brief Check if code is an error(-1)
+ *  @param code code to check
+ *  @param message message printed if error
+*/
+void control(int code, char* message);
 #endif

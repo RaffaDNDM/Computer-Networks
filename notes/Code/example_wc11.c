@@ -1,6 +1,5 @@
 #include "net_utility.h"
 #include "wc11.h"
-
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>

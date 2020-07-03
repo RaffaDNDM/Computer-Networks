@@ -49,10 +49,7 @@
 \lstset{
   basicstyle=\footnotesize\sffamily,
   commentstyle=\itshape\color{gray},
-  captionpos=b,
   frame=shadowbox,
-  language=HTML,
-  rulesepcolor=\color{333},
   tabsize=2
 }
 
@@ -61,6 +58,24 @@
   commentstyle=\color{comment},
 }
 
+\lstdefinestyle{customC}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  %showstringspaces=true,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  numberstyle=\tiny\color{gray},
+  stringstyle=\color{orange},
+  captionpos=t,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=10pt,
+}
 
 %------------------------------ define Abstract environment, missing in the 'book' class
 \newenvironment{abstract}{\cleardoublepage \null \vfill \begin{center}\bfseries\abstractname \end{center}}{\vfill\null}
@@ -165,7 +180,6 @@ Raffaele Di Nardo Di Maio
 \endgroup
 
 \mainmatter
-
 \input{Chapters/OSI}
 \input{Chapters/Programming}
 \input{Chapters/NetworkC}
@@ -180,6 +194,7 @@ Raffaele Di Nardo Di Maio
 \input{Chapters/Shell}
 \input{Chapters/Vim}
 \input{Chapters/GDB}
+\input{Chapters/Code}
 %Bibliography part (called References)
 \addcontentsline{toc}{chapter}{References}
 \bibliographystyle{plain}

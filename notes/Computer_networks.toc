@@ -108,4 +108,5 @@
 \contentsline {subsection}{\numberline {C.1.4}Automate tasks in gdb}{102}{subsection.C.1.4}
 \contentsline {subsection}{\numberline {C.1.5}Debugging with fork() and exec()}{102}{subsection.C.1.5}
 \contentsline {subsection}{\numberline {C.1.6}Debugging with multiple threads}{103}{subsection.C.1.6}
-\contentsline {chapter}{References}{103}{table.caption.177}
+\contentsline {chapter}{\numberline {D}Code}{105}{appendix.D}
+\contentsline {chapter}{References}{137}{lstnumber.D.10.400}
