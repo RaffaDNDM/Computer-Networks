@@ -1,4 +1,3 @@
-#include "wp.h"
 #include "net_utility.h"
 
 #include <sys/types.h>
@@ -13,6 +12,8 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <netdb.h>
+
+#define QUEUE_MAX 10
 
 struct sockaddr_in local, remote;
 struct hostent* he;

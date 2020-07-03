@@ -25,16 +25,12 @@ gdb test
 {\textbf{break example.c:name\_function}} & {Set breakpoint on function called \textit{name\_function} in file example.c}\\
 \hline
 {\textbf{break XX}} & {Set breakpoint at line numbered XX}\\
+{\textbf{break} or \textbf{b}} & {Set breakpoint at line in which the program has already failed}\\
 {\textbf{break example.c:XX}} & {Set breakpoint at line numbered XX in file example.c}\\
 \hline
 {\textbf{clear XX}} & {Remove breakpoint at line numbered XX}\\
 \hline
 {\textbf{watch name\_variable}} & {Program will stop whenever the variable \textit{name\_variable} changes}\\
-\hline
-{\textbf{print name\_variable}} & {Print the value of variable called \textit{name\_variable}}\\
-{\textbf{p name\_variable}} & {}\\
-\hline
-{\textbf{list}}  & {Show all the code in the file}\\
 \hline
 {\textbf{step}} & {Step into a function call}\\
 \hline
@@ -88,7 +84,20 @@ where n, f, and u are all optional parameters that specify how much memory to di
 \hline
 \end{tabular}
 \end{table}
-
+There are other commands used to examine and to set variable values to something. These are:
+\begin{table}[h]
+\footnotesize\centering
+\begin{tabular}{|l|l|}
+\hline
+{\textbf{print name\_variable}} & {Print the value of variable called \textit{name\_variable}}\\
+{\textbf{p name\_variable}} & {}\\
+\hline
+{\textbf{list}}  & {Show all the code in the file}\\
+\hline
+{\textbf{set var} name\_variable=value} & {Set the value of the variable \textit{name\_variable} equal to \textit{value}}\\
+\hline
+\end{tabular}
+\end{table}
 \subsection{Automate tasks in gdb}
 You can insert all the commands that you want to launch on gdb in a file \textit{init.gdb} and then pass it to the program thanks to the option \textit{-x}, as follows:
 \begin{lstlisting}[linewidth=110pt, basicstyle=\footnotesize\sffamily,]

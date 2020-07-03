@@ -1,5 +1,5 @@
 \chapter{HTTP protocol}
-HTTP protocol was presented for the first time in the RFC1945\cite{RFC1945}.\\
+HTTP protocol was described for the first time in the RFC1945\cite{RFC1945}.\\
 The Hypertext Transfer Protocol (HTTP) is an application-level protocol with the simplicity and the speed needed for distributed, collaborative, hypermedia information systems. It is a generic, stateless, object-oriented protocol which can be used for many tasks, such as name servers and distributed object management systems, through extension of its request methods (commands).\\
 It's not the first Hypertext protocol in history because before it there was Hypertalk, made by Apple. \\
 A feature of HTTP is typing the data representation, allowing systems to be built independently w.r.t data being transferred. HTTP has been in use by the World-Wide Web global information initiative since 1990.
@@ -173,7 +173,7 @@ Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 \end{lstlisting}
 \end{tabular}
 \end{center}
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \footnotesize
 \begin{tabular}{|r|l|}
@@ -196,7 +196,7 @@ Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 \hline
 \end{tabular}
 \end{table}
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \footnotesize
 \begin{tabular}{|r|l|}
@@ -286,7 +286,7 @@ It's based on locality principle and was observed on programs execution.
 \item{\textbf{Time Locality}\\
 When a program accesses to an address, there will be an access to it again in the near future with high probability.\\
 If I put this address in a faster memory (cache), the next access to the same location would be faster.
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{Images/HTTP/time_locality}
 \end{figure}
@@ -295,7 +295,7 @@ If I put this address in a faster memory (cache), the next access to the same lo
 If a program accesses to an address in the memory, it's very probable that neighboring addresses would be accessed next.}
 \end{itemize}
 The caching principle is applied also in Computer Networks, storing of the visited web pages on client system and then updating them through the use of particular headers and requests (see Figure \ref{caching}). The purpose of using cache is to reduce traffic over the network and load of the server. The main problem of storing the page in a file, used as a cache, is that the page on the server can me modified and so client's copy can be obsolete.\\
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{Images/HTTP/caching}
 \caption{\footnotesize{First insertion of the resource in the cache.\\}}\label{catching}
@@ -314,7 +314,7 @@ A problem of this method is that the server needs to know in advance when the pa
 \end{itemize}
 The other problem of this method is that we need to have server and client clocks synchronized. Hence, we need to have date correction and compensation between these systems.
 \end{enumerate}
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{Images/HTTP/expires_cache}
 \end{figure}
@@ -328,7 +328,7 @@ The other problem of this method is that we need to have server and client clock
 If the store date was older than new date, the client makes a new request for the resource to the server. Otherwise, he uses the resource in the cache.}
 \end{enumerate}
 The problem of this method is that, in the worst case, we send two times the request of the same resource (even if the first one, with "HEAD" method, is less heavy).
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{Images/HTTP/last_cache}
 \end{figure}
@@ -343,9 +343,13 @@ The problem of this method is that, in the worst case, we send two times the req
 Otherwise, it sends to client the message "HTTP/1.0 304 Not Modified".}
 \end{enumerate}
 The positive aspect of this method is that the client can do only a request and obtain the corrept answer without other requests.
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{Images/HTTP/if_cache}
+\includegraphics[scale=0.8]{Images/HTTP/if_cache1}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{Images/HTTP/if_cache2}
 \end{figure}
 }
 \end{itemize}
@@ -455,6 +459,7 @@ If the stream of bytes is not composed by a multiple of 24 bits, base64 pad whol
 \end{figure}
 }
 \end{itemize}
+\vspace{2cm}
 \section{HTTP 1.1}
 The architecture of the model is in RFC2616\cite{RFC2616}. It has by default the option keep alive actived by default with respect to HTTP 1.0. It has the mandatory header "Host" followed by the hostname of the remote system, to which the request or the response is sent. The headers used in HTTP/1.0 are used also in HTTP/1.1, but in this new protocol there are new headers not used in the previous one. The body is organized in chunks, so we need the connection kept alive to manage future new chunks.\\
 This is useful with dynamic pages, in which the server doesn't know the length of the stream in advance and can update the content of the stream during the extablished connection, sending a fixed amount of bytes to client. We can check if the connection is chunked oriented, looking for the header "Transfer-Encoding" with value "chunked".\\
@@ -485,11 +490,11 @@ trailer        = *(entity-header CRLF)
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{Images/HTTP/Chunked-Body}\caption{\footnotesize{Chunked body.}}\label{chunked_body}
+\includegraphics[scale=0.4]{Images/HTTP/Chunked-Body}\caption{\footnotesize{Chunked body.}}\label{chunked_body}
 \end{figure}
 
 \subsection{Caching based on HASH}
-It's like the caching mechanism used looking to "Last-Modified" header value through the use of HEAD. The organization is as follows:
+It's like the caching mechanism used looking to "Last-Modified" header value through HEAD request. The organization is as follows:
 \begin{enumerate}
 \item{The client asks the resource to the server, he stores resource in the cache, within also its "Etag" header value.}
 \item{The client checks if its copy of the resource is obsolete by making a request to the server of only the header of the resource. This type of request is done by using the \textit{"HEAD"} method.}
@@ -506,7 +511,7 @@ In URI, there is the encapsulation of the operation done in the past, to have a 
 \end{enumerate}
 \begin{center}
 \begin{tabular}{c}
-\begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
+\begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily, showstringspaces=false]
 URI            = ( absoluteURI | relativeURI ) [ "#" fragment ]
 
 absoluteURI    = scheme ":" *( uchar | reserved )
@@ -538,13 +543,14 @@ extra          = "!" | "*" | "'" | "(" | ")" | ","
 safe           = "$" | "-" | "_" | "."
 unsafe         = CTL | SP | <"> | "#" | "%" | "<" | ">"
 national       = <any OCTET excluding ALPHA, DIGIT,
+                 reserved, extra, safe and unsafe>
 \end{lstlisting}
 \end{tabular}
 \end{center}
 Hence Uniform Resource Identifiers are simply formatted strings which identify via name, location, or any other characteristic a network resource. The following example refers to Relative URI:
 \begin{center}
 \begin{tabular}{c}
-\begin{lstlisting}[linewidth=320pt, basicstyle=\footnotesize\sffamily,]
+\begin{lstlisting}[linewidth=130pt, basicstyle=\footnotesize\sffamily,]
 //net_loc/a/b/c?parameters
 \end{lstlisting}
 \end{tabular}
@@ -652,7 +658,7 @@ The proxy has an encrypted channel with the client and one with the server. This
 \vspace{1cm}
 \item{\textbf{Change default behaviour of proxy}\\
 The proxy in this case can only forward encrypted data without knowing anything about them. In this case, proxy works as a Layer-4 gateway and creates a tunnel between client and server\cite{RFC2817}.\\
-In HTTPS the client uses the method \textit{CONNECT} to tell to the proxy to work as a tunnel. The proxy, receiving the \textit{CONNECT} request, extablish the secure connection between client and server (through the preliminary exchange of keys with Diffie-Hellmann).\\
+In HTTPS the client uses the method \textit{CONNECT} to tell to the proxy to work as a tunnel. The proxy, receiving the \textit{CONNECT} request, extablishes the secure connection between client and server (through the preliminary exchange of keys with Diffie-Hellmann).\\
 The proxy sends HTTP response to the client if the \textbf{connect()} call succeded. Then the client can send encrypted data as \textit{raw data} and the proxy will not access them but only forward them. With \textit{CONNECT} request, the client asks to open a connection to web host.\\
 The proxy needs to create two processes (Figure \ref{proxy_HTTPS}):\\
 \begin{itemize}

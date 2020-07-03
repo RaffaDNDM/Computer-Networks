@@ -1,6 +1,6 @@
-#ifndef WC11
+#ifndef WC10
 
-#define WC11
+#define WC10
 
 
 

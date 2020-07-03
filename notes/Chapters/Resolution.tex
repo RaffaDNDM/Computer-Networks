@@ -2,8 +2,7 @@
 The following section will talk about history of technologies under the resolution of server names in URL to their IP addresses, needed to extablish the connection.
 
 \section{Network Information Center (NIC)}\label{NIC_section}
-This type of architecture was used in the past to resolve names. Each client has its own file \textbf{HOSTS.txt}, with resolution of names. The client shared its file with a central system, called \textbf{NIC} (Figure \ref{NIC}).\\
-This system collects all the files, like an hub, and shared resolution names to other clients (Figure \ref{NIC}).\\
+This type of architecture was used in the past to resolve names. Each client has its own file \textbf{HOSTS.txt}, with resolution of names. The client shared its file with a central system, called \textbf{NIC} (Figure \ref{NIC}). This system collects all the files, like an hub, and shared resolution names to other clients.\\
 This architecture is unfeasable and not scalable with nowadays number of IP addresses, because the files become very huge and transfering becomes very slow.\\
 \begin{figure}[h]
 \centering
@@ -13,7 +12,7 @@ This architecture is unfeasable and not scalable with nowadays number of IP addr
 
 
 \section{Domain Name System (DNS)}\label{DNS_system}
-The file \textbf{HOSTS.txt}\ref{NIC_section} is yet used in nowadays UNIX systems. The specified host name is searched in local \textbf{/etc/hosts.txt}, that contains local and private addresses resolution table, and if not found, it will be searched through DNS\cite{RFC1034}.
+The file \textbf{HOSTS.txt} is yet used in nowadays UNIX systems (Section \ref{NIC_section}). The specified host name is searched in local \textbf{/etc/hosts.txt}, that contains local and private addresses resolution table, and if not found, it will be searched through DNS\cite{RFC1034}.
 
 \subsection{Goals}
 \begin{enumerate}
@@ -33,21 +32,19 @@ Both personal computers and large timeshared hosts should be able to use the sys
 \end{enumerate}
 
 \subsection{Hierarchy structure}
-Hierarchy permits to manage a lot of nambers of domain names and IP addresses, reducing the time spent to resolve them. Given for example the host name \textbf{www.dei.unipd.it}, we have a \textbf{Name Server (NS)} for each of the domain name inside it (Figure \ref{DNS_hierarchy}).\\
-The tree hierarchy has a name server for each one of its internal nodes.The name server gives us only the name of the name server of the lower level to which we need to go.\\
-To obtain the IP address of this name server, we need to ask, to name server of upper layer, a \textbf{glue record}. The glue record is an additional information that needs us to understand how to rich that name server. Hence the glue record is the IP address of NS of the lower level in hierarchy. \\
-For each request to NS, we obtain also the expiration time information because a caching approach is adopted also in DNS but at level 4. There are 13 root name servers that are returned when asking resolution to root. \\
-In reality root name servers are more than 13 but the communication used in DNS is made through UDP and this type of connection supports only 13 simultaneously transfering. The local DNS server for the device, managed by my network provides, contains the 13 root servers and permit us to reach at least one DNS root server.\\
-The 13 DNS root servers are added locally at its installation of local DNS and updated assuming that at least one root server of them can be reachable. There is no address record for the root.\\
-In general structure of the queries to name servers, we ask only the domain resolution for a domain that composes name \ref{default_DNS}.\\
-To use a caching system efficiently, we need to make a recursive query, sending the request of resolution of the whole name with all its domains (Figure \ref{extreme_recursive}. All the name servers, where the query passes throuh, store information about resolution. This system is never applied as it is.\\
-In reality we use an hybrid version, that uses partially recursion \ref{partial_recursion}. Local DNS  usually has huge cache with main important names and also first and second level have caches. So local DNS rarely asks resolution to TOP Level Domain or Root.\\
-Recursive query option in dig command is made by a flag default set yes and that is used in UDP packet as an additional information. The Root Name Server decides if it wants to accept recursive query or if not, how mmany domains can resolve.\\
-I can group some domains, defining a zone, so I can use only a name server for the zone that solves more domains together \ref{DNS_zone}. So the name servers are authorithative over zones and not only single domains. It depends if domains are grouped or not.\\
-The creation of the zones are used to manage easily the responsability and the organization over the zones, partitioning them. Another reason for this partition in zones is because of some domains has few names and so it's better to group the domain with others.
+Hierarchy permits to manage a lot of nambers of domain names and IP addresses, reducing the time spent to resolve them. Given for example the host name \textbf{www.dei.unipd.it}, we have a \textbf{Name Server (NS)} for each of the domain name inside it (Figure \ref{DNS_hierarchy}). The tree hierarchy has a name server for each one of its internal nodes.The name server gives us only the name of the name server of the lower level to which we need to go.\\
+To obtain the IP address of this name server, we need to ask, to name server of upper layer, a \textbf{glue record}. The glue record is an additional information that is needed by us to understand how to reach that name server. Hence the glue record is the IP address of NS of the lower level in hierarchy. \\
+For each request to NS, we obtain also the expiration time information because a caching approach is adopted in DNS but at level 4. There are 13 root name servers that are obtained when asking resolution to root. \\
+In reality root name servers are more than 13 but the communication used in DNS is made through UDP and this type of connection supports only 13 simultaneously transfers. The local DNS server for the device, managed by my network provider, contains the 13 root servers and permits us to reach at least one DNS root server.\\
+The 13 DNS root servers are added locally during the installation of local DNSs and updated assuming that at least one root server of them can be reachable. There is no address record for the root.\\
+In general structure of the queries to name servers, we ask only the resolution for a specific domain that composes the whole name (Figure \ref{default_DNS}).\\
+To use a caching system efficiently, we need to make a recursive query, sending the request of resolution of the whole name with all its domains (Figure \ref{recursive_DNS}). All the name servers, where the query passes throuh, store information about resolution. This system is never applied as it is.\\
+In reality an hybrid version is implemented, using only partial recursion (Figure \ref{hybrid_DNS}). Local DNS usually has huge cache with main important names and also first and second level have caches. So local DNS rarely asks resolution to TOP Level Domain or Root.\\
+Recursive query option in dig command is made by a flag, default set to yes and used in UDP packet as an additional information. The Root Name Server decides if it wants to accept recursive query or if not, how many domains can resolve. I can group some domains, defining a zone, so I can use only a name server for a specific zone to solve many domains together (Figure \ref{DNS_zone}). So the name servers are authorithative over zones and not only single domains.\\
+The creation of the zones are used to manage easily the responsability of companies and their organization over the zones, grouping domains. Another reason for this partition in zones is the presence of some domains with few names, that it's better to group with other domains.
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.4]{Images/Resolution/DNS_hierarchy}
+\includegraphics[scale=0.38]{Images/Resolution/DNS_hierarchy}
 \caption{\footnotesize{DNS structure.}}\label{DNS_hierarchy}
 \end{figure}
 \begin{lstlisting}[linewidth=470pt, style=code, caption=Example of default DNS queries using dig.]

@@ -1,4 +1,3 @@
-#include "ws.h"
 #include "net_utility.h"
 
 #include <sys/types.h>
@@ -12,6 +11,11 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <signal.h>
+
+#define QUEUE_MAX 10
+#define ROOT_PATH "../dat"
+#define CGI_BIN "/cgi-bin/"
+#define CGI_RESULT "../dat/result.txt"
 
 struct sockaddr_in local, remote;
 
