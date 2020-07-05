@@ -20,6 +20,7 @@ int main(int argc, char ** argv)
     int sd;
     int t;
     int i;
+    int k;
     int size;
     int header_size;
     int body_length=0;
@@ -28,7 +29,7 @@ int main(int argc, char ** argv)
     char entity[1000000];
     char *website=NULL;
     char *status_tokens[3];
-    unsigned char ipaddr[4] = {216,58,211,163};
+    unsigned char ipaddr[4] = {192,168,1,81};
 
     if(argc>3)
     {
@@ -36,37 +37,37 @@ int main(int argc, char ** argv)
         return 1;
     }
 
-    //Initialization of TCP socket for IPv4 protocol
-    sd = socket(AF_INET, SOCK_STREAM, 0);
-    control(sd, "Socket failed\n");
-
-    //Definition of IP address + Port of the server
-    server.sin_family=AF_INET;
-    server.sin_port = htons(80);
-
-    if(argc>1)
-    {
-        server.sin_addr.s_addr=inet_addr(argv[1]);
-        //or inet_aton(argv[1], &server.sin_addr);
-
-        if(argc==3)
-            server.sin_port = htons(atoi(argv[2]));
-    }
-    else
-    {
-        server.sin_port = htons(80);
-        server.sin_addr.s_addr = *(uint32_t *) ipaddr;
-    }
-
-    //Connect to remote server
-    t = connect(sd, (struct sockaddr *)&server, sizeof(server));
-    control(t, "Connection failed \n");
-
     i=0;
     while(i<3)
     {
+        //Initialization of TCP socket for IPv4 protocol
+        sd = socket(AF_INET, SOCK_STREAM, 0);
+        control(sd, "Socket failed\n");
+
+        //Definition of IP address + Port of the server
+        server.sin_family=AF_INET;
+        server.sin_port = htons(80);
+
+        if(argc>1)
+        {
+            server.sin_addr.s_addr=inet_addr(argv[1]);
+            //or inet_aton(argv[1], &server.sin_addr);
+
+            if(argc==3)
+                server.sin_port = htons(atoi(argv[2]));
+        }
+        else
+        {
+            server.sin_port = htons(80);
+            server.sin_addr.s_addr = *(uint32_t *) ipaddr;
+        }
+
+        //Connect to remote server
+        t = connect(sd, (struct sockaddr *)&server, sizeof(server));
+        control(t, "Connection failed \n");
+
         //Writing on socket (Sending request to server)
-        sprintf(request, "GET / HTTP/1.1\r\nHost: www.google.it\r\n\r\n");
+        sprintf(request, "GET /reflect HTTP/1.1\r\nHost: 192.168.1.81\r\n\r\n");
         size = my_strlen(request);
         t = write(sd, request, size);
         control(t, "Write failed \n");
@@ -81,6 +82,9 @@ int main(int argc, char ** argv)
         body_acquire(sd, body_length, entity, &size);
         print_body(entity, size, 0);
         i++;
+
+         for(k=1; k<30 && h[k].name[0]; k++)
+            h[k].value=0;
     }
 
     return 0;
@@ -139,12 +143,11 @@ void analysis_headers(char **status_tokens, header* h, int* body_length, char* w
     printf(LINE);
     printf("                    HEADERS\n");
     printf(LINE);
-    printf("Status line:\n");
-    printf(LINE);
+    printf("Status line\n");
     printf("HTTP version: %30s\n", status_tokens[0]);
     code = atoi(status_tokens[1]);
     printf("HTTP code:    %30d\n", code);
-    printf("HTTP version: %30s\n", status_tokens[2]);
+    printf("HTTP comment: %30s\n", status_tokens[2]);
     printf(LINE);
 
     website=NULL;
