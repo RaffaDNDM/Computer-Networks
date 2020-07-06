@@ -8,23 +8,18 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define LINE "_________________________________________________________"
 struct sockaddr_in local,remote;
 char request[2000],response[2000];
 char * method, *path, *version;
-
-struct header{
-    char* name;
-    char* value;
-}h[30];
+#define SIZE_CHUNK 11
 
 int main()
 {
     FILE *f;
     char command[100];
-    int i,s,t,s2,n,len,c,yes=1, j; 
+    int i,s,t,s2,n,len,c,yes=1; 
     unsigned int count;
-    char response_length[10];
+    char response_temp[SIZE_CHUNK];
 
     s = socket(AF_INET, SOCK_STREAM, 0);
     if ( s == -1) { perror("Socket Failed\n"); return 1;}
@@ -52,6 +47,7 @@ int main()
         {
             n=read(s2,request,1999);
             request[n]=0;
+            printf("%s",request);
             method = request;
             for(i=0;(i<2000) && (request[i]!=' ');i++); 
             request[i]=0;
@@ -64,45 +60,10 @@ int main()
             for(   ;(i<2000) && (request[i]!='\r');i++); 
             request[i]=0;
             
-            printf("%s\nMethod = %s, path = %s , version = %s\n",LINE,method,path,version);	
-
-            i+=2;
-            j=0;
-            h[j].name = request+i;
-
-            while(i<n)
-            {
-                if(request[i]=='\r' && request[i+1]=='\n')
-                {
-                    request[i]=0;
-                    h[++j].name=request+i+2;
-                    i++;
-                }
-                else if(request[i]==':' && h[j].value==0)
-                {
-                    request[i]=0;
-                    h[j].value=request+i+1;
-                }
-
-                i++;
-            }
-
+            printf("Method = %s, path = %s , version = %s\n",method,path,version);	
             
-            for(i=0; h[i].name[0]; i++)
-            {
-                printf("[%s] %s\n", h[i].name, h[i].value);
-
-                if((!strcmp(h[i].name, "Connection") && !strcmp(h[i].value, "keep-alive")) 
-                   || !strcmp(version, "HTTP/1.1"))
-                    break;
-            }
-
-            printf("%s\n", LINE);
- 
-            if(!h[i].name[0] && !strcmp(version, "HTTP/1.0"))
-                sprintf(response, "%s 400 Bad Request\r\n\r\n", version); 
-            else if(strcmp("GET",method)) // it is not a GET
-                sprintf(response, "%s 501 Not Implemented\r\n\r\n", version);
+            if(strcmp("GET",method)) // it is not a GET
+                sprintf(response, "HTTP/1.1 501 Not Implemented\r\n\r\n");
             else 
             { // it is a get
                 if(!strncmp(path,"/cgi-bin/",9))
@@ -117,33 +78,49 @@ int main()
                         printf("cgi bin error\n");
                         return 1;
                     }
-                    sprintf(response,"%s 200 OK\r\nContent-Length", version);
+                    sprintf(response,"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
                 }
                 else  if((f=fopen(path+1,"r"))==NULL)
-                    sprintf(response,"%s 404 Not Found\r\nConnection:Close\r\n\r\n", version);
+                    sprintf(response,"HTTP/1.1 404 Not Found\r\nConnection:Close\r\n\r\n");
                 else 
-                    sprintf(response,"%s 200 OK\r\nContent-Length:", version);
+                    sprintf(response,"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n");
             }
 
             write(s2,response,strlen(response)); // HTTP Headers
-            
             if(f!=NULL)
             { 
                 // if present, the Entity Body 
-                count=0;
-                while((c=fgetc(f))!=EOF)
+                while(1)
                 {
-                    sprintf(response+count, "%c", c);
-                    count++;
+                    count=0;
+                    int size = (rand() % (SIZE_CHUNK-1)) +1;
+
+                    while(count<size)
+                    {
+                        c=fgetc(f);
+                        if(c!=EOF)
+                        {
+                            response_temp[count]=c;
+                            count++;
+                            printf("%c",c);
+                        }
+                        else
+                            break;
+                    }
+                    response_temp[count]=0;
+
+                    sprintf(response,"%x\r\n%s\r\n", count, response_temp);
+                    write(s2, response, strlen(response));
+
+                    if(c==EOF)
+                        break;
                 }
 
-                sprintf(response_length, "%d\r\n\r\n", count);
-                write(s2, response_length, strlen(response_length));
-                write(s2, response, count);
+                sprintf(response, "0\r\n\r\n");
+                write(s2, response, strlen(response));
 
                 fclose(f); 
             }
-
             shutdown(s2,SHUT_RDWR);
             close(s2);	
             exit(0);

@@ -17,17 +17,17 @@ int main()
 {
 	 int s,t,size,i,j,k;
 	 char request[100],response[1000000];
-	 unsigned char ipaddr[4]={216,58,211,163};
+	 unsigned char ipaddr[4]={192,168,1,81};
 	 int bodylength=0;
          s = socket(AF_INET, SOCK_STREAM, 0);
 	 if ( s == -1) { printf("Errno = %d\n", errno); perror("Socket Failed"); return 1; }
 	 server.sin_family = AF_INET;
-	 server.sin_port = htons(80); //Ex: Write a function to revert endianness
+	 server.sin_port = htons(8083); //Ex: Write a function to revert endianness
 	 server.sin_addr.s_addr = *(uint32_t *)ipaddr;
 	 // WRONG : server.sin_addr.s_addr = (uint32_t )*ipaddr
 	 t = connect(s, (struct sockaddr *)&server, sizeof(server));
 	 if ( t == -1) { perror("Connect Failed"); return 1; }
-	 sprintf(request,"GET /  HTTP/1.0\r\n\r\n"); // request[0]='G', request[1]='E',... request[7]=0 (or '\0') 
+	 sprintf(request,"GET /prova.html HTTP/1.0\r\nConnection:keep-alive\r\n\r\n"); // request[0]='G', request[1]='E',... request[7]=0 (or '\0') 
 	 for(size=0;request[size];size++);
 	 t=write(s,request,size);	
 	 if ( t == -1 ) { perror("Write failed"); return 1; }
