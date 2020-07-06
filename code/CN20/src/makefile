@@ -16,5 +16,5 @@ all : wc09 wc10 wc11 wc_cache wp wp_dbl_connection ws ws_chunked ws_content ws_r
 	$(CC) $(GDB_FLAG) -o $(BIN)/$@ $^
 
 clean:
-	cd $(BIN) & ls -p $(BIN) | grep -v / | grep -v ".html" | xargs rm
+	cd $(BIN) ; ls -p  | grep -v / | grep -v ".html" | xargs rm
 
