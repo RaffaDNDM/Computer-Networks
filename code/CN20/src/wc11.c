@@ -29,7 +29,7 @@ int main()
 	 // WRONG : server.sin_addr.s_addr = (uint32_t )*ipaddr
 	 t = connect(s, (struct sockaddr *)&server, sizeof(server));
 	 if ( t == -1) { perror("Connect Failed"); return 1; }
-	 sprintf(request,"GET /prova.html HTTP/1.1\r\nHost: 192.168.1.81\r\n\r\n"); // request[0]='G', request[1]='E',... request[7]=0 (or '\0') 
+	 sprintf(request,"HEAD /prova.html HTTP/1.1\r\nHost:192.168.1.81\r\n\r\n"); // request[0]='G', request[1]='E',... request[7]=0 (or '\0') 
 	 for(size=0;request[size];size++);
 	 t=write(s,request,size);	
 	 if ( t == -1 ) { perror("Write failed"); return 1; }

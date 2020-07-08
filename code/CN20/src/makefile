@@ -8,7 +8,7 @@ INCLUDE  = ../include
 SRC   = .
 BIN   = ../bin
 
-all : wc09 wc10 wc11 wc_cache wp wp_dbl_connection ws ws_chunked ws_content ws_reflect wp wp_dbl_connection
+all : wc09 wc10 wc11 wc_cache wc_cache2 wp wp_dbl_connection ws ws_chunked ws_cache ws_content ws_reflect wp wp_dbl_connection
 
 .PHONY: clean
 
