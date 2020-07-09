@@ -10,7 +10,7 @@ SRC   = .
 BIN   = ../bin
 UTILITY = net_utility
 
-all : wc09 wc10 wc11 wc_cache wc_cache2 wp wp_dbl_connection ws ws_chunked ws_cache ws_content ws_reflect wp wp_dbl_connection
+all : wc09 wc10 wc11 wc_cache wc_cache2 wp wp_dbl_connection ws ws_chunked ws_cache ws_content ws_reflect wp wp_dbl_connection wp_2_connections1 wp_2_connections2
 
 .PHONY: clean, %_r
 

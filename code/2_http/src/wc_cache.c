@@ -129,6 +129,8 @@ int main(int argc, char** argv)
 
         if(cache_time<last_time)
         {
+            shutdown(s, SHUT_RDWR);
+            close(s);
             s = socket(AF_INET, SOCK_STREAM, 0);
             if ( s == -1) { printf("Errno = %d\n", errno); perror("Socket Failed"); return 1; }
             

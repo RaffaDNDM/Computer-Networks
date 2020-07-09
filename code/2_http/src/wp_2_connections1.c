@@ -10,10 +10,14 @@
 #include <stdlib.h>
 #include <netdb.h>
 
+#include "net_utility.h"
+
 struct hostent * he;
-struct sockaddr_in local,remote,server;
-char request[2000],response[2000],request2[2000],response2[2000];
-char * method, *path, *version, *host, *scheme, *resource,*port;
+struct sockaddr_in local, remote, server;
+
+char request[2000],response[10000],request2[2000],response2[2000];
+char *method, *path, *version, *host, *scheme, *resource, *port; 
+
 struct headers {
 char *n;
 char *v;
@@ -25,6 +29,11 @@ int main()
     char command[100];
     int i,s,t,s2,s3,n,len,c,yes=1,j,k,pid; 
     int chunked = 1;
+    int keep_alive;
+    char conn2server_type[30];
+    int body_length=0;
+    int size=0;
+    int chunk_size;
 
     s = socket(AF_INET, SOCK_STREAM, 0);
     if ( s == -1) { perror("Socket Failed\n"); return 1;}
@@ -45,7 +54,7 @@ int main()
         f = NULL;
         remote.sin_family=AF_INET;
         len = sizeof(struct sockaddr_in);
-        
+
         s2 = accept(s,(struct sockaddr *) &remote, &len);
         if(fork()) continue; 
         if (s2 == -1) {perror("Accept Failed\n"); return 1;}
@@ -70,7 +79,20 @@ int main()
             }
             j++;
         }
-            
+          
+        for(i=1; h[i].n[0]; i++)
+        {
+            if(!strcmp(h[i].n, "Connection"))
+            {
+                if(!strcmp(h[i].v, "keep-alive"))
+                    keep_alive = 1;
+                else if(!strcmp(h[i].v, "close"))
+                    keep_alive = 0;
+                else
+                    keep_alive = -1;
+            }
+        }
+
         printf("%s\n",request);
         method = request;
         for(i=0;(i<2000) && (request[i]!=' ');i++); request[i]=0;
@@ -79,8 +101,13 @@ int main()
         version = request+i+1;
         printf("Method = %s, path = %s , version = %s\n",method,path,version);
         
-//        for(i=1; h[i].n; i++)
-//            printf("%s----->%s\n", h[i].n, h[i].v);
+        //for(i=1; h[i].n[0]; i++)
+        //    printf("%s----->%s\n", h[i].n, h[i].v);
+
+        if(keep_alive>0)
+            strcpy(conn2server_type,"close");
+        else if(keep_alive==0)
+            strcpy(conn2server_type,"keep-alive");
 
         if(!strcmp("GET",method)) //it is a GET
         {
@@ -105,13 +132,13 @@ int main()
             t=connect(s3,(struct sockaddr *)&server,sizeof(struct sockaddr_in));		
             if(t==-1){perror("Connect to server failed"); return 1;}
 
-            sprintf(request2,"GET /%s HTTP/1.1\r\nHost:%s\r\nConnection:close\r\n\r\n",resource,host);
-            write(s3,request2,strlen(request2)); 
-             
-            if(chunked)
+            if(keep_alive>=0)
             {
-                for(i=0; h[i].n; i++)
-                    h[i].v=0;
+                sprintf(request2,"GET /%s HTTP/1.0\r\nHost:%s\r\nConnection:%s\r\n\r\n", resource, host, conn2server_type);
+                write(s3,request2,strlen(request2));
+            
+                //Read the answer of the server and forward it to client
+                memset(h, 0, 30*sizeof(struct headers));
 
                 j=0;k=0;
                 h[k].n = response;
@@ -141,30 +168,95 @@ int main()
 
                 for(i=1; h[i].n[0]; i++)
                 {
-                    if(!strcmp(h[i].n, "Connection"))
-                        sprintf(response2, "%s:keep-alive\r\n", h[i].n);
+                    if(!keep_alive && !strcmp(h[i].n, "Content-Length"))
+                        body_length=atoi(h[i].v);
+                    else if(!keep_alive && !strcmp(h[i].n, "Transfer-Encoding") && !strcmp(h[i].v, "chunked"))
+                        body_length=-1;
                     else
-                        sprintf(response2, "%s:%s", h[i].n, h[i].v);
-
-                    write(s2, response2, strlen(response2));
+                    {
+                        sprintf(response2, "%s:%s\r\n", h[i].n, h[i].v);
+                        write(s2, response2, strlen(response2));
+                    }
                 }
 
-                write(s2, "\r\n", 2);
 
-                while(t=read(s3,response2,1999))
+                if(keep_alive)//Keep-alive on client, close from server
                 {
-                    write(s2,response2,t);
+                    size=0;
+                    if(chunked)
+                    {
+                        write(s2, "\r\n", 2);
+                        while(t=read(s3, response, 2000)>0)
+                        {
+                            char length_chunk[10];
+                            sprintf(length_chunk, "%x\r\n", t);
+                            write(s2, length_chunk, strlen(length_chunk));
+                            write(s2, response, t);
+                            write(s2,"\r\n",2);
+                        }
+                        write(s2, "0\r\n\r\n", 5); 
+                    }
+                    else
+                    {
+                        for(size=0; (t=read(s3, response+size, 10000-size))>0; size+=t);
+
+                        char content_length[30];
+                        sprintf(content_length, "Content-Length:%d\r\n\r\n",size);
+                        write(s2, content_length, strlen(content_length));
+                        write(s2, response, size);
+                    }
+                }
+                else
+                {
+                    if(body_length>0)
+                    {
+                        size=0; 
+                        while((t=read(s3, response, body_length-size))>0)
+                        {
+                            write(s2, response, t);
+                            size+=t;
+                        }
+                    }
+                    else if(body_length<0)
+                    {
+                        body_length=0;
+
+                        do
+                        {
+                            char c;
+
+                            chunk_size=0;
+                            while((t=read(s3, &c, 1))>0)
+                            {
+                                if(c=='\n')
+                                    break;
+                                else if(c=='\r')
+                                    continue;
+                                else
+                                    c=hex2dec(c);
+
+                                chunk_size = chunk_size*16 + c;
+                            }
+
+                            if(t==-1)
+                                perror("line 223");
+
+                            for(size=0; (t=read(s3, response+body_length+size, chunk_size-size))>0; size+=t);
+                            read(s3, &c, 1);
+                            read(s3, &c, 1);
+
+                            body_length+=chunk_size;
+                        }
+                        while(chunk_size>0);
+                    }
                 }
 
-                if(t==-1){perror("Read from server to clien failed"); return 1;} 
-                write(s2, "0\r\n\r\n", 5);
             }
             else
             {
-                ;
+            
             }
             
-
             shutdown(s3,SHUT_RDWR);
             close(s3);
         }
@@ -220,4 +312,6 @@ int main()
         close(s2);	
         exit(0);
     }
+
+    return 0;
 }
