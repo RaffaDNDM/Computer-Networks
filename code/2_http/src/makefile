@@ -3,7 +3,8 @@ SHELL:=/bin/bash
 CC = gcc
 
 GDB_FLAG = -g
-CFLAGS   = -Wall -pedantic -I
+#CFLAGS   = -Wall -pedantic -I
+CFLAGS = -I
 
 INCLUDE  = ../include
 SRC   = .
