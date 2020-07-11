@@ -19,9 +19,9 @@ Implementation of network applications, using Linux socket.
     3. Web Server with Content-Length header
     4. Web Server with both caching management
     5. Web Server that replies with message of client, with additional info about client
-- Web Proxy
-  1. HTTPS and HTTP management
-  2. Keep-alive and close connections together
+  - Web Proxy
+    1. HTTPS and HTTP management
+    2. Keep-alive and close connections together
 - [Base64 implementation.](https://github.com/RaffaDNDM/Computer-Networks/tree/master/code/3_base64)
 - [Implementation of Ethernet Packets using socket.](https://github.com/RaffaDNDM/Computer-Networks/tree/master/code/4_dll)
   1. ARP (Address Resolution Protocol)
