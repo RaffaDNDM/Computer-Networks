@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
     control(t, "Connection failed \n");
 
     //Writing on socket (Sending request to server)
-    sprintf(request, "GET http://www.radioamatori.it/ HTTP/1.0\r\nConnection:keep-alive\r\n\r\n");
+    sprintf(request, "GET http://www.example.com/ HTTP/1.0\r\nHost:www.example.com\r\nConnection:close\r\n\r\n");
     size = my_strlen(request);
     t = write(sd, request, size);
     control(t, "Write failed\n");
