@@ -7,10 +7,10 @@
 #include <net/if.h>
 #include <string.h>
 
-unsigned char myip[4]={88,80,187,84};
+unsigned char myip[4]={192,168,1,81};
 unsigned char netmask[4]={255,255,255,0};
-unsigned char mymac[6]={0xf2,0x3c,0x91,0xdb,0xc2,0x98};
-unsigned char gateway[4]={88,80,187,1};
+unsigned char mymac[6]={0x4c,0xbb,0x58,0x5f,0xb4,0xdc};
+unsigned char gateway[4]={192,168,1,1};
 
 
 //unsigned char targetip[4]={88,80,187,50};
@@ -81,7 +81,7 @@ ip->tos=0;
 ip->len=htons(payloadlen+20);
 ip->id=htons(0xABCD);
 ip->flag_offs=htons(0);
-ip->ttl=128;
+ip->ttl=8;
 ip->proto=proto;
 ip->checksum=htons(0);
 ip->src= *(unsigned int*)myip;
@@ -95,9 +95,8 @@ struct icmp_packet
 unsigned char type;
 unsigned char code;
 unsigned short checksum;
-unsigned short id;
-unsigned short seq;
-unsigned char payload[1400];
+unsigned int unused;
+unsigned char payload[84];
 };
 
 int forge_icmp(struct icmp_packet * icmp, int payloadsize)
@@ -106,13 +105,10 @@ int i;
 icmp->type=8;
 icmp->code=0;
 icmp->checksum=htons(0);
-icmp->id=htons(0x1234);
-icmp->seq=htons(1);
+icmp->unused = 0;
 for(i=0;i<payloadsize;i++)icmp->payload[i]=i&0xFF;
 icmp->checksum=htons(checksum((unsigned char*)icmp,8 + payloadsize));
 } 
-
-
 
 int arp_resolve(unsigned char* destip, unsigned char * destmac)
 {
@@ -137,7 +133,7 @@ for(i=0;i<6;i++) arp->dstmac[i]=0;
 for(i=0;i<4;i++) arp->dstip[i]=destip[i];
 //printpacket(pkt,14+sizeof(struct arp_packet));
 sll.sll_family = AF_PACKET;
-sll.sll_ifindex = if_nametoindex("eth0");
+sll.sll_ifindex = if_nametoindex("wlp6s0");
 len = sizeof(sll);
 n=sendto(s,pkt,14+sizeof(struct arp_packet), 0,(struct sockaddr *)&sll,len);
 if (n == -1) {perror("Recvfrom failed"); return 0;}
@@ -148,8 +144,8 @@ while( 1 ){
 		if(arp->op == htons(2)) // it is a reply
 			if(!memcmp(destip,arp->srcip,4)){ // comes from our target
 				memcpy(destmac,arp->srcmac,6);
-				printpacket(pkt,14+sizeof(struct arp_packet));
-				return 0;
+                printpacket(pkt,14+sizeof(struct arp_packet));
+                return 0;
 				}	
 	}
 }
@@ -192,7 +188,7 @@ printpacket(packet,14+20+8+20);
 for(i=0;i<sizeof(sll);i++) ((char *)&sll)[i]=0;
 
 sll.sll_family=AF_PACKET;
-sll.sll_ifindex = if_nametoindex("eth0");
+sll.sll_ifindex = if_nametoindex("wlp6s0");
 len=sizeof(sll);
 n=sendto(s,packet,14+20+8+20, 0,(struct sockaddr *)&sll,len);
 if (n == -1) {perror("Recvfrom failed"); return 0;}
@@ -203,8 +199,18 @@ while( 1 ){
 	if (n == -1) {perror("Recvfrom failed"); return 0;}
 	if (eth->type == htons (0x0800)) //it is IP
 		if(ip->proto == 1) // it is ICMP 
-			if(icmp->type==0){
-				printpacket(packet,n);	
+			if(icmp->type==11 && icmp->code == 0){
+				printpacket(packet,n);
+                printf("______________________________________\n");
+                printf("\033[1;31mRemote IP address:\033[0m   ");
+
+                unsigned char* src_ip = (unsigned char*) &(ip->src);
+                for(i=0; i<3; i++)
+                    printf("%u.", src_ip[i]);
+                printf("%u\n", src_ip[i]);
+
+                printf("______________________________________\n");
+
 				break;
 				}
 }
