@@ -3,37 +3,37 @@ SHELL:=/bin/bash
 CC = gcc
 
 GDB_FLAG = -g
-CFLAGS   = -Wall -pedantic -I
+CFLAGS   = #-Wall -pedantic
 
 INCLUDE  = ../include
 SRC   = .
 BIN   = ../bin
 UTILITY = $(BIN)/utility.o $(BIN)/arp.o
 
-all : np nt te
+all : ping traceroute time_exceeded unreachable_dest statistics
 
 .PHONY: clean, %_r
 
 %_r: $(BIN)/%
 	./$<
 
-te: $(SRC)/time_exceeded.c
-	$(CC) $(GDB_FLAG) -o $(BIN)/$@ $^ $(CFLAGS)$(INCLUDE)
+time_exceeded: $(SRC)/time_exceeded.c 
+	$(CC) $(GDB_FLAG) -o $(BIN)/$@ $^ $(CFLAGS)
 	sudo setcap cap_net_raw,cap_net_admin=eip $(BIN)/$@
 
-np : $(SRC)/ping.c $(UTILITY)
-	$(CC) $(GDB_FLAG) -o $(BIN)/$@ $^ $(CFLAGS)$(INCLUDE)
+unreachable_dest: $(SRC)/unreachable_dest.c
+	$(CC) $(GDB_FLAG) -o $(BIN)/$@ $^ $(CFLAGS)
 	sudo setcap cap_net_raw,cap_net_admin=eip $(BIN)/$@
 
-nt : $(SRC)/traceroute.c $(UTILITY)
-	$(CC) $(GDB_FLAG) -o $(BIN)/$@ $^ $(CFLAGS)$(INCLUDE)
+%: $(SRC)/%.c $(UTILITY)
+	$(CC) $(GDB_FLAG) -o $(BIN)/$@ $^ $(CFLAGS) -I$(INCLUDE)
 	sudo setcap cap_net_raw,cap_net_admin=eip $(BIN)/$@
 
 $(BIN)/utility.o : $(SRC)/utility.c
-	$(CC) -c -o $@ $< $(CFLAGS)$(INCLUDE)
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(INCLUDE)
 
 $(BIN)/arp.o : $(SRC)/arp.c
-	$(CC) -c -o $@ $< $(CFLAGS)$(INCLUDE)
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(INCLUDE)
 
 clean:
 	rm $(BIN)/*
