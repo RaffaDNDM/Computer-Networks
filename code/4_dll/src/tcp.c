@@ -14,7 +14,7 @@ unsigned char mymac[6]={0x4c,0xbb,0x58,0x5f,0xb4,0xdc};
 unsigned char gateway[4]={192,168,1,1};
 
 //unsigned char targetip[4]={88,80,187,50};
-unsigned char targetip[4]={147,162,2,100};
+unsigned char targetip[4]={216,58,206,68};
 unsigned char targetmac[6];
 unsigned char buffer[1500];
 int s;
@@ -59,8 +59,7 @@ unsigned char proto;
 unsigned short checksum;
 unsigned int src;
 unsigned int dst;
-unsigned char option[39];
-unsigned char payload[1441];
+unsigned char payload[1480];
 };
 
 int forge_ip(struct ip_datagram *ip, unsigned char * dst, int payloadlen,unsigned char proto) 
@@ -79,35 +78,28 @@ ip->checksum =htons(checksum((unsigned char *)ip,59));
 /* Calculate the checksum!!!*/
 };
 
-struct icmp_packet 
+struct tcp_segment
 {
-unsigned char type;
-unsigned char code;
+unsigned short src_port;
+unsigned short dst_port;
+unsigned int seq_num;
+unsigned int ack_num;
+unsigned short off_res_flags;
+unsigned short window;
 unsigned short checksum;
-unsigned short id;
-unsigned short seq;
-unsigned char payload[1400];
+unsigned short urg_pointer;
+unsigned int options;
+unsigned char data[1376];
 };
 
-struct record_route
+struct pseudo_header
 {
-unsigned char type;
-unsigned char length;
-unsigned char pointer;
-unsigned char route_data[36];
+    unsigned int src_IP;
+    unsigned int dst_IP;
+    unsigned short protocol;
+    unsigned short length;
+    unsigned char tcp_header[20];
 };
-
-int forge_icmp(struct icmp_packet * icmp, int payloadsize)
-{
-int i;
-icmp->type=8;
-icmp->code=0;
-icmp->checksum=htons(0);
-icmp->id = htons(1);
-icmp->seq = htons(1);
-for(i=0;i<payloadsize;i++)icmp->payload[i]=i&0xFF;
-icmp->checksum=htons(checksum((unsigned char*)icmp,8 + payloadsize));
-} 
 
 int arp_resolve(unsigned char* destip, unsigned char * destmac)
 {
@@ -150,6 +142,7 @@ while( 1 ){
 }
 
 unsigned char packet[1500];
+struct pseudo_header pseudo_h;
 
 int main(){
 int i,n,len ;
@@ -157,8 +150,7 @@ unsigned char dstmac[6];
 
 struct eth_frame* eth;
 struct ip_datagram* ip;
-struct icmp_packet* icmp;
-struct record_route* rr; 
+struct tcp_segment* tcp;
 
 s = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL)); 
 if(s==-1){perror("socket failed");return 1;}
@@ -176,26 +168,31 @@ printf("destmac: ");printpacket(dstmac,6);
 
 eth = (struct eth_frame *) packet;
 ip = (struct ip_datagram *) eth->payload; 
-rr = (struct record_route*) ip->option;
-icmp = (struct icmp_packet *) ip->payload;
-
-rr->type = 7;
-rr->length = 39;
-rr->pointer = 4;
+tcp = (struct tcp_segment *) ip->payload;
 
 for(i=0;i<6;i++) eth->dst[i]=dstmac[i];
 for(i=0;i<6;i++) eth->src[i]=mymac[i];
 eth->type=htons(0x0800);
-forge_icmp(icmp, 20);
-forge_ip(ip,targetip, 20+8, 1); 
-printpacket(packet,14+59+8+20);
+tcp->src_port=htons(8080);
+tcp->dst_port=htons(80);
+tcp->seq_num=htonl(1);
+tcp->off_res_flags = htons(2);
+tcp->window = 0xffff;
+forge_ip(ip,targetip, 20, 6); 
+pseudo_h.src_IP = ip->src;
+pseudo_h.dst_IP = ip->dst;
+pseudo_h.length = htons(20);
+pseudo_h.protocol = htons(6);
+memcpy(&(pseudo_h.tcp_header), tcp, 20);
+tcp->checksum=checksum((unsigned char*) &pseudo_h, 32);
+printpacket(packet,14+20+20);
 
 for(i=0;i<sizeof(sll);i++) ((char *)&sll)[i]=0;
 
 sll.sll_family=AF_PACKET;
 sll.sll_ifindex = if_nametoindex("wlp6s0");
 len=sizeof(sll);
-n=sendto(s,packet,14+59+8+20, 0,(struct sockaddr *)&sll,len);
+n=sendto(s,packet,14+20+20, 0,(struct sockaddr *)&sll,len);
 if (n == -1) {perror("Recvfrom failed"); return 0;}
 
 while( 1 ){
@@ -204,21 +201,16 @@ while( 1 ){
 	if (n == -1) {perror("Recvfrom failed"); return 0;}
 	if (eth->type == htons (0x0800)) //it is IP
     {
-        if(ip->proto == 1) // it is ICMP 
+        if(ip->proto == 6) // it is TCP 
         {
-            if(icmp->type==0)
+            printf("reach");
+            if(tcp->src_port == htons(80) && 
+               tcp->dst_port == htons(8080) &&
+               tcp->ack_num == htonl(2) &&
+               tcp->off_res_flags == htons(0x0012))
             {
-                printf("ECHO REPLY\n");
-				if(rr->type==7)
-                {
-                    printpacket(packet,14+59+8+20);
-				    break;
-                }
-		    }
-            else if(icmp->type==12)
-            {
-                printf("PROBLEM");
-                printpacket(packet, 14+59+8+20);
+                printf("PACKET");
+                printpacket(packet, 14+20+20);
                 break;
             }
         }
