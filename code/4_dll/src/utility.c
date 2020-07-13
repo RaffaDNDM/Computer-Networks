@@ -47,6 +47,14 @@ unsigned short checksum(unsigned char* buf, int size)
             sum = (sum&0xffff)+1;
     }
 
+    if(size%2)
+    {
+        sum += htons(p[i] & 0xff00);
+        
+        if(sum & 0x10000)
+            sum = (sum&0xffff)+1;  
+    }
+
     return (unsigned short) ~sum;
 }
 
