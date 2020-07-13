@@ -14,7 +14,7 @@ Implementation of network applications, using Linux socket.
     4. Web Client with caching implemented using Last-Modified header and HEAD method
     5. Web Client with caching implemented using If-Modified-Since header
   - Web Server
-    1. Standard version
+    1. Standard version with management of function calls
     2. Web Server with Transfer-Encoding:chunked header
     3. Web Server with Content-Length header
     4. Web Server with both caching management
@@ -27,3 +27,7 @@ Implementation of network applications, using Linux socket.
   1. ARP (Address Resolution Protocol)
   2. ping
   3. traceroute
+  4. statistics about received packets
+  5. record route oprion of IP header
+  6. time exceeded
+  7. unreachable destination ICMP
