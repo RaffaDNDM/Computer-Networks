@@ -5,7 +5,7 @@ Application of Computer Networks protocols in C, C++, Python and Java and [notes
 Implementation of network applications, using Linux socket.
 - [Endianness used in Operating Systems and Network Byte Order.](https://github.com/RaffaDNDM/Computer-Networks/tree/master/code/1_endianness)
   1. Evaluation of endianness of the system.
-  2. Host to Network order translation.
+  2. Convertion of number from Host to Network Byte Order.
 - [Implementation of HTTP protocol using TCP socket.](https://github.com/RaffaDNDM/Computer-Networks/tree/master/code/2_http)
   - Web Client
     1. Web Client HTTP/0.9
