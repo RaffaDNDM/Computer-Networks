@@ -20,25 +20,26 @@ void control(int code, char* message)
 
 char hex2dec(char c)
 {
+    printf("%c",c);
     switch(c)
     {
          case '0' ... '9':
-             printf("%c", c);
+             //printf("%c", c);
              c = c - '0';
              break;
 
          case 'A' ... 'F':
-             printf("%c", c);
+             //printf("%c", c);
              c = c - 'A' +10;
              break;
 
          case 'a' ... 'f':
-             printf("%c", c);
+             //printf("%c", c);
              c = c - 'a' +10;
              break;
 
          default:
-             control(-1,"Error in chunk size format");
+             return -1;
     }
 
     return c;

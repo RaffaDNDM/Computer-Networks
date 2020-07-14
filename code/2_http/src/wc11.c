@@ -67,7 +67,7 @@ int main(int argc, char ** argv)
         control(t, "Connection failed \n");
 
         //Writing on socket (Sending request to server)
-        sprintf(request, "GET /reflect HTTP/1.1\r\nHost: 192.168.1.81\r\n\r\n");
+        sprintf(request, "GET / HTTP/1.1\r\nHost:www.google.com\r\n\r\n");
         size = my_strlen(request);
         t = write(sd, request, size);
         control(t, "Write failed \n");
@@ -174,6 +174,7 @@ void body_acquire(int sd, int body_length, char* entity, int *size)
     char c;
     int t;
     int chunk_size;
+    int is_size;
 
     printf(LINE);
     printf(LINE);
@@ -193,18 +194,22 @@ void body_acquire(int sd, int body_length, char* entity, int *size)
             chunk_size=0;
             printf("HEX chunck size: ");
 
+            is_size=1;
             while((t=read(sd, &c, 1))>0)
             {
                 if(c=='\n')
                     break;
-
                 else if(c=='\r')
                     continue;
-
-                else
+                else if(is_size)
+                {
                     c = hex2dec(c);
 
-                chunk_size = chunk_size*16+c;
+                    if(c==-1)
+                        is_size=0;
+                    else
+                        chunk_size = chunk_size*16+c;
+                }
             }
 
             control(t, "Chunk body read failed");

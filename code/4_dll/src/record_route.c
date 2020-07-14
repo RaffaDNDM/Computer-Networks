@@ -59,15 +59,15 @@ unsigned char proto;
 unsigned short checksum;
 unsigned int src;
 unsigned int dst;
-unsigned char option[39];
+unsigned char option[40];
 unsigned char payload[1441];
 };
 
 int forge_ip(struct ip_datagram *ip, unsigned char * dst, int payloadlen,unsigned char proto) 
 {
-ip->ver_ihl=0x45;
+ip->ver_ihl=0x4F;
 ip->tos=0;
-ip->len=htons(payloadlen+20);
+ip->len=htons(payloadlen+20+40);
 ip->id=htons(0xABCD);
 ip->flag_offs=htons(0);
 ip->ttl=128;
@@ -75,7 +75,7 @@ ip->proto=proto;
 ip->checksum=htons(0);
 ip->src= *(unsigned int*)myip;
 ip->dst= *(unsigned int*)dst;
-ip->checksum =htons(checksum((unsigned char *)ip,59));
+ip->checksum =htons(checksum((unsigned char *)ip,60));
 /* Calculate the checksum!!!*/
 };
 
@@ -94,7 +94,7 @@ struct record_route
 unsigned char type;
 unsigned char length;
 unsigned char pointer;
-unsigned char route_data[36];
+unsigned char route_data[37];
 };
 
 int forge_icmp(struct icmp_packet * icmp, int payloadsize)
@@ -172,7 +172,8 @@ else
 
 /********/
 
-printf("destmac: ");printpacket(dstmac,6);
+printf("destmac: ");
+printpacket(dstmac,6);
 
 eth = (struct eth_frame *) packet;
 ip = (struct ip_datagram *) eth->payload; 
@@ -180,7 +181,7 @@ rr = (struct record_route*) ip->option;
 icmp = (struct icmp_packet *) ip->payload;
 
 rr->type = 7;
-rr->length = 39;
+rr->length = 40;
 rr->pointer = 4;
 
 for(i=0;i<6;i++) eth->dst[i]=dstmac[i];
@@ -188,14 +189,14 @@ for(i=0;i<6;i++) eth->src[i]=mymac[i];
 eth->type=htons(0x0800);
 forge_icmp(icmp, 20);
 forge_ip(ip,targetip, 20+8, 1); 
-printpacket(packet,14+59+8+20);
+printpacket(packet,14+60+8+20);
 
 for(i=0;i<sizeof(sll);i++) ((char *)&sll)[i]=0;
 
 sll.sll_family=AF_PACKET;
 sll.sll_ifindex = if_nametoindex("wlp6s0");
 len=sizeof(sll);
-n=sendto(s,packet,14+59+8+20, 0,(struct sockaddr *)&sll,len);
+n=sendto(s,packet,14+60+8+20, 0,(struct sockaddr *)&sll,len);
 if (n == -1) {perror("Recvfrom failed"); return 0;}
 
 while( 1 ){
@@ -211,14 +212,14 @@ while( 1 ){
                 printf("ECHO REPLY\n");
 				if(rr->type==7)
                 {
-                    printpacket(packet,14+59+8+20);
+                    printpacket(packet,14+60+8+20);
 				    break;
                 }
 		    }
             else if(icmp->type==12)
             {
                 printf("PROBLEM");
-                printpacket(packet, 14+59+8+20);
+                printpacket(packet, n);
                 break;
             }
         }
