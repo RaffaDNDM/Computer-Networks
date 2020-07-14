@@ -201,17 +201,28 @@ int main()
                     sprintf(response, "Transfer-Encoding:chunked\r\n\r\n");
                     write(s2, response, strlen(response));
 
-                    if(body_length==0)
-                        body_length = 10000;
-             
-                    for(size=0; (t=read(s3, response, body_length-size))>0; size+=t)
+                    if(body_length<0)
                     {
-                        sprintf(response2, "%x\r\n", t);
-                        write(s2, response2, strlen(response2));
-                        write(s2, response, t);
-                        write(s2, "\r\n", 2);
+                        char c;
+                        while((t=read(s3, &c, 1))!=0)
+                        {
+                            write(s2, &c, 1);
+                        }
                     }
-                    write(s2, "0\r\n\r\n", 5);
+                    else
+                    { 
+                        if(body_length==0)
+                            body_length = 10000;
+
+                        for(size=0; (t=read(s3, response, body_length-size))>0; size+=t)
+                        {
+                            sprintf(response2, "%x\r\n", t);
+                            write(s2, response2, strlen(response2));
+                            write(s2, response, t);
+                            write(s2, "\r\n", 2);
+                        }
+                        write(s2, "0\r\n\r\n", 5);
+                    }
                 }
                 else
                 {
