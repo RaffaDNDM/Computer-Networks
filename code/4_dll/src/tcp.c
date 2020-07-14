@@ -8,13 +8,13 @@
 #include <string.h>
 
 #include "utility.h"
-unsigned char myip[4]={192,168,1,81};
+unsigned char myip[4]={88,80,187,84};
 unsigned char netmask[4]={255,255,255,0};
-unsigned char mymac[6]={0x4c,0xbb,0x58,0x5f,0xb4,0xdc};
-unsigned char gateway[4]={192,168,1,1};
+unsigned char mymac[6]={0xf2,0x3c,0x91,0xdb,0xc2,0x98};
+unsigned char gateway[4]={88,80,187,1};
 
 //unsigned char targetip[4]={88,80,187,50};
-unsigned char targetip[4]={216,58,206,68};
+unsigned char targetip[4]={147,162,2,100};
 unsigned char targetmac[6];
 unsigned char buffer[1500];
 int s;
@@ -26,7 +26,7 @@ int i;
 	printf("%.2x(%.3d) ",b[i],b[i]);  
 	if(i%4 == 3) printf("\n");
 	}
-	printf("\n ================\n");
+	printf("\n================\n");
 }	
 	
 struct eth_frame {
@@ -74,7 +74,7 @@ ip->proto=proto;
 ip->checksum=htons(0);
 ip->src= *(unsigned int*)myip;
 ip->dst= *(unsigned int*)dst;
-ip->checksum =htons(checksum((unsigned char *)ip,59));
+ip->checksum =htons(checksum((unsigned char *)ip,20));
 /* Calculate the checksum!!!*/
 };
 
@@ -124,7 +124,7 @@ for(i=0;i<6;i++) arp->dstmac[i]=0;
 for(i=0;i<4;i++) arp->dstip[i]=destip[i];
 //printpacket(pkt,14+sizeof(struct arp_packet));
 sll.sll_family = AF_PACKET;
-sll.sll_ifindex = if_nametoindex("wlp6s0");
+sll.sll_ifindex = if_nametoindex("eth0");
 len = sizeof(sll);
 n=sendto(s,pkt,14+sizeof(struct arp_packet), 0,(struct sockaddr *)&sll,len);
 if (n == -1) {perror("Recvfrom failed"); return 0;}
@@ -175,22 +175,24 @@ for(i=0;i<6;i++) eth->src[i]=mymac[i];
 eth->type=htons(0x0800);
 tcp->src_port=htons(8080);
 tcp->dst_port=htons(80);
-tcp->seq_num=htonl(1);
-tcp->off_res_flags = htons(2);
+tcp->seq_num=htonl(10);
+tcp->off_res_flags = htons(0x5002);
 tcp->window = 0xffff;
+tcp->checksum = 0;
+tcp->urg_pointer = 0;
 forge_ip(ip,targetip, 20, 6); 
 pseudo_h.src_IP = ip->src;
 pseudo_h.dst_IP = ip->dst;
 pseudo_h.length = htons(20);
 pseudo_h.protocol = htons(6);
-memcpy(&(pseudo_h.tcp_header), tcp, 20);
-tcp->checksum=checksum((unsigned char*) &pseudo_h, 32);
+memcpy(pseudo_h.tcp_header, tcp, 20);
+tcp->checksum=htons(checksum((unsigned char*) &pseudo_h, 32));
 printpacket(packet,14+20+20);
 
 for(i=0;i<sizeof(sll);i++) ((char *)&sll)[i]=0;
 
 sll.sll_family=AF_PACKET;
-sll.sll_ifindex = if_nametoindex("wlp6s0");
+sll.sll_ifindex = if_nametoindex("eth0");
 len=sizeof(sll);
 n=sendto(s,packet,14+20+20, 0,(struct sockaddr *)&sll,len);
 if (n == -1) {perror("Recvfrom failed"); return 0;}
@@ -203,14 +205,13 @@ while( 1 ){
     {
         if(ip->proto == 6) // it is TCP 
         {
-            printf("reach");
             if(tcp->src_port == htons(80) && 
                tcp->dst_port == htons(8080) &&
-               tcp->ack_num == htonl(2) &&
-               tcp->off_res_flags == htons(0x0012))
+               tcp->ack_num == htonl(11) &&
+               ((tcp->off_res_flags & htons(0x003f))==htons(0x0012)))
             {
-                printf("PACKET");
-                printpacket(packet, 14+20+20);
+                printf("TCP response\n");
+                printpacket(packet, n);
                 break;
             }
         }
