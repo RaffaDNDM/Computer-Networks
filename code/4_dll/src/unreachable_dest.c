@@ -6,12 +6,12 @@
 #include <net/ethernet.h> /* the L2 protocols */
 #include <net/if.h>
 #include <string.h>
+#include "utility.h"
 
 unsigned char myip[4]={88,80,187,84};
 unsigned char netmask[4]={255,255,255,0};
 unsigned char mymac[6]={0xf2,0x3c,0x91,0xdb,0xc2,0x98};
 unsigned char gateway[4]={88,80,187,1};
-
 
 //unsigned char targetip[4]={88,80,187,50};
 unsigned char targetip[4]={10,20,30,40};
@@ -20,23 +20,16 @@ unsigned char buffer[1500];
 int s;
 struct sockaddr_ll sll;
 
-int printpacket(unsigned char *b,int l){
-int i;
- for(i=0;i<l;i++){
-	printf("%.2x(%.3d) ",b[i],b[i]);  
-	if(i%4 == 3) printf("\n");
-	}
-	printf("\n ================\n");
-}	
-	
-struct eth_frame {
+struct eth_frame 
+{
 unsigned char dst[6];
 unsigned char src[6];
 unsigned short type;
 unsigned char payload[1460];
 };
 
-struct arp_packet{
+struct arp_packet
+{
 unsigned short hw;
 unsigned short proto;
 unsigned char hlen;
@@ -48,7 +41,8 @@ unsigned char dstmac[6];
 unsigned char dstip[4];
 };
 
-struct ip_datagram {
+struct ip_datagram 
+{
 unsigned char ver_ihl;
 unsigned char tos;
 unsigned short len;
@@ -61,18 +55,6 @@ unsigned int src;
 unsigned int dst;
 unsigned char payload[1480];
 };
-
-unsigned short checksum(char *buf, int size){
-int i;
-unsigned int tot=0; //32 bits
-unsigned short *p ;
-p = (unsigned short *)buf;
-for(i=0;i<size/2;i++){
-	tot = tot + htons(p[i]);
-	if(tot&0x10000) tot = ((tot&0xffff) + 1);
-	}
-return (unsigned short) (0xffff-tot);	
-}
 
 int forge_ip(struct ip_datagram *ip, unsigned char * dst, int payloadlen,unsigned char proto) 
 {
@@ -131,7 +113,7 @@ for(i=0;i<6;i++) arp->srcmac[i]=mymac[i];
 for(i=0;i<4;i++) arp->srcip[i]=myip[i];
 for(i=0;i<6;i++) arp->dstmac[i]=0;
 for(i=0;i<4;i++) arp->dstip[i]=destip[i];
-//printpacket(pkt,14+sizeof(struct arp_packet));
+print_packet(pkt,14+sizeof(struct arp_packet), BOLD_CYAN);
 sll.sll_family = AF_PACKET;
 sll.sll_ifindex = if_nametoindex("eth0");
 len = sizeof(sll);
@@ -144,7 +126,7 @@ while( 1 ){
 		if(arp->op == htons(2)) // it is a reply
 			if(!memcmp(destip,arp->srcip,4)){ // comes from our target
 				memcpy(destmac,arp->srcmac,6);
-                printpacket(pkt,14+sizeof(struct arp_packet));
+                print_packet(pkt, 14+sizeof(struct arp_packet), BOLD_CYAN);
                 return 0;
 				}	
 	}
@@ -170,61 +152,55 @@ if( (*(unsigned int*)&myip) & (*(unsigned int*)&netmask) ==
 else
 	arp_resolve(gateway,dstmac);
 
-/********/
+    printf("%sdestmac: %s", BOLD_RED, DEFAULT);
 
-printf("destmac: ");printpacket(dstmac,6);
+    for(i=0; i<5; i++)
+        printf("%2x:",dstmac[i]);
+    printf("%2x\n", dstmac[i]);
 
-eth = (struct eth_frame *) packet;
-ip = (struct ip_datagram *) eth->payload; 
-icmp = (struct icmp_packet *) ip->payload;
+    eth = (struct eth_frame *) packet;
+    ip = (struct ip_datagram *) eth->payload; 
+    icmp = (struct icmp_packet *) ip->payload;
 
-for(i=0;i<6;i++) eth->dst[i]=dstmac[i];
-for(i=0;i<6;i++) eth->src[i]=mymac[i];
-eth->type=htons(0x0800);
-forge_icmp(icmp, 20);
-forge_ip(ip,targetip, 20+8, 1); 
-printpacket(packet,14+20+8+20);
+    for(i=0;i<6;i++) eth->dst[i]=dstmac[i];
+    for(i=0;i<6;i++) eth->src[i]=mymac[i];
+    eth->type=htons(0x0800);
+    forge_icmp(icmp, 20);
+    forge_ip(ip,targetip, 20+8, 1); 
+    print_packet(packet,14+20+8+20,BOLD_YELLOW);
 
-for(i=0;i<sizeof(sll);i++) ((char *)&sll)[i]=0;
+    for(i=0;i<sizeof(sll);i++) ((char *)&sll)[i]=0;
 
-sll.sll_family=AF_PACKET;
-sll.sll_ifindex = if_nametoindex("eth0");
-len=sizeof(sll);
-n=sendto(s,packet,14+20+8+20, 0,(struct sockaddr *)&sll,len);
-if (n == -1) {perror("Recvfrom failed"); return 0;}
+    sll.sll_family=AF_PACKET;
+    sll.sll_ifindex = if_nametoindex("eth0");
+    len=sizeof(sll);
+    n=sendto(s,packet,14+20+8+20, 0,(struct sockaddr *)&sll,len);
+    if (n == -1) {perror("Recvfrom failed"); return 0;}
 
-while( 1 ){
-	len=sizeof(sll);
-	n=recvfrom(s,packet,1500, 0,(struct sockaddr *)&sll,&len);
-	if (n == -1) {perror("Recvfrom failed"); return 0;}
-	if (eth->type == htons (0x0800)) //it is IP
-		if(ip->proto == 1) // it is ICMP 
-			if(icmp->type==3){
-				printpacket(packet,n);
-                printf("\033[1;32m__________________________________________________________________\n\033[0m");
-                
-                printf("\033[1;31m[");
-                unsigned char* src_ip = (unsigned char*) &(ip->src);
-                for(i=0; i<3; i++)
-                    printf("%u.", src_ip[i]);
-                printf("%u]\033[0m The host with address \033[1;33m", src_ip[i]);
-                for(i=0; i<3; i++)
-                    printf("%u.", targetip[i]);
-                printf("%u\033[0m is unreachable\n", targetip[i]);
-                
-                printf("\033[1;32m__________________________________________________________________\n\033[0m");
+    while( 1 ){
+        len=sizeof(sll);
+        n=recvfrom(s,packet,1500, 0,(struct sockaddr *)&sll,&len);
+        if (n == -1) {perror("Recvfrom failed"); return 0;}
+        if (eth->type == htons (0x0800)) //it is IP
+            if(ip->proto == 1) // it is ICMP 
+                if(icmp->type==3){
+                    print_packet(packet,n, BOLD_YELLOW);
+                    printf("%s__________________________________________________________________\n%s", BOLD_BLUE, BOLD_RED);
+                    
+                    unsigned char* src_ip = (unsigned char*) &(ip->src);
+                    
+                    for(i=0; i<3; i++)
+                        printf("%u.", src_ip[i]);
+                    printf("%u]%s The host with address %s", src_ip[i], DEFAULT, BOLD_YELLOW);
+                    for(i=0; i<3; i++)
+                        printf("%u.", targetip[i]);
+                    printf("%u%s is unreachable\n", targetip[i], DEFAULT);
+                    
+                    printf("%s__________________________________________________________________\n%s", BOLD_BLUE, DEFAULT);
 
-				break;
-				}
-}
+                    break;
+                    }
+    }
 
-return 0;
-
-sll.sll_family = AF_PACKET;
-sll.sll_ifindex = if_nametoindex("eth0");
-len = sizeof(sll);
-if (n=recvfrom(s,buffer,1500, 0,(struct sockaddr *)&sll,&len));
-if (n == -1) {perror("Recvfrom failed"); return 0;}
-printpacket(buffer,n);
-
+    return 0;
 }
