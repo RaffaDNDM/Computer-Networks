@@ -1,2 +1,0 @@
-Web client that makes an HTTP/1.1 request and analyses the response of the
-server looking for either Content-Length or Transfer-Encoding header.
