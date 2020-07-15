@@ -18,6 +18,14 @@
   <details> <summary> wc_cache2.c </summary> 
   Web Client with caching implemented using If-Modified-Since header.
   </details>
+  <details> <summary> wc_trace.c </summary> 
+  Web Client that uses the method TRACE, defined in HTTP/1.1 and explained in Section 9.8 of the RFC 2616,
+and understands if the request was modified by transparent proxies before reaching the server.
+  Web Client is going to be tested on following addresses:
+  - 184.168.221.96 (www.webtrace.com)
+  - 46.37.17.205 (www.radioamatori.it)
+  </details>
+
 - ***Web Server***
   <details> <summary> ws.c </summary> 
   Standard version with management of function calls.
@@ -41,3 +49,7 @@
   <details> <summary> wp_2_connections.c </summary> 
   Keep-alive and close connections together.
   </details>
+  <details> <summary> wp_blacklist.c </summary> 
+  Web Proxy that manages HTTP requests from client, such that if the client has an IP address that is the same of one of 4 IP addresses stored in the proxy (max 4 addresses), the proxy leave the transfering of only HTML or TEXT files.
+  </details>
+ 
