@@ -10,7 +10,7 @@ SRC   = .
 BIN   = ../bin
 UTILITY = $(BIN)/utility.o $(BIN)/arp.o
 
-all : ping traceroute time_exceeded unreachable_dest statistics record_route tcp rr_1
+all : ping traceroute time_exceeded unreachable_dest statistics record_route tcp inverse_ping inverse_ping1
 
 .PHONY: clean, %_r
 

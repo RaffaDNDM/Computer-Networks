@@ -37,7 +37,7 @@
 #define ROUTE_INTERFACE_INDEX 7
 
 //Format of packet to print
-#define LINE_32_BITS "-----------------------------------------------------\n"
+#define LINE_32_BITS "_____________________________________________________\n"
 
 //Packet characteristics
 #define PACKET_SIZE 1500 //Max size of ethernet packet

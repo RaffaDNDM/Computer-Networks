@@ -26,10 +26,10 @@ void print_packet(unsigned char* pkt, int size, char* color)
 
     for(i=0; i<count; i++)
     {
-        printf("%s-------------", color);
+        printf("%s_____________", color);
     }
 
-    printf("-%s\n\n", DEFAULT);
+    printf("_%s\n\n", DEFAULT);
 
 }
 
