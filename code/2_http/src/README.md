@@ -21,8 +21,8 @@
   <details> <summary> <b><i>wc_trace.c</i></b> </summary> 
   Web Client that uses the method TRACE, defined in HTTP/1.1 and explained in  <a href="https://tools.ietf.org/html/rfc2616#section-9.8">Section 9.8 of the RFC 2616</a>, and understands if the request was modified by transparent proxies before reaching the server.<br> Web Client is going to be tested on following addresses:
   <ul>
-    <li>184.168.221.96 (www.webtrace.com)</li>
-    <li>46.37.17.205 (www.radioamatori.it)</li>
+    <li>184.168.221.96 (<a href="www.webtrace.com">www.webtrace.com</a>)</li>
+    <li>46.37.17.205 (<a href="www.radioamatori.it">www.radioamatori.it</a>)</li>
   </ul>
   </details>
 
