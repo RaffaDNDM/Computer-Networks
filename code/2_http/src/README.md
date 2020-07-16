@@ -30,14 +30,14 @@
   <details> <summary> <b><i>ws.c</i></b> </summary> 
   Standard version with management of function calls.
   </details>
+  <details> <summary> <b><i>ws_cache.c</i></b> </summary> 
+  Web Server with both caching management.
+  </details>
   <details> <summary> <b><i>ws_chunked.c</i></b> </summary> 
   Web Server with <i>Transfer-Encoding:chunked</i> header management.
   </details>
   <details> <summary> <b><i>ws_content.c</i></b> </summary> 
   Web Server with Content-Length header.
-  </details>
-  <details> <summary> <b><i>ws_cache.c</i></b> </summary> 
-  Web Server with both caching management.
   </details>
   <details> <summary> <b><i>ws_reflect.c</i></b> </summary> 
   Web Server that replies with message of client, with additional info about client
@@ -52,4 +52,3 @@
   <details> <summary> <b><i>wp_blacklist.c</i></b> </summary> 
   Web Proxy that manages HTTP requests from client, such that if the client has an IP address that is the same of one of 4 IP addresses stored in the proxy (max 4 addresses), the proxy leave the transfering of only HTML or TEXT files.
   </details>
- 
