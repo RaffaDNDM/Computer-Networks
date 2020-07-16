@@ -6,16 +6,17 @@
 #include <net/ethernet.h> /* the L2 protocols */
 #include <net/if.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "utility.h"
 
-unsigned char myip[4]={88,80,187,84};
+unsigned char myip[4]={192, 168, 1, 81};
 unsigned char netmask[4]={255,255,255,0};
-unsigned char mymac[6]={0xf2,0x3c,0x91,0xdb,0xc2,0x98};
-unsigned char gateway[4]={88,80,187,1};
+unsigned char mymac[6]={0x4c,0xbb,0x58,0x5f,0xb4,0xdc};
+unsigned char gateway[4]={192,168,1,1};
 
 //unsigned char targetip[4]={88,80,187,50};
-unsigned char targetip[4]={216,58,212,196};
+unsigned char targetip[4]={147,162,2,100};
 unsigned char targetmac[6];
 unsigned char buffer[1500];
 int s;
@@ -57,13 +58,23 @@ struct ip_datagram
     unsigned char payload[1480];
 };
 
-int forge_ip(struct ip_datagram *ip, unsigned char * dst, int payloadlen,unsigned char proto) 
+int forge_ip(struct ip_datagram *ip, unsigned char * dst, int payloadlen,unsigned char proto, unsigned short fragment, int last) 
 {
+    if(fragment>0x1FFF)
+    {
+        printf("[ERROR] fragment size");
+        exit(1);
+    }
+
     ip->ver_ihl=0x45;
     ip->tos=0;
     ip->len=htons(payloadlen+20);
     ip->id=htons(0xABCD);
-    ip->flag_offs=htons(0);
+    ip->flag_offs=htons(fragment);
+    
+    if(!last)
+        ip->flag_offs |= htons(0x2000);
+    
     ip->ttl=128;
     ip->proto=proto;
     ip->checksum=htons(0);
@@ -134,7 +145,7 @@ int arp_resolve(unsigned char* destip, unsigned char * destmac)
 
     print_packet(pkt,14+sizeof(struct arp_packet),BOLD_CYAN);
     sll.sll_family = AF_PACKET;
-    sll.sll_ifindex = if_nametoindex("eth0");
+    sll.sll_ifindex = if_nametoindex("wlp6s0");
     len = sizeof(sll);
     n=sendto(s,pkt,14+sizeof(struct arp_packet), 0,(struct sockaddr *)&sll,len);
     
@@ -209,20 +220,33 @@ int main()
 
     eth->type=htons(0x0800);
     forge_icmp(icmp, 20);
-    forge_ip(ip,targetip, 20+8, 1); 
-    print_packet(packet,14+20+8+20,BOLD_YELLOW);
+    forge_ip(ip,targetip, 16, 1, 0, 0); 
+    print_packet(packet,14+20+16,BOLD_YELLOW);
 
     for(i=0;i<sizeof(sll);i++) 
         ((char *)&sll)[i]=0;
 
     sll.sll_family=AF_PACKET;
-    sll.sll_ifindex = if_nametoindex("eth0");
+    sll.sll_ifindex = if_nametoindex("wlp6s0");
     len=sizeof(sll);
-    n=sendto(s,packet,14+20+8+20, 0,(struct sockaddr *)&sll,len);
+    n=sendto(s,packet,14+20+16, 0,(struct sockaddr *)&sll,len);
     
     if (n == -1) 
     {
-        perror("Recvfrom failed"); 
+        perror("Sendto failed"); 
+        return 0;
+    }
+
+    memcpy(ip->payload,(unsigned char*)icmp->payload + 8, 20-8);
+    forge_ip(ip, targetip, 20-8, 1, 2, 1);
+    print_packet(packet, 14+20+(20-8), BOLD_YELLOW);
+    
+    len = sizeof(sll);
+    n=sendto(s,packet,14+20+(20-8), 0,(struct sockaddr *)&sll,len);
+
+    if (n == -1) 
+    {
+        perror("Sendto failed"); 
         return 0;
     }
 

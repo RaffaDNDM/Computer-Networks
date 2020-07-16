@@ -132,7 +132,13 @@ int main(int argc, char** argv)
             shutdown(s, SHUT_RDWR);
             close(s);
             s = socket(AF_INET, SOCK_STREAM, 0);
-            if ( s == -1) { printf("Errno = %d\n", errno); perror("Socket Failed"); return 1; }
+            
+            if ( s == -1) 
+            { 
+                printf("Errno = %d\n", errno); 
+                perror("Socket Failed"); 
+                return 1; 
+            }
             
             server.sin_family = AF_INET;
             server.sin_port = htons(8083);
@@ -187,14 +193,11 @@ int main(int argc, char** argv)
 	    if ( t == -1 ) { perror("Read failed"); return 1; }
 
         response[size]=0; 
-      
-
         char down_time[30];
         time_t download_time = time(0);
         struct tm* tm=gmtime(&download_time);
         strftime(down_time, 30, "%a, %d %b %Y %H:%M:%S %Z", tm); 
         fprintf(f, "%s\n%s", down_time, response);
-
         fclose(f);
     }
     else
