@@ -1,8 +1,35 @@
 #include <stdio.h>
+#include "endianness.h"
 
-int is_little_endian();
-short int htons(short int num);
-int htonl(int num);
+int main(int argc, char**argv)
+{
+    int x1 = 0x01020304;
+    short int x2 = 0x0102;
+
+    unsigned char* p1 = (unsigned char*) &x1; 
+    unsigned char* p2 = (unsigned char*) &x2;
+
+    int i;
+    printf("0x");
+    for(i=0; i<sizeof(x1); i++)
+        printf("%x", p1[i]);
+    printf("\n0x");
+    for(i=0; i<sizeof(x2); i++)
+        printf("%x", p2[i]);
+
+    x1 = htonl(x1);
+    x2 = htons(x2);
+
+    printf("\n0x");
+    for(i=0; i<sizeof(x1); i++)
+        printf("%x", p1[i]);
+    printf("\n0x");
+    for(i=0; i<sizeof(x2); i++)
+        printf("%x", p2[i]);
+    printf("\n");
+
+    return 0;
+}
 
 int is_little_endian()
 {
@@ -49,33 +76,3 @@ int htonl(int num)
     else
         return num;
 }
-
-int main(int argc, char**argv)
-{
-    int x1 = 0x01020304;
-    short int x2 = 0x0102;
-
-    unsigned char* p1 = (unsigned char*) &x1; 
-    unsigned char* p2 = (unsigned char*) &x2;
-
-    int i;
-    printf("0x");
-    for(i=0; i<sizeof(x1); i++)
-        printf("%x", p1[i]);
-    printf("\n0x");
-    for(i=0; i<sizeof(x2); i++)
-        printf("%x", p2[i]);
-
-    x1 = htonl(x1);
-    x2 = htons(x2);
-
-    printf("\n0x");
-    for(i=0; i<sizeof(x1); i++)
-        printf("%x", p1[i]);
-    printf("\n0x");
-    for(i=0; i<sizeof(x2); i++)
-        printf("%x", p2[i]);
-    printf("\n");
-
-}
-
