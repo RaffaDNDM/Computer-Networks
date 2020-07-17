@@ -6,6 +6,6 @@ notes/*.bbl
 notes/*.blg
 notes/*.out
 notes/*.synctex.gz
-code/1_endianness/*.o
+code/1_endianness/bin/*
 code/2_http/bin/*
-code/4_dll/np
+code/4_dll/bin/*
