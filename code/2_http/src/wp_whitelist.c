@@ -10,15 +10,15 @@
 #include <stdlib.h>
 #include <netdb.h>
 
-#define SIZE_BLACK_LIST 3
+#define SIZE_WHITE_LIST 3
 
 struct hostent * he;
 struct sockaddr_in local,remote,server;
 char request[10000],response[2000],request2[2000],response2[2000];
 char * method, *path, *version, *host, *scheme, *resource,*port;
-char black_list[SIZE_BLACK_LIST][20] = {"www.google.com",
-                                        "www.radioamatori.it",
-                                        "www.youtube.com"};
+char white_list[SIZE_WHITE_LIST][20] = {"www.google.com",
+                                            "www.radioamatori.it",
+                                            "www.youtube.com"};
 
 struct headers {
     char *n;
@@ -30,7 +30,7 @@ int main()
     FILE *f;
     char *type, *sub_type;
     char command[100], c;
-    int i,s,t,s2,s3,n,len,yes=1,j,k,pid,size, block=0;
+    int i,s,t,s2,s3,n,len,yes=1,j,k,pid,size, block=1;
 
     s = socket(AF_INET, SOCK_STREAM, 0);
     if ( s == -1) 
@@ -66,6 +66,7 @@ int main()
         s2 = accept(s,(struct sockaddr *) &remote, &len);
         
         if(fork()) continue; //<< MULTI PROCESS HADLING
+        
         if (s2 == -1) 
         {
             perror("Accept Failed\n"); 
@@ -114,40 +115,15 @@ int main()
 			resource=path+i+1;
 			printf("Scheme=%s, host=%s, resource = %s\n", scheme,host,resource);
 		
-            for(i=0; i<SIZE_BLACK_LIST; i++)
+            for(i=0; i<SIZE_WHITE_LIST; i++)
             {
-                if(!strcmp(host, black_list[i]))
+                if(!strcmp(host, white_list[i]))
                 {
-                    block=1;
+                    block=0;
                     break;
                 }
             }
 
-            he = gethostbyname(host);
-			if (he == NULL) 
-            { 
-                printf("Gethostbyname Failed\n"); 
-                return 1;
-            }
-
-			printf("Server address = %u.%u.%u.%u\n", (unsigned char ) he->h_addr[0],(unsigned char ) he->h_addr[1],(unsigned char ) he->h_addr[2],(unsigned char ) he->h_addr[3]); 			
-			s3=socket(AF_INET,SOCK_STREAM,0);
-			if(s3==-1)
-            {
-                perror("Socket to server failed"); 
-                return 1;
-            }
-			
-            server.sin_family=AF_INET;
-			server.sin_port=htons(80);
-		 	server.sin_addr.s_addr=*(unsigned int*) he->h_addr;			
-			t=connect(s3,(struct sockaddr *)&server,sizeof(struct sockaddr_in));		
-            if(t==-1)
-            {
-                perror("Connect to server failed"); 
-                return 1;
-            }
-            
             if(block)
             {
                 sprintf(response2, "HTTP/1.1 401 Unauthorized\r\n\r\n");
@@ -155,6 +131,31 @@ int main()
             }
             else
             {
+                he = gethostbyname(host);
+                if (he == NULL) 
+                { 
+                    printf("Gethostbyname Failed\n"); 
+                    return 1;
+                }
+
+                printf("Server address = %u.%u.%u.%u\n", (unsigned char ) he->h_addr[0],(unsigned char ) he->h_addr[1],(unsigned char ) he->h_addr[2],(unsigned char ) he->h_addr[3]); 			
+                s3=socket(AF_INET,SOCK_STREAM,0);
+                if(s3==-1)
+                {
+                    perror("Socket to server failed"); 
+                    return 1;
+                }
+                
+                server.sin_family=AF_INET;
+                server.sin_port=htons(80);
+                server.sin_addr.s_addr=*(unsigned int*) he->h_addr;			
+                t=connect(s3,(struct sockaddr *)&server,sizeof(struct sockaddr_in));		
+                if(t==-1)
+                {
+                    perror("Connect to server failed"); 
+                    return 1;
+                }
+
 			    sprintf(request2,"GET /%s HTTP/1.1\r\nHost:%s\r\nConnection:close\r\n\r\n",resource,host);
                 write(s3,request2,strlen(request2)); 
 
@@ -166,10 +167,10 @@ int main()
                     perror("[PROXY ERROR] Reading server response");
                     exit(1);
                 }
-            }
 
-            shutdown(s3,SHUT_RDWR);
-            close(s3);
+                shutdown(s3,SHUT_RDWR);
+                close(s3);
+            }
 		}
 		else if(!strcmp("CONNECT",method)) 
         {
@@ -179,11 +180,11 @@ int main()
 			port=path+i+1;
 			printf("host:%s, port:%s\n",host,port);
 
-            for(i=0; i<SIZE_BLACK_LIST; i++)
+            for(i=0; i<SIZE_WHITE_LIST; i++)
             {
-                if(!strcmp(host, black_list[i]))
+                if(!strcmp(host, white_list[i]))
                 {
-                    block=1;
+                    block=0;
                     break;
                 }
             }
