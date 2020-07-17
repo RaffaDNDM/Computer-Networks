@@ -152,6 +152,71 @@ int main()
 			sprintf(request2,"GET /%s HTTP/1.1\r\nHost:%s\r\nConnection:close\r\n\r\n",resource,host);
             write(s3,request2,strlen(request2)); 
 			
+            memset(h, 0, 30*sizeof(struct headers));
+
+            j=0;k=0;
+            h[k].n = response;
+            while((t=read(s3,response+j,1))>0)
+            {
+                if((response[j]=='\n') && (response[j-1]=='\r'))
+                {
+                    response[j-1]=0;
+                    
+                    if(h[k].n[0]==0) 
+                        break;
+
+                    h[++k].n=response+j+1;
+                }
+                
+                if(response[j]==':' && (h[k].v==0) && k!=0)
+                {
+                    response[j]=0;
+                    h[k].v=response+j+1;
+                }
+
+                j++;
+            }
+
+            if(t==-1)
+            {
+                perror("Error on message");
+                exit(1);
+            }
+
+            if(block)
+            {
+                for(i=1; h[i].n[0]; i++)
+                {
+                    if(!strcmp(h[i].n, "Content-Type"))
+                    {
+                        type = h[i].v;
+                        for(j=0; h[i].v[j]!='/'; j++);
+                        h[i].v[j]=0;
+                        
+                        if(!strcmp(type, " text")) 
+                        {
+                            block=0;
+                            h[i].v[j]='/';
+                            break;
+                        }
+
+                        sub_type = h[i].v + j +1;
+                        int size_sub=strlen(sub_type);
+                        for(j=j+1; j<size_sub && h[i].v[j]!=';'; j++);
+                        
+                        if(!strcmp(sub_type, "html"))
+                        {    
+                            block = 0;
+                            if(j<size_sub)
+                                h[i].v[j]=';';
+                            break;
+                        }
+
+                        break;
+                    }
+                }
+            }
+            
             if(block)
             {
                 sprintf(response2, "HTTP/1.1 401 Unauthorized\r\n\r\n");

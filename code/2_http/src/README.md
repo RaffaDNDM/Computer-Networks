@@ -42,6 +42,7 @@
   <details> <summary> <b><i>ws_reflect.c</i></b> </summary> 
   Web Server that replies with message of client, with additional info about client
   </details>
+
 - ***Web Proxy***
   <details> <summary> <b><i>wp.c</i></b> </summary> 
   HTTPS and HTTP management.
@@ -50,5 +51,12 @@
   Keep-alive and close connections together.
   </details>
   <details> <summary> <b><i>wp_blacklist.c</i></b> </summary> 
+  </details>
+  <details> <summary> <b><i>wp_cache.c</i></b> </summary> 
+  </details>
+  <details> <summary> <b><i>wp_filter_response.c</i></b> </summary>
   Web Proxy that manages HTTP requests from client, such that if the client has an IP address that is the same of one of 4 IP addresses stored in the proxy (max 4 addresses), the proxy leave the transfering of only HTML or TEXT files.
+  To create this program, I analyse the Content-Type header value of HTTP response from the Server (<a href="https://tools.ietf.org/html/rfc1945#section-10.5">Section 10.5 of RFC 1945</a>). 
+  </details>
+  <details> <summary> <b><i>wp_whitelist.c</i></b> </summary> 
   </details>
