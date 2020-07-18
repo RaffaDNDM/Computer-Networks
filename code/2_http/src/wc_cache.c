@@ -12,6 +12,7 @@
 
 #define __USE_XOPEN
 #include <time.h>
+//#define USE_GMT
 
 struct sockaddr_in server;
 
@@ -26,7 +27,7 @@ int main(int argc, char** argv)
 {
     int s,t,size,i,j,k;
     char request[100],response[1000000];
-    unsigned char ipaddr[4]={192,168,1,81};
+    unsigned char ipaddr[4]={93,184,216,34};
     int bodylength=0;
     char resource[50];
     char resource_path[50] = "./cache/";
@@ -42,9 +43,8 @@ int main(int argc, char** argv)
     if ( s == -1) { printf("Errno = %d\n", errno); perror("Socket Failed"); return 1; }
     
     server.sin_family = AF_INET;
-    server.sin_port = htons(8083);
+    server.sin_port = htons(80);
     server.sin_addr.s_addr = *(uint32_t *)ipaddr;
-    // WRONG : server.sin_addr.s_addr = (uint32_t )*ipaddr
     
     t = connect(s, (struct sockaddr *)&server, sizeof(server));
     if ( t == -1) { perror("Connect Failed"); return 1; }
@@ -59,11 +59,11 @@ int main(int argc, char** argv)
     strcat(resource_path, resource);
     if((f=fopen(resource_path, "r"))!=NULL)
     {
-        sprintf(request,"HEAD %s HTTP/1.0\r\nHost:192.168.1.81\r\n\r\n", argv[1]);
+        sprintf(request,"HEAD %s HTTP/1.0\r\nHost:www.example.com\r\n\r\n", argv[1]);
         head=1;
     }
     else
-        sprintf(request,"GET %s HTTP/1.0\r\nHost:192.169.1.81\r\n\r\n", argv[1]);
+        sprintf(request,"GET %s HTTP/1.0\r\nHost:www.example.com\r\n\r\n", argv[1]);
 
     for(size=0;request[size];size++);
     t=write(s,request,size);
@@ -119,13 +119,23 @@ int main(int argc, char** argv)
         struct tm tm, tm2;
         memset(&tm, 0, sizeof(tm));
         strptime(last_modified, "%a, %d %b %Y %H:%M:%S %Z", &tm); 
-        last_time = timegm(&tm);
+        
+        #ifdef USE_GMT
+            last_time = timegm(&tm);
+        #else
+            last_time = mktime(&tm);
+        #endif
 
         time_t cache_time;
         char date[100];
         fgets(date, 100, f);
         strptime(date, "%a, %d %b %Y %H:%M:%S %Z", &tm2); 
-        cache_time = timegm(&tm2);
+    
+        #ifdef USE_GMT
+            cache_time = timegm(&tm2);
+        #else
+            cache_time = mktime(&tm2);
+        #endif
 
         if(cache_time<last_time)
         {
@@ -193,10 +203,17 @@ int main(int argc, char** argv)
 	    if ( t == -1 ) { perror("Read failed"); return 1; }
 
         response[size]=0; 
-        char down_time[30];
+        char down_time[40];
         time_t download_time = time(0);
-        struct tm* tm=gmtime(&download_time);
-        strftime(down_time, 30, "%a, %d %b %Y %H:%M:%S %Z", tm); 
+        struct tm* tm;
+
+        #ifdef USE_GMT
+            tm=gmtime(&download_time);
+        #else
+            tm=localtime(&download_time);
+        #endif
+
+        strftime(down_time, 40, "%a, %d %b %Y %H:%M:%S %Z", tm); 
         fprintf(f, "%s\n%s", down_time, response);
         fclose(f);
     }
