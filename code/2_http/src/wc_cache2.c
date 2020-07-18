@@ -12,6 +12,7 @@
 
 #define __USE_XOPEN
 #include <time.h>
+//#define USE_GMT
 
 struct sockaddr_in server;
 
@@ -27,7 +28,7 @@ int main(int argc, char** argv)
     int s,t,size,i,j,k;
     char *version, *code, *comment;
     char request[100],response[1000000];
-    unsigned char ipaddr[4]={192,168,1,81};
+    unsigned char ipaddr[4]={93,184,216,34};
     int bodylength=0;
     char resource[50];
     char resource_path[50] = "./cache/";
@@ -62,11 +63,11 @@ int main(int argc, char** argv)
         fgets(date, 100, f);
         fclose(f);
 
-        sprintf(request,"GET %s HTTP/1.0\r\nHost:192.168.1.81\r\nIf-Modified-Since:%s\r\n\r\n", argv[1], date);
+        sprintf(request,"GET %s HTTP/1.0\r\nHost:www.example.com\r\nIf-Modified-Since:%s\r\n\r\n", argv[1], date);
     }
     else
     {
-        sprintf(request,"GET %s HTTP/1.0\r\nHost:192.169.1.81\r\n\r\n", argv[1]);
+        sprintf(request,"GET %s HTTP/1.0\r\nHost:www.example.com\r\n\r\n", argv[1]);
     }
 
     for(size=0;request[size];size++);
@@ -128,10 +129,17 @@ int main(int argc, char** argv)
         response[size]=0; 
       
 
-        char down_time[30];
+        char down_time[40];
         time_t download_time = time(0);
-        struct tm* tm=gmtime(&download_time);
-        strftime(down_time, 30, "%a, %d %b %Y %H:%M:%S %Z", tm); 
+        struct tm* tm;
+        
+        #ifdef USE_GMT
+            tm=gmtime(&download_time);
+        #else
+            tm=localtime(&download_time);
+        #endif
+
+        strftime(down_time, 40, "%a, %d %b %Y %H:%M:%S %Z", tm); 
         fprintf(f, "%s\n%s", down_time, response);
 
         fclose(f);
