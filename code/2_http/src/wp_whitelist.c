@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 
+#include "net_utility.h"
 #define SIZE_WHITE_LIST 3
 
 struct hostent * he;

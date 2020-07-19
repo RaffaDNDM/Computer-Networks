@@ -10,12 +10,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <sys/time.h>
-
-#define BOLD_RED "\033[1;31m"
-#define BOLD_YELLOW "\033[1;33m"
-#define BOLD_BLUE "\033[1;34m"
-#define BOLD_CYAN "\033[1;36m"
-#define DEFAULT "\033[0m"
+#include "net_utility.h"
 
 struct hostent * he;
 struct sockaddr_in local,remote,server;
@@ -92,13 +87,12 @@ int main()
             j++;
         }
 
-		printf("%s",request);
 		method = request;
 		for(i=0;(i<2000) && (request[i]!=' ');i++); request[i]=0;
 		path = request+i+1;
 		for(   ;(i<2000) && (request[i]!=' ');i++); request[i]=0;
 		version = request+i+1;
-		printf("Method = %s, path = %s , version = %s\n",method,path,version);	
+		printf("\n%s%s %s %s%s\n", BOLD_GREEN, method, path, version, DEFAULT);	
 		
         if(!strcmp("GET",method))
         { 
@@ -244,8 +238,6 @@ int main()
                         count=0;
                     }
 
-                    //printf("C >>> S(%d): %s\n", t, host);
-
                     //To be more accurate in the next evaluation
                     if(gettimeofday(&t1, NULL))
                     {
@@ -321,8 +313,6 @@ int main()
                         printf("%sDownload:%s  %2.3lf Kbit/s\n", BOLD_BLUE, DEFAULT, ((double) (count*8*1000))/(diff_sec*1000000.0+diff_usec));
                         count=0;
                     }
-
-                    //printf("C <<< S(%d): %s\n", t, host);
 
                     //To be more accurate in the next evaluation
                     if(gettimeofday(&t1, NULL))

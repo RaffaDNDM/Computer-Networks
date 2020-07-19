@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 
+#include "net_utility.h"
 #define NUM_BLOCKED_IP 4
 
 struct hostent * he;
@@ -18,7 +19,7 @@ char request[10000],response[2000],request2[2000],response2[2000];
 char * method, *path, *version, *host, *scheme, *resource,*port;
 char blocked_IPs[NUM_BLOCKED_IP][4] = {{192,168,1,81},
                                        {192,168,1,210},
-                                       {192,168, 1,1},
+                                       {192,168, 1,14},
                                        {192,165,22,1}};
 
 struct headers {
@@ -106,13 +107,12 @@ int main()
             j++;
         }
 
-		printf("%s",request);
 		method = request;
 		for(i=0;(i<2000) && (request[i]!=' ');i++); request[i]=0;
 		path = request+i+1;
 		for(   ;(i<2000) && (request[i]!=' ');i++); request[i]=0;
 		version = request+i+1;
-        printf("Method = %s, path = %s , version = %s\n",method,path,version);	
+		printf("\n%s%s %s %s%s\n", BOLD_GREEN, method, path, version, DEFAULT);	
 		
         if(!strcmp("GET",method))
         {
@@ -122,7 +122,7 @@ int main()
 			host=path+i+3; 
 			for(i=i+3;path[i]!='/';i++); path[i]=0;
 			resource=path+i+1;
-			printf("Scheme=%s, host=%s, resource = %s\n", scheme,host,resource);
+            printf("Scheme=%s, host=%s, resource = %s\n", scheme,host,resource);
 			
             he = gethostbyname(host);
 			if (he == NULL) 
@@ -151,7 +151,7 @@ int main()
 
 			sprintf(request2,"GET /%s HTTP/1.1\r\nHost:%s\r\nConnection:close\r\n\r\n",resource,host);
             write(s3,request2,strlen(request2)); 
-			
+		    	
             memset(h, 0, 30*sizeof(struct headers));
 
             j=0;k=0;
@@ -193,25 +193,27 @@ int main()
                         for(j=0; h[i].v[j]!='/'; j++);
                         h[i].v[j]=0;
                         
+                        printf("%s%15s%s/", BOLD_YELLOW, type, DEFAULT);
+
                         if(!strcmp(type, " text")) 
                         {
                             block=0;
                             h[i].v[j]='/';
-                            break;
                         }
 
                         sub_type = h[i].v + j +1;
                         int size_sub=strlen(sub_type);
                         for(j=j+1; j<size_sub && h[i].v[j]!=';'; j++);
-                        
-                        if(!strcmp(sub_type, "html"))
-                        {    
-                            block = 0;
-                            if(j<size_sub)
-                                h[i].v[j]=';';
-                            break;
-                        }
+                        h[i].v[j]=0;
 
+                        printf("%s%-15s%s", BOLD_CYAN, sub_type, DEFAULT);
+                        
+                        if(block && !strcmp(sub_type, "html"))
+                            block = 0;
+
+                        if(j<size_sub)
+                            h[i].v[j]=';';
+                        
                         break;
                     }
                 }
@@ -221,11 +223,13 @@ int main()
             {
                 sprintf(response2, "HTTP/1.1 401 Unauthorized\r\n\r\n");
                 write(s2, response2, strlen(response2));
+                printf("      %s%s%s", BOLD_RED, response2, DEFAULT);
             }
             else
             {
                 sprintf(response2, "%s\r\n", h[0].n);
                 write(s2, response2, strlen(response2));
+                printf("      %s%s%s", BOLD_BLUE, response2, DEFAULT);
 
                 for(i=1; h[i].n[0]; i++)
                 {
@@ -289,7 +293,7 @@ int main()
 				while(t=read(s2,request2,2000))
                 {	
                     write(s3,request2,t);
-					printf("CL >>>(%d)%s \n",t,host); //SOLO PER CHECK
+					printf("CL >>>(%d)%s \n",t,host);
                 }	
 				exit(0);
             }
