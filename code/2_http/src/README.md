@@ -60,10 +60,25 @@
   </details>
   <details> <summary> <b><i>wp_limit_avg_bitrate.c</i></b> </summary> 
   Web Proxy that limits the bandwidth when it works as a Layer-4 gateway. It limits the average upload bitrate, from client to the server, to <i>1.0 Kbits per second</i> (maximum) and the average download to <i>10.0 Kbits per second</i> (maximum).<br>
-  The program is implemented using <i>gettimeofday(3)</i>, <i>usleep(3)</i>, <i>sleep(3)</i> UNIX library functions to implement the mechanism.
+  The program is implemented using <i>gettimeofday(3)</i>, <i>usleep(3)</i>, <i>sleep(3)</i> UNIX library functions to implement the mechanism. The proxy work as follow:
+  <ol>
+  <li>It reads a certain amount of data from the server or the client respectively</li>
+  <li>It sends this amount of data to the client or the server respectively </li>
+  <li>If the time, needed to read this data guaranting wanted bitrate, is greater then time needed to read that bytes, the proxy waits. For example, to obtain a download bitrate of 10 Kbits per second we should spend 800 us for each read byte. If we read a set of <b>t</b> bytes in less than <b>t*8</b> us, the proxy waits for the remaining time.</li>
+  </ol>
   </details>
   <details> <summary> <b><i>wp_limit_avg_bitrate2.c</i></b> </summary> 
-  Web Proxy like the one implemented in <b><i>wp_limit_avg_bitrate.c</i></b>, that does the same things in an alternative way.
+  Web Proxy like the one implemented in <b><i>wp_limit_avg_bitrate.c</i></b>, that does the same things in an alternative way:
+  <dl>
+  <dt>If proxy receives 10 Kbits from the client in less than 1 second</dt>
+  <dd>the proxy waits for the remaining time until it reaches 1 second to obtain a bitrate of <i>10 Kbits per second</i></dd>
+  <dt>If proxy receives 1 Kbits from the client in more than 1 second</dt>
+  <dd>the proxy does nothing because bitrate is less than <i>1 Kbits per second</i></dd>
+  <dt>If proxy receives 10 Kbits from the server in less than 1 second</dt>
+  <dd>the proxy waits for the remaining time until it reaches 1 second to obtain a bitrate of <i>10 Kbits per second</i></dd>
+  <dt>If proxy receives 10 Kbits from the server in more than 1 second</dt>
+  <dd>the proxy does nothing because bitrate is less than <i>10 Kbits per second</i></dd>
+  </dl>
   </details>
   <details> <summary> <b><i>wp_limit_bitrate.c</i></b> </summary>     
   Web Proxy that limits the bandwidth when it works as a Layer-4 gateway. It limits the upload bitrate, from client to server, to <i>1.0 Kbits per second</i> (maximum) and the average download bitrate, from the server to the client, to <i>10.0 Kbits per second</i> (maximum).<br>

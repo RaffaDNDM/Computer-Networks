@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <sys/time.h>
-
 #include "net_utility.h"
 
 struct hostent * he;
@@ -27,7 +26,7 @@ int main()
 {
     FILE *f;
     char command[100];
-    int i,s,t,s2,s3,n,len,c,yes=1,j,k,pid, size; 
+    int i,s,t,s2,s3,n,len,c,yes=1,j,k,pid; 
     
     s = socket(AF_INET, SOCK_STREAM, 0);
     if ( s == -1) 
@@ -112,8 +111,7 @@ int main()
                 return 1;
             }
 
-            printf("Server address = %u.%u.%u.%u\n", (unsigned char) he->h_addr[0], (unsigned char) he->h_addr[1],
-                                                     (unsigned char) he->h_addr[2], (unsigned char ) he->h_addr[3]); 			
+            printf("Server address = %u.%u.%u.%u\n", (unsigned char ) he->h_addr[0],(unsigned char ) he->h_addr[1],(unsigned char ) he->h_addr[2],(unsigned char ) he->h_addr[3]); 			
             
             s3=socket(AF_INET,SOCK_STREAM,0);
             if(s3==-1)
@@ -180,136 +178,142 @@ int main()
 			
             if(!(pid=fork())) //Child
             { 
-                t=1;
-                while(t)
-                {
-                    struct timeval t1, t2;
-                    time_t diff_sec;
-                    suseconds_t estimated_usec, diff_usec;
+                struct timeval t1;
+                struct timeval t2;
+                suseconds_t diff, diff_sec, diff_usec;
+                int count=0;
 
-                    if(gettimeofday(&t1, NULL))
+				if(gettimeofday(&t1, NULL))
+                {
+                    printf("[PROXY ERROR] gettimeofday\n");
+                    exit(1);
+                }
+
+                while(t=read(s2,request2,1))
+                {	
+                    count++;
+
+                    if(gettimeofday(&t2, NULL))
                     {
                         printf("[PROXY ERROR] gettimeofday\n");
                         exit(1);
                     }
+				    
+                    write(s3,request2,t);
 
-                    for(size=0;(t=read(s2,request2,125-size)); size+=t)
-                        write(s3,request2,t);
-
-                    if(t==-1)
+                    if(count==125)
                     {
-                        printf("[PROXY ERROR] Reading\n");
-                        exit(1);
+                        diff_sec = t2.tv_sec - t1.tv_sec;
+                    
+                        if(t2.tv_usec>t1.tv_usec)
+                            diff_usec = t2.tv_usec - t1.tv_usec;
+                        else
+                        {
+                            diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
+                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
+                        }
+
+                        if(diff_sec*1000000+diff_usec<1000000)
+                            usleep(1000000-diff_sec*1000000-diff_usec);             
+
+                        if(gettimeofday(&t2, NULL))
+                        {
+                            printf("[PROXY ERROR] gettimeofday\n");
+                            exit(1);
+                        }
+
+                        diff_sec = t2.tv_sec - t1.tv_sec;
+                    
+                        if(t2.tv_usec>t1.tv_usec)
+                            diff_usec = t2.tv_usec - t1.tv_usec;
+                        else
+                        {
+                            diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
+                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
+                        }
+
+                        printf("%s  Upload:%s  %6.3lf Kbit/s\n", BOLD_RED, DEFAULT, ((double) (count*8*1000))/(diff_sec*1000000.0+diff_usec));
+                        count=0;
+
+                        if(gettimeofday(&t1, NULL))
+                        {
+                            printf("[PROXY ERROR] gettimeofday\n");
+                            exit(1);
+                        }
                     }
-                        if(gettimeofday(&t2, NULL))
-                        {
-                            printf("[PROXY ERROR] gettimeofday\n");
-                            exit(1);
-                        }
-                        
-                        estimated_usec = size*8000;
-                        diff_sec = t2.tv_sec - t1.tv_sec;
-                        
-                        if(t2.tv_usec>t1.tv_usec)
-                            diff_usec = t2.tv_usec - t1.tv_usec;
-                        else
-                        {
-                            diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
-                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
-                        }
-
-                        if((diff_sec*1000000+diff_usec)<estimated_usec)
-                            usleep(estimated_usec-diff_sec*1000000-diff_usec);
-
-                        if(gettimeofday(&t2, NULL))
-                        {
-                            printf("[PROXY ERROR] gettimeofday\n");
-                            exit(1);
-                        }
-
-                        diff_sec = t2.tv_sec - t1.tv_sec;
-                        
-                        if(t2.tv_usec>t1.tv_usec)
-                            diff_usec = t2.tv_usec - t1.tv_usec;
-                        else
-                        {
-                            diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
-                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
-                        }
-
-                        printf("%sBitrate:%s  %6.3lf Kbit/s    ", BOLD_RED, DEFAULT, ((double) (size*8*1000))/(diff_sec*1000000.0+diff_usec));
-                        printf("%sC >>> S(%s%4d%s): %s%s%s \n",BOLD_RED, DEFAULT, size, BOLD_RED, BOLD_YELLOW, host, DEFAULT);
                 }
-				
                 exit(0);
             }
 			else //Parent	
             { 
-                t=1;
-                while(t)
-                {
-                    struct timeval t1, t2;
-                    time_t diff_sec;
-                    suseconds_t estimated_usec, diff_usec;
+                struct timeval t1;
+                struct timeval t2;
+                suseconds_t diff, diff_sec, diff_usec;
+                int count=0;
 
-                    if(gettimeofday(&t1, NULL))
+				if(gettimeofday(&t1, NULL))
+                {
+                    printf("[PROXY ERROR] gettimeofday\n");
+                    exit(1);
+                }
+
+                while(t=read(s3,response2,1))
+                {	
+                    count++;
+
+                    if(gettimeofday(&t2, NULL))
                     {
                         printf("[PROXY ERROR] gettimeofday\n");
                         exit(1);
                     }
+				    
+                    write(s2,response2,t);
 
-                    for(size=0;(t=read(s3,response2,1250-size)); size+=t)
-                        write(s2,response2,t);
-
-                    if(t==-1)
+                    if(count==1250)
                     {
-                        printf("[PROXY ERROR] Reading\n");
-                        exit(1);
+                        diff_sec = t2.tv_sec - t1.tv_sec;
+                    
+                        if(t2.tv_usec>t1.tv_usec)
+                            diff_usec = t2.tv_usec - t1.tv_usec;
+                        else
+                        {
+                            diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
+                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
+                        }
+
+                        if(diff_sec*1000000+diff_usec<1000000)
+                            usleep(1000000-diff_sec*1000000-diff_usec);             
+
+                        if(gettimeofday(&t2, NULL))
+                        {
+                            printf("[PROXY ERROR] gettimeofday\n");
+                            exit(1);
+                        }
+
+                        diff_sec = t2.tv_sec - t1.tv_sec;
+                    
+                        if(t2.tv_usec>t1.tv_usec)
+                            diff_usec = t2.tv_usec - t1.tv_usec;
+                        else
+                        {
+                            diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
+                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
+                        }
+
+                        printf("%sDownload:%s  %6.3lf Kbit/s\n", BOLD_BLUE, DEFAULT, ((double) (count*8*1000))/(diff_sec*1000000.0+diff_usec));
+                        count=0;
+
+                        if(gettimeofday(&t1, NULL))
+                        {
+                            printf("[PROXY ERROR] gettimeofday\n");
+                            exit(1);
+                        }
                     }
-                        if(gettimeofday(&t2, NULL))
-                        {
-                            printf("[PROXY ERROR] gettimeofday\n");
-                            exit(1);
-                        }
-                        
-                        estimated_usec = size*800;
-                        printf("%d\n", estimated_usec);
-                        diff_sec = t2.tv_sec - t1.tv_sec;
-                        
-                        if(t2.tv_usec>t1.tv_usec)
-                            diff_usec = t2.tv_usec - t1.tv_usec;
-                        else
-                        {
-                            diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
-                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
-                        }
-
-                        if((diff_sec*1000000+diff_usec)<estimated_usec)
-                            usleep(estimated_usec-diff_sec*1000000-diff_usec);
-
-                        if(gettimeofday(&t2, NULL))
-                        {
-                            printf("[PROXY ERROR] gettimeofday\n");
-                            exit(1);
-                        }
-
-                        diff_sec = t2.tv_sec - t1.tv_sec;
-                        
-                        if(t2.tv_usec>t1.tv_usec)
-                            diff_usec = t2.tv_usec - t1.tv_usec;
-                        else
-                        {
-                            diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
-                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
-                        }
-
-                        printf("%sBitrate:%s  %6.3lf Kbit/s    ", BOLD_BLUE, DEFAULT, ((double) (size*8*1000))/(diff_sec*1000000.0+diff_usec));
-                        printf("%sC <<< S(%s%4d%s): %s%s%s \n",BOLD_BLUE, DEFAULT, size, BOLD_BLUE, BOLD_CYAN, host, DEFAULT);
-			    }
-
-                kill(pid, 15);
-	            shutdown(s3,SHUT_RDWR);
-                close(s3);
+                }
+				
+                kill(pid,15);
+				shutdown(s3,SHUT_RDWR);
+				close(s3);
             }	
 		}
 
