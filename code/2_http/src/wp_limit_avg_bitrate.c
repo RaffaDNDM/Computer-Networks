@@ -188,7 +188,7 @@ int main()
                 struct timeval t1;
                 struct timeval t2;
                 suseconds_t diff_sec, diff_usec, estimated_sec, estimated_usec;
-                
+
                 if(gettimeofday(&t1, NULL))
                 {
                     printf("[PROXY ERROR] gettimeofday\n");

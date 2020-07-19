@@ -11,13 +11,20 @@
 #include <netdb.h>
 #include <sys/time.h>
 
+#define BOLD_RED "\033[1;31m"
+#define BOLD_YELLOW "\033[1;33m"
+#define BOLD_BLUE "\033[1;34m"
+#define BOLD_CYAN "\033[1;36m"
+#define DEFAULT "\033[0m"
+
 struct hostent * he;
 struct sockaddr_in local,remote,server;
 char request[2000],response[2000],request2[2000],response2[2000];
 char * method, *path, *version, *host, *scheme, *resource,*port;
+
 struct headers {
-char *n;
-char *v;
+    char *n;
+    char *v;
 }h[30];
 
 int main()
@@ -179,16 +186,21 @@ int main()
             { 
                 struct timeval t1;
                 struct timeval t2;
-                suseconds_t diff;
+                struct timeval start;
+                suseconds_t diff, diff_sec, diff_usec;
+                int count=0;
 
 				if(gettimeofday(&t1, NULL))
                 {
                     printf("[PROXY ERROR] gettimeofday\n");
                     exit(1);
                 }
+				memcpy(&start, &t1, sizeof(t1));
 
                 while(t=read(s2,request2,1))
                 {	
+                    count++;
+
                     if(gettimeofday(&t2, NULL))
                     {
                         printf("[PROXY ERROR] gettimeofday\n");
@@ -200,8 +212,8 @@ int main()
                     else
                         diff = t2.tv_usec + 1000000 - t1.tv_usec;
 
-                    if(diff <8000)
-                        usleep(8000-diff);
+                    if(diff < 8000)
+                        usleep(8000 - diff);
 
 				    if(gettimeofday(&t1, NULL))
                     {
@@ -210,7 +222,39 @@ int main()
                     }
 
                     write(s3,request2,t);
-					printf("CL >>>(%d)%s \n",t,host);
+                    if(gettimeofday(&t1, NULL))
+                    {
+                        printf("[PROXY ERROR] gettimeofday\n");
+                        exit(1);
+                    }
+
+                    if(count==200)
+                    {
+                        diff_sec = t1.tv_sec - start.tv_sec;
+                    
+                        if(t1.tv_usec>start.tv_usec)
+                            diff_usec = t1.tv_usec - start.tv_usec;
+                        else
+                        {
+                            diff_usec = t1.tv_usec +1000000 - start.tv_usec;
+                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
+                        }
+
+                        printf("%sUpload:%s  %2.3lf Kbit/s\n", BOLD_RED, DEFAULT, ((double) (count*8*1000))/(diff_sec*1000000.0+diff_usec));
+                        count=0;
+                    }
+
+                    //printf("C >>> S(%d): %s\n", t, host);
+
+                    //To be more accurate in the next evaluation
+                    if(gettimeofday(&t1, NULL))
+                    {
+                        printf("[PROXY ERROR] gettimeofday\n");
+                        exit(1);
+                    }
+
+                    if(!count)
+                        memcpy(&start, &t1, sizeof(t1));
 				}	
 				
                 exit(0);
@@ -219,16 +263,21 @@ int main()
             { 
                 struct timeval t1;
                 struct timeval t2;
-                suseconds_t diff;
+                struct timeval start;
+                suseconds_t diff, diff_sec, diff_usec;
+                int count=0;
 
 				if(gettimeofday(&t1, NULL))
                 {
                     printf("[PROXY ERROR] gettimeofday\n");
                     exit(1);
                 }
-				
+				memcpy(&start, &t1, sizeof(t1));
+
                 while(t=read(s3,response2,1))
-                {	
+                {
+                    count++;    
+                    
                     if(gettimeofday(&t2, NULL))
                     {
                         printf("[PROXY ERROR] gettimeofday\n");
@@ -241,7 +290,7 @@ int main()
                         diff = t2.tv_usec + 1000000 - t1.tv_usec;
 
                     if(diff < 800)
-                        usleep(800-diff);
+                        usleep(800 - diff);
 
 				    if(gettimeofday(&t1, NULL))
                     {
@@ -250,7 +299,40 @@ int main()
                     }
 					
                     write(s2,response2,t);
-					printf("CL <<<(%d)%s \n",t,host);
+
+                    if(gettimeofday(&t1, NULL))
+                    {
+                        printf("[PROXY ERROR] gettimeofday\n");
+                        exit(1);
+                    }
+
+                    if(count==200)
+                    {
+                        diff_sec = t1.tv_sec - start.tv_sec;
+                    
+                        if(t1.tv_usec>start.tv_usec)
+                            diff_usec = t1.tv_usec - start.tv_usec;
+                        else
+                        {
+                            diff_usec = t1.tv_usec +1000000 - start.tv_usec;
+                            diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
+                        }
+
+                        printf("%sDownload:%s  %2.3lf Kbit/s\n", BOLD_BLUE, DEFAULT, ((double) (count*8*1000))/(diff_sec*1000000.0+diff_usec));
+                        count=0;
+                    }
+
+                    //printf("C <<< S(%d): %s\n", t, host);
+
+                    //To be more accurate in the next evaluation
+                    if(gettimeofday(&t1, NULL))
+                    {
+                        printf("[PROXY ERROR] gettimeofday\n");
+                        exit(1);
+                    }
+
+                    if(!count)
+                        memcpy(&start, &t1, sizeof(t1));
                 }	
 				
                 kill(pid,15);
