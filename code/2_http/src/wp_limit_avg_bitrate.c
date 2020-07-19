@@ -213,7 +213,7 @@ int main()
                     else
                     {
                         diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
-                        diff_sec--;
+                        diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
                     }
 
                     struct timeval t3;
@@ -228,17 +228,26 @@ int main()
                         exit(1);
                     }
 
+                    diff_sec = t1.tv_sec - t3.tv_sec;
+                    
                     if(t1.tv_usec>t3.tv_usec)
                         diff_usec = t1.tv_usec - t3.tv_usec;
                     else
                     {
                         diff_usec = t1.tv_usec +1000000 - t3.tv_usec;
-                        diff_sec--;
+                        diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
                     }
 
-                    printf("%sBitrate:%s  %lf Kbit/s    ", BOLD_RED, DEFAULT, ((double) (t*8*1000000))/(diff_sec*1000000+diff_usec));
-					printf("%sC >>> S(%s%d%s)%s%s%s \n",BOLD_RED, DEFAULT, t, BOLD_RED, BOLD_YELLOW, host, DEFAULT);
-				}	
+                    printf("%sBitrate:%s  %2.3lf Kbit/s    ", BOLD_RED, DEFAULT, ((double) (t*8*1000))/(diff_sec*1000000.0+diff_usec));
+					printf("%sC >>> S(%s%4d%s): %s%s%s \n",BOLD_RED, DEFAULT, t, BOLD_RED, BOLD_YELLOW, host, DEFAULT);
+
+                    //To be more accurate in the next evaluation
+                    if(gettimeofday(&t1, NULL))
+                    {
+                        printf("[PROXY ERROR] gettimeofday\n");
+                        exit(1);
+                    }
+                }	
 				
                 exit(0);
             }
@@ -272,17 +281,14 @@ int main()
                     else
                     {
                         diff_usec = t2.tv_usec +1000000 - t1.tv_usec;
-                        diff_sec--;
+                        diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
                     }
 
                     if((diff_sec*1000000+diff_usec)<estimated_usec)
                         usleep(estimated_usec-diff_sec*1000000-diff_usec);
-
+                    
                     struct timeval t3;
                     memcpy(&t3, &t1, sizeof(t1));
-
-                    if((diff_sec*1000000+diff_usec)<estimated_usec)
-                        usleep(estimated_usec-diff_sec*1000000-diff_usec);
 
                     if(gettimeofday(&t1, NULL))
                     {
@@ -290,16 +296,27 @@ int main()
                         exit(1);
                     }
 
+                    diff_sec = t1.tv_sec - t3.tv_sec;
+                    
                     if(t1.tv_usec>t3.tv_usec)
                         diff_usec = t1.tv_usec - t3.tv_usec;
                     else
                     {
                         diff_usec = t1.tv_usec +1000000 - t3.tv_usec;
-                        diff_sec--;
+                        diff_sec=(diff_sec>0)?diff_sec-1:diff_sec;
                     }
 
-                    printf("%sBitrate:%s  %lf bit/s    ", BOLD_BLUE, DEFAULT, (((double) t)*8*1000000)/(diff_sec*1000000+diff_usec));
-					printf("%sC >>> S(%s%d%s)%s%s%s \n",BOLD_BLUE, DEFAULT, t, BOLD_BLUE, BOLD_CYAN, host, DEFAULT);
+                    //printf("%sDIFF:%s %ld    %sT:%s %d    %sSEC:%s %ld    %sUSEC:%s %ld\n", BOLD_BLUE, DEFAULT, diff_sec*1000000+diff_usec, BOLD_BLUE, DEFAULT, t,
+                    //                                                                        BOLD_BLUE, DEFAULT, diff_sec, BOLD_BLUE, DEFAULT, diff_usec);
+                    printf("%sBitrate:%s  %2.3lf Kbit/s    ", BOLD_BLUE, DEFAULT, (((double) t)*8*1000)/(diff_sec*1000000.0+diff_usec));
+					printf("%sC <<< S(%s%4d%s): %s%s%s \n",BOLD_BLUE, DEFAULT, t, BOLD_BLUE, BOLD_CYAN, host, DEFAULT);
+                    
+                    //To be more accurate in the next evaluation
+                    if(gettimeofday(&t1, NULL))
+                    {
+                        printf("[PROXY ERROR] gettimeofday\n");
+                        exit(1);
+                    }
                 }	
 				
                 kill(pid,15);
