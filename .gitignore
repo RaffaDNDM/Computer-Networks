@@ -10,4 +10,3 @@ code/1_endianness/bin/*
 code/2_http/bin/*
 !code/2_http/bin/*.html
 code/4_dll/bin/*
-*.swp
