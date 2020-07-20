@@ -6,7 +6,6 @@ Implementation of network applications, using Linux socket.
 - [Endianness used in Operating Systems and Network Byte Order.](https://github.com/RaffaDNDM/Computer-Networks/tree/master/code/1_endianness)
   1. Evaluation of endianness of the system.
   2. Convertion of number from Host to Network Byte Order.
-
 - [Implementation of HTTP protocol using TCP socket.](https://github.com/RaffaDNDM/Computer-Networks/tree/master/code/2_http)
   - Web Client
     1. Web Client HTTP/0.9
@@ -29,14 +28,15 @@ Implementation of network applications, using Linux socket.
     2. Web Server with Transfer-Encoding:chunked header
     3. Web Server with Content-Length header
     5. Web Server that replies with message of client, with additional info about client
-    
 - [Base64 implementation.](https://github.com/RaffaDNDM/Computer-Networks/tree/master/code/3_base64)
-
 - [Implementation of Ethernet Packets using socket.](https://github.com/RaffaDNDM/Computer-Networks/tree/master/code/4_dll)
   1. ARP (Address Resolution Protocol)
-  2. ping
-  3. traceroute
-  4. statistics about received packets
-  5. record route oprion of IP header
-  6. time exceeded
-  7. unreachable destination ICMP
+  2. Inverse ping
+  3. Ping
+  4. Record route option of IP header
+  5. Split ICMP ECHO REQUEST in two packets
+  6. Statistics about number of received packets
+  7. TCP request and response
+  8. ICMP Time exceeded message management
+  9. Traceroute
+  10. ICMP Unreachable destination message management
