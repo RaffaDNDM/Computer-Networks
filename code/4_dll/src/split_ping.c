@@ -10,7 +10,7 @@
 
 #include "utility.h"
 
-unsigned char myip[4]={192, 168, 1, 81};
+unsigned char myip[4]={192, 168, 1, 210};
 unsigned char netmask[4]={255,255,255,0};
 unsigned char mymac[6]={0x4c,0xbb,0x58,0x5f,0xb4,0xdc};
 unsigned char gateway[4]={192,168,1,1};

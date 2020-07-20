@@ -107,16 +107,16 @@ int main(){
     
     printf("%s Ethernet statistics        IP statistics%s\n",
             BOLD_RED, DEFAULT);
-    printf("%s   IP packets:%s %4d       %sICMP packets:%s %4d\n",
-            BOLD_GREEN, DEFAULT, count_IP, BOLD_YELLOW, DEFAULT, count_ICMP);
-    printf("%s  ARP packets:%s %4d        %sTCP packets:%s %4d\n",
-            BOLD_GREEN, DEFAULT, count_ARP, BOLD_YELLOW, DEFAULT, count_TCP);
-    printf("%sOther packets:%s %4d        %sUDP packets:%s %4d\n",
-            BOLD_GREEN, DEFAULT, count_3_level, BOLD_YELLOW, DEFAULT, count_UDP);
-    printf("                        %sOther packets:%s %4d\n",
-            BOLD_YELLOW, DEFAULT, count_other);
+    printf("%s   IP packets:%s %6.2lf%%       %sICMP packets:%s %6.2lf%%\n",
+            BOLD_GREEN, DEFAULT, ((double) count_IP*100.0)/1000.0, BOLD_YELLOW, DEFAULT, ((double) count_ICMP*100.0)/count_IP);
+    printf("%s  ARP packets:%s %6.2lf%%        %sTCP packets:%s %6.2lf%%\n",
+            BOLD_GREEN, DEFAULT, ((double) count_ARP*100.0)/1000.0, BOLD_YELLOW, DEFAULT, ((double) count_TCP*100.0)/count_IP);
+    printf("%sOther packets:%s %6.2lf%%        %sUDP packets:%s %6.2lf%%\n",
+            BOLD_GREEN, DEFAULT, ((double) count_3_level*100.0)/1000.0, BOLD_YELLOW, DEFAULT, ((double) count_UDP*100.0)/count_IP);
+    printf("                            %sOther packets:%s %6.2lf%%\n",
+            BOLD_YELLOW, DEFAULT, ((double) count_other*100.0)/count_IP);
     
-    printf("%s___________________________________________________________________%s\n",
+    printf("%s___________________________________________________________________%s\n\n",
             BOLD_GREEN, DEFAULT);
  
     return 0;
