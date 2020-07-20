@@ -25,8 +25,6 @@
   <details> <summary> <b><i>wp_blacklist.c</i></b> </summary> 
   Web Proxy that blocks requests to some domain, stored in an array.
   </details>
-  <details> <summary> <b><i>wp_cache.c</i></b> </summary> 
-  </details>
   <details> <summary> <b><i>wp_filter_response.c</i></b> </summary>
   Web Proxy that manages HTTP requests from client, such that if the client has an IP address that is the same of one of 4 IP addresses stored in the proxy (max 4 addresses), the proxy leave the transfering of only HTML or TEXT files.
   To create this program, I analyse the Content-Type header value of HTTP response from the Server (<a href="https://tools.ietf.org/html/rfc1945#section-10.5">Section 10.5 of RFC 1945</a>). 
