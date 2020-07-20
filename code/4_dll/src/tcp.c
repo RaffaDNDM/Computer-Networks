@@ -6,6 +6,8 @@
 #include <net/ethernet.h> /* the L2 protocols */
 #include <net/if.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "utility.h"
 unsigned char myip[4]={88,80,187,84};
@@ -23,12 +25,12 @@ struct sockaddr_ll sll;
 int printpacket(unsigned char *b,int l){
 int i;
  for(i=0;i<l;i++){
-	printf("%.2x(%.3d) ",b[i],b[i]);  
+	printf("%.2x(%.3d) ",b[i],b[i]);
 	if(i%4 == 3) printf("\n");
 	}
 	printf("\n================\n");
-}	
-	
+}
+
 struct eth_frame {
 unsigned char dst[6];
 unsigned char src[6];
@@ -62,7 +64,7 @@ unsigned int dst;
 unsigned char payload[1480];
 };
 
-int forge_ip(struct ip_datagram *ip, unsigned char * dst, int payloadlen,unsigned char proto) 
+int forge_ip(struct ip_datagram *ip, unsigned char * dst, int payloadlen,unsigned char proto)
 {
 ip->ver_ihl=0x45;
 ip->tos=0;
@@ -109,7 +111,7 @@ struct eth_frame *eth;
 struct arp_packet *arp;
 
 eth = (struct eth_frame *) pkt;
-arp = (struct arp_packet *) eth->payload; 
+arp = (struct arp_packet *) eth->payload;
 for(i=0;i<6;i++) eth->dst[i]=0xff;
 for(i=0;i<6;i++) eth->src[i]=mymac[i];
 eth->type=htons(0x0806);
@@ -137,7 +139,7 @@ while( 1 ){
 				memcpy(destmac,arp->srcmac,6);
                 printpacket(pkt,14+sizeof(struct arp_packet));
                 return 0;
-				}	
+				}
 	}
 }
 
@@ -152,11 +154,11 @@ struct eth_frame* eth;
 struct ip_datagram* ip;
 struct tcp_segment* tcp;
 
-s = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL)); 
+s = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
 if(s==-1){perror("socket failed");return 1;}
 
 /**** HOST ROUTING ****/
-if( (*(unsigned int*)&myip) & (*(unsigned int*)&netmask) == 
+if( (*(unsigned int*)&myip) & (*(unsigned int*)&netmask) ==
     (*(unsigned int*)&targetip) & (*(unsigned int*)&netmask))
 	arp_resolve(targetip,dstmac);
 else
@@ -167,8 +169,11 @@ else
 printf("destmac: ");printpacket(dstmac,6);
 
 eth = (struct eth_frame *) packet;
-ip = (struct ip_datagram *) eth->payload; 
+ip = (struct ip_datagram *) eth->payload;
 tcp = (struct tcp_segment *) ip->payload;
+
+srand((unsigned int) time(0));
+unsigned short port = (unsigned short) ((rand() %6000)+6000);
 
 for(i=0;i<6;i++) eth->dst[i]=dstmac[i];
 for(i=0;i<6;i++) eth->src[i]=mymac[i];
@@ -180,7 +185,7 @@ tcp->off_res_flags = htons(0x5002);
 tcp->window = 0xffff;
 tcp->checksum = 0;
 tcp->urg_pointer = 0;
-forge_ip(ip,targetip, 20, 6); 
+forge_ip(ip,targetip, 20, 6);
 pseudo_h.src_IP = ip->src;
 pseudo_h.dst_IP = ip->dst;
 pseudo_h.length = htons(20);
@@ -203,10 +208,10 @@ while( 1 ){
 	if (n == -1) {perror("Recvfrom failed"); return 0;}
 	if (eth->type == htons (0x0800)) //it is IP
     {
-        if(ip->proto == 6) // it is TCP 
+        if(ip->proto == 6) // it is TCP
         {
-            if(tcp->src_port == htons(80) && 
-               tcp->dst_port == htons(8080) &&
+            if(tcp->src_port == htons(80) &&
+               tcp->dst_port == htons(port) &&
                tcp->ack_num == htonl(11) &&
                ((tcp->off_res_flags & htons(0x003f))==htons(0x0012)))
             {
