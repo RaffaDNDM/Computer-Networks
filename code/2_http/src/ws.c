@@ -159,7 +159,7 @@ void manage_request(char* method, char* path, char* version, char* response, FIL
             if(status==-1)
             {
                 //Used to manage if a program doesn't exists
-                sprintf(response,"HTTP/1.1 400 Not Found\r\nConnection:Close\r\n\r\n");
+                sprintf(response,"HTTP/1.1 400 Bad request\r\nConnection:Close\r\n\r\n");
                 *f=NULL;
             }
             else if(!status)

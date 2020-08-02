@@ -33,7 +33,7 @@ def response(sd):
     print(headers)
     request_line = headers[0].split(' ')
     print(request_line)
-    d = dict(x.split(":") for x in headers[1:])
+    d = dict(x.split(":", 1) for x in headers[1:])
     print(d)
     print(parts_message[1])
 
