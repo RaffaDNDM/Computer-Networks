@@ -47,7 +47,7 @@ def handle_client(sd, addr):
                 args = dict(x.split('=', 1) for x in function[1].split("&"))
                 cmd = "cd "+DAT_FOLDER+"; "+function[0]
                 
-                for var,value in args.items():
+                for value in args.values():
                     cmd += (" "+value)
 
                 file_path = DAT_FOLDER+"/"+RESULTS
