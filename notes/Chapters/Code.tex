@@ -1,6 +1,6 @@
 \chapter{Code}
 \section{Endianness}
-\lstinputlisting[style=customC, firstline=21, lastline=46, firstnumber=1]{../code/1_endianness/src/endianness.c}
+\lstinputlisting[style=customC, firstline=34, lastline=78, firstnumber=1]{../code/1_endianness/src/endianness.c}
 \clearpage
 \section{HTTP}
 \subsection{HEX to DEC convertion}
@@ -35,6 +35,7 @@
 \subsubsection{Filter of Content-Type of response}
 \lstinputlisting[style=customC, firstline=1, lastline=317, firstnumber=1]{../code/2_http/src/wp_filter_response.c}
 \clearpage
+\begin{comment}
 \subsubsection{Limit of average bitrate}
 \lstinputlisting[style=customC, firstline=1, lastline=319, firstnumber=1]{../code/2_http/src/wp_limit_avg_bitrate.c}
 \clearpage
@@ -44,6 +45,7 @@
 \subsubsection{Limit of bitrate}
 \lstinputlisting[style=customC, firstline=1, lastline=338, firstnumber=1]{../code/2_http/src/wp_limit_bitrate.c}
 \clearpage
+\end{comment}
 \subsubsection{Whitelist}
 \lstinputlisting[style=customC, firstline=1, lastline=256, firstnumber=1]{../code/2_http/src/wp_whitelist.c}
 \clearpage
@@ -104,5 +106,3 @@
 \lstinputlisting[style=customC, firstline=1, lastline=206, firstnumber=1]{../code/4_dll/src/unreachable_dest.c}
 \subsection{Colors}
 \lstinputlisting[style=customC, firstline=8, lastline=14, firstnumber=1]{../code/2_http/include/net_utility.h}
-\section{Usefull functions}
-%gettimeofday, strptime, strftime, time, mktime, gmtime, timegm, localtime

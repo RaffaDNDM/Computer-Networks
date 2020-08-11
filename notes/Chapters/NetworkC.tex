@@ -505,3 +505,369 @@ unsigned int if_nametoindex(const char *ifname);
 Given in input the name of the network interface (e.g. \textit{"eth0"}), the function returns its related number.
 }
 \end{itemize}
+
+\section{Usefull functions}
+\subsection{Time}
+\subsubsection{gettimeofday()}
+It resturns the number of seconds and microseconds since the Epoch.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=300pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/time.h>
+int gettimeofday(struct timeval *tv, struct timezone *tz);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{0} on success}\\
+{} & {\textit{-1} if some error occurs and errno is set appropriately.}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{tv =} & {\textit{Number of seconds and microseconds since the Epoch}}\\
+{} & {\textit{It will be filled (it can't be NULL)}}\\
+& \\
+\textbf{tz =} & {\textit{Obsolete (normally specified to NULL)}}\\
+&\\
+\end{tabular}
+\end{table}
+
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=270pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/time.h>
+struct timeval {
+	time_t tv_sec; /* seconds */
+	suseconds_t tv_usec; /* microseconds */
+};
+
+struct timezone {
+	int tz_minuteswest; /* minutes west of Greenwich */
+	int tz_dsttime;     /* type of DST correction */
+};
+\end{lstlisting}
+\end{tabular}
+\end{center}
+\vspace{4cm}
+\subsubsection{settimeofday()}
+It sets the number of seconds and microseconds since the Epoch.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=370pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/time.h>
+int settimeofday(const struct timeval *tv, const struct timezone *tz);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{0} on success}\\
+{} & {\textit{-1} if some error occurs and errno is set appropriately.}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{tv =} & {\textit{Number of seconds and microseconds since the Epoch}}\\
+{} & {\textit{It will be filled (it can't be NULL)}}\\
+& \\
+\textbf{tz =} & {\textit{Obsolete (normally specified to NULL)}}\\
+&\\
+\end{tabular}
+\end{table}
+
+\subsubsection{time()}
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=140pt, basicstyle=\footnotesize\sffamily,]
+#include <time.h>
+time_t time(time_t *tloc);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Number of seconds since the Epoch} on success}\\
+{} & {\textit{((time\_t) -1)} if some error occurs and errno is set appropriately.}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{tloc =} & {\textit{Stored return value (if not NULL)}}\\
+& \\
+\end{tabular}
+\end{table}
+
+\subsubsection{gmtime()}
+It converts the calendar time to broken-down time representation, expressed in Coordinated Universal Time (UTC). It may return NULL when the year does not fit into an integer.  The return value points to a statically  allocated struct which might be overwritten by subsequent calls to any of the date and time functions.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=200pt, basicstyle=\footnotesize\sffamily,]
+#include <time.h>
+struct tm *gmtime(const time_t *timep);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Pointer to a struct tm} on success}\\
+{} & {\textit{NULL} if some error occurs and errno is set appropriately.}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{timep =} & {\textit{Calendar time}}\\
+& \\
+\end{tabular}
+\end{table}
+
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=300pt, basicstyle=\footnotesize\sffamily,]
+#include <time.h>
+struct tm {
+	int tm_sec;   /* Seconds (0-60) */
+	int tm_min;   /* Minutes (0-59) */
+	int tm_hour;  /* Hours (0-23) */
+	int tm_mday;  /* Day of the month (1-31) */
+	int tm_mon;   /* Month (0-11) */
+	int tm_year;  /* Year - 1900 */
+	int tm_wday;  /* Day of the week (0-6, Sunday = 0) */
+	int tm_yday;  /* Day in the year (0-365, 1 Jan = 0) */
+	int tm_isdst; /* Daylight saving time */
+};
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\subsubsection{localtime()}
+It converts the calendar time to broken-down time representation, expressed relative to the user's specified timezone.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=220pt, basicstyle=\footnotesize\sffamily,]
+#include <time.h>
+struct tm *localtime(const time_t *timep);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Pointer to a struct tm} on success}\\
+{} & {\textit{NULL} if some error occurs and errno is set appropriately.}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{timep =} & {\textit{Calendar time}}\\
+& \\
+\end{tabular}
+\end{table}
+
+\subsubsection{timegm()}
+It's the inverse of \textit{localtime()} function. It returns the calendar time (seconds since the Epoch, 1970-01-01 00:00:00 +0000, UTC), taking the input value to be Coordinated Universal Time (UTC).
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=150pt, basicstyle=\footnotesize\sffamily,]
+#include <time.h>
+time_t timegm(struct tm *tm);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Calendar time (seconds since the Epoch)} on success}\\
+{} & {\textit{((time\_t) -1)} if some error occurs and errno is set appropriately.}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{tm =} & {\textit{Input time structure}}\\
+& \\
+\end{tabular}
+\end{table}
+
+\subsubsection{timelocal()}
+It's the inverse of \textit{localtime()} function. It returns the calendar time (seconds since the Epoch, 1970-01-01 00:00:00 +0000, UTC), taking the local timezone into account when doing the conversion.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=170pt, basicstyle=\footnotesize\sffamily,]
+#include <time.h>
+time_t timelocal(struct tm *tm);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Calendar time (seconds since the Epoch)} on success}\\
+{} & {\textit{((time\_t) -1)} if some error occurs and errno is set appropriately.}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{tm =} & {\textit{Input time structure}}\\
+& \\
+\end{tabular}
+\end{table}
+
+\subsubsection{mktime()}
+It converts a broken-down time structure, expressed as local time, to calendar time representation. The function ignores the values supplied by the caller in the tm\_wday and tm\_yday fields.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=180pt, basicstyle=\footnotesize\sffamily,]
+#include <time.h>
+time_t mktime(struct tm *tm);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Calendar time (seconds since the Epoch)} on success}\\
+{} & {\textit{((time\_t) -1)} if some error occurs and errno is set appropriately.}\\
+{} & {(You can check value of errno including <errno.h>).}\\
+& \\
+\textbf{tm =} & {\textit{Input time structure}}\\
+& \\
+\end{tabular}
+\end{table}
+
+\subsubsection{strptime()}
+It's the converse of \textit{strftime()}; it converts the character string pointed to by s to values which are stored in the "broken-down  time"  structure pointed to by tm, using the format specified by format.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=340pt, basicstyle=\footnotesize\sffamily,]
+#define __USE_XOPEN
+#include <time.h>
+char *strptime(const char *s, const char *format, struct tm *tm);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Pointer to the first charater not processed}}\\
+{} & {\textit{NULL} if it fails to match all of the format string.}\\
+& \\
+\textbf{s =} & {\textit{Input string, processed from left to right}}\\
+{}&{If the input cannot be matched to the format string, the function stops.}\\
+& \\
+\textbf{format =} & {\textit{character string of field descriptors and text characters}}\\
+{}&{field descriptor = \% character}\\
+{}&{other character in format must have matching character in s}\\
+{}&{except whitespace, which matches zero or more whitespaces}\\
+& \\
+\end{tabular}
+\end{table}
+
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=300pt, basicstyle=\footnotesize\sffamily,]
+struct tm {
+	int tm_sec;   /* Seconds (0-60) */
+	int tm_min;   /* Minutes (0-59) */
+	int tm_hour;  /* Hours (0-23) */
+	int tm_mday;  /* Day of the month (1-31) */
+	int tm_mon;   /* Month (0-11) */
+	int tm_year;  /* Year - 1900 */
+	int tm_wday;  /* Day of the week (0-6, Sunday = 0) */
+	int tm_yday;  /* Day in the year (0-365, 1 Jan = 0) */
+	int tm_isdst; /* Daylight saving time */
+};
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\subsubsection{strftime()}
+It formats the broken-down time tm according to the format specification format and places the result in the character array s of size max.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=410pt, basicstyle=\footnotesize\sffamily,]
+#include <time.h>
+size_t strftime(char *s, size_t max, const char *format, const struct tm *tm);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Pointer to the first charater not processed}}\\
+{} & {\textit{NULL} if it fails to match all of the format string.}\\
+& \\
+\textbf{s =} & {\textit{Output string}}\\
+{}&{If the input cannot be matched to the format string, the function stops.}\\
+& \\
+\textbf{format =} & {\textit{character string of field descriptors and text characters}}\\
+{}&{field descriptor = \% character}\\
+{}&{other character in format must have matching character in s}\\
+{}&{except whitespace, which matches zero or more whitespaces}\\
+& \\
+\end{tabular}
+\end{table}
+
+\section{Info about files}
+\subsection{stat()}
+It returns information about a file, in the buffer pointed to by statbuf. stat() retrieves information about the file pointed to by pathname. lstat() is identical to stat(), except that if pathname is a symbolic link, then it returns information about the link itself, not the file that it refers to. fstat() is identical to stat(), except that the file about which information is to be retrieved is specified by the file descriptor fd.
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=280pt, basicstyle=\footnotesize\sffamily,]
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+int stat(const char *pathname, struct stat *statbuf);
+int fstat(int fd, struct stat *statbuf);
+int lstat(const char *pathname, struct stat *statbuf);
+\end{lstlisting}
+\end{tabular}
+\end{center}
+
+\begin{table}[H]
+\centering\footnotesize
+\begin{tabular}{rl}
+\textbf{RETURN VALUE} & {\textit{Pointer to the first charater not processed}}\\
+{} & {\textit{NULL} if it fails to match all of the format string.}\\
+& \\
+\textbf{s =} & {\textit{Output string}}\\
+{}&{If the input cannot be matched to the format string, the function stops.}\\
+& \\
+\textbf{format =} & {\textit{character string of field descriptors and text characters}}\\
+{}&{field descriptor = \% character}\\
+{}&{other character in format must have matching character in s}\\
+{}&{except whitespace, which matches zero or more whitespaces}\\
+& \\
+\end{tabular}
+\end{table}
+
+\begin{center}
+\begin{tabular}{c}
+\begin{lstlisting}[linewidth=340pt, basicstyle=\footnotesize\sffamily,]
+struct stat {
+	dev_t     st_dev;         /* ID of device containing file */
+	ino_t     st_ino;         /* Inode number */
+	mode_t    st_mode;        /* File type and mode */
+	nlink_t   st_nlink;       /* Number of hard links */
+	uid_t     st_uid;         /* User ID of owner */
+	gid_t     st_gid;         /* Group ID of owner */
+	dev_t     st_rdev;        /* Device ID (if special file) */
+	off_t     st_size;        /* Total size, in bytes */
+	blksize_t st_blksize;     /* Block size for filesystem I/O */
+	blkcnt_t  st_blocks;      /* Number of 512B blocks allocated */
+
+	/* Since Linux 2.6, the kernel supports nanosecond
+	  precision for the following timestamp fields.
+	   For the details before Linux 2.6, see NOTES. */
+
+	struct timespec st_atim;  /* Time of last access */
+	struct timespec st_mtim;  /* Time of last modification */
+	struct timespec st_ctim;  /* Time of last status change */
+
+	#define st_atime st_atim.tv_sec  /* Backward compatibility */
+	#define st_mtime st_mtim.tv_sec
+	#define st_ctime st_ctim.tv_sec
+};
+\end{lstlisting}
+\end{tabular}
+\end{center}
