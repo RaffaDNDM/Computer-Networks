@@ -14,7 +14,8 @@
   </details>
   <details> <summary> <b><i>wc_cache2.c</i></b> </summary> 
   Web Client with caching implemented using <i>If-Modified-Since</i> header.
-
+  </details>
+  
 - ***Web Proxy***
   <details> <summary> <b><i>wp.c</i></b> </summary> 
   HTTPS and HTTP management.
