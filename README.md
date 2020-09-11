@@ -1,5 +1,5 @@
 # Computer-Networks
-Application of Computer Networks protocols in C, C++, Python and Java and [notes](https://github.com/RaffaDNDM/Computer-Networks/blob/master/notes/Computer_networks.pdf) about attended course.
+Application of Computer Networks protocols in C, C++, Python and Java and [notes](https://github.com/RaffaDNDM/Computer-Networks/blob/master/Computer_networks.pdf) of attended course or [notes](https://github.com/RaffaDNDM/Computer-Networks/blob/master/Telecommunication_networks.pdf) about telecommunication networks.
 
 ### Code
 Implementation of network applications, using Linux socket.
