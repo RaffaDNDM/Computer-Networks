@@ -51,6 +51,12 @@ class Server:
             print(size, end='] ---> ')
             
             if size == 'LOGGED':
+                if self.ONLINE_CLIENTS and nickname in self.ONLINE_CLIENTS:
+                    client_sd.send(b'NO')
+                    break
+                else:
+                    client_sd.send(b'OK')
+
                 with self.mutex:
                     self.ONLINE_CLIENTS[nickname] = client_sd
 
@@ -62,12 +68,11 @@ class Server:
                 msg = client_sd.recv(int(size)).decode()
                 self.broadcast(msg, nickname)
                 print(msg)
+        
+        client_sd.close()
 
     def broadcast(self, msg, nickname):
-        msg = msg.encode()
-        final_msg = nickname.encode() + b'\r\n' +\
-                    str(len(msg)).encode() + b'\r\n' +\
-                    msg
+        final_msg = f'{nickname}\r\n{len(msg.encode())}\r\n{msg}'.encode()
 
         for k in self.ONLINE_CLIENTS:
             if k!=nickname:
