@@ -37,20 +37,21 @@ class Server:
                     nickname = nickname[:-2]
                     break
 
-            print(nickname, end='[') 
+            #print(nickname, end='[') 
 
             size = ''
 
             while True:
-                size += client_sd.recv(1).decode()
+                size += (client_sd.recv(1).decode())
                 
                 if size.endswith('\r\n'):
                     size = size[:-2]
                     break
 
-            print(size, end='] ---> ')
+            #print(size, end='] ---> ')
             
             if size == 'LOGGED':
+                print(nickname, client_sd, end='\n\n')
                 if self.ONLINE_CLIENTS and nickname in self.ONLINE_CLIENTS:
                     client_sd.send(b'NO')
                     break
@@ -72,10 +73,14 @@ class Server:
         client_sd.close()
 
     def broadcast(self, msg, nickname):
-        final_msg = f'{nickname}\r\n{len(msg.encode())}\r\n{msg}'.encode()
+        msg = msg.encode()
+        final_msg = nickname.encode()+b'\r\n'+\
+                    str(len(msg)).encode()+ b'\r\n'+\
+                    msg
 
         for k in self.ONLINE_CLIENTS:
             if k!=nickname:
+                #print(k, self.ONLINE_CLIENTS[k])
                 self.ONLINE_CLIENTS[k].send(final_msg)
 
 def main():

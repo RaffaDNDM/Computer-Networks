@@ -4,6 +4,7 @@ from termcolor import colored
 import tkinter
 from tkinter import simpledialog
 import tkinter.scrolledtext
+import time
 
 class Client:
 
@@ -20,8 +21,8 @@ class Client:
             #Wait until the nickname is not already inserted
             self.NICKNAME = simpledialog.askstring('Nickname', 'Insert nickname', parent=login_win)
             #self.NICKNAME = input(colored('Insert your nickname: ', 'red'))
-            msg = self.NICKNAME.encode()+b'\r\nLOGGED\r\n'
-            self.sd.send(msg)
+            msg = f'{self.NICKNAME}\r\nLOGGED\r\n'
+            self.sd.send(msg.encode())
             response = self.sd.recv(2).decode()
             
             if response != 'OK':
@@ -29,7 +30,10 @@ class Client:
             else:
                 break
         
-        self.RUNNING = True
+        gui = threading.Thread(target=self.gui_manage)
+        gui.start()
+
+    def gui_manage(self):
         self.win = tkinter.Tk()
         self.win.configure(bg='black')
         
@@ -59,7 +63,6 @@ class Client:
         self.sd.send(msg.encode())
         self.sd.close()
         self.win.destroy()
-        self.RUNNING = False
 
     def send_data(self):
         try:
@@ -71,49 +74,55 @@ class Client:
                 #print(colored(f'{self.NICKNAME}', 'green', attrs=['bold',]))
                 #print(msg, end='\n\n')
                 self.chat_area.config(state='normal')
-                self.chat_area.insert('end', f'{self.NICKNAME}\n', 'nickname')
+                self.chat_area.insert('end', f'{self.NICKNAME}\n', 'nickname2')
                 self.chat_area.insert('end', msg, 'text')
-                self.chat_area.tag_config('nickname', foreground='green')
+                self.chat_area.insert('end', '\n')
+                self.chat_area.tag_config('nickname2', foreground='green')
                 self.chat_area.tag_config('text', background='gray')
                 self.chat_area.config(state='disabled')
 
-            msg = msg.encode()
-            final_msg = self.NICKNAME.encode() + b'\r\n' +\
-                        str(len(msg)).encode() + b'\r\n' +\
-                        msg
+            msg = msg
+            final_msg = f'{self.NICKNAME}\r\n{len(msg.encode())}\r\n'
 
-            self.sd.send(final_msg)
+            self.sd.send(final_msg.encode()+msg.encode())
 
         except KeyboardInterrupt:
             msg = f'{self.NICKNAME}\r\nQUIT\r\n'
             self.sd.send(msg.encode())
 
     def receive_data(self):
-        while self.RUNNING:
+        time.sleep(2)
+        
+        while True:
             nickname = ''
 
             while True:  
-                nickname += self.sd.recv(1).decode()
+                nickname += (self.sd.recv(1).decode())
                 
                 if nickname[-2:] == '\r\n':
                     nickname = nickname[:-2]
                     break
 
+            print(nickname)
+
             size = ''
             while True:
-                size += self.sd.recv(1).decode()
+                size += (self.sd.recv(1).decode())
                 
                 if size[-2:] == '\r\n':
                     size = size[:-2]
                     break
+            
+            print(size)
 
             msg = self.sd.recv(int(size)).decode()
-
+            print(msg)
+            
             with self.mutex:
                 #print(colored(f'\r{self.NICKNAME}', 'blue', attrs=['bold',]))
                 #print(msg, end='\n\n')
                 #print(f'{self.NICKNAME}>: ')
-                
+                print(msg)
                 self.chat_area.config(state='normal')
                 self.chat_area.insert('end', f'{nickname}\n', 'nickname')
                 self.chat_area.insert('end', msg, 'text')
@@ -124,11 +133,12 @@ class Client:
 
     def run_chat(self):
         #Receive data on secondary thread
-        receiver = threading.Thread(target=self.receive_data)
-        receiver.start()
+        #receiver = threading.Thread(target=self.receive_data)
+        #receiver.start()
 
+        self.receive_data()
         #Send data on main thread 
-        self.send_data()
+        #self.send_data()
 
 def main():
     IP_ADDRESS = '127.0.0.1'
