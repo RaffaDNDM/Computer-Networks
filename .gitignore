@@ -1,12 +1,5 @@
-notes/Chapters/*.log
 code/1_endianness/endianness.o
-notes/*.aux
-notes/*.toc
-notes/*.bbl
-notes/*.blg
-notes/*.out
-notes/*.synctex.gz
 code/1_endianness/bin/*
 code/2_http/bin/*
-!code/2_http/bin/*.html
+code/2_http/bin/*.html
 code/4_dll/bin/*
