@@ -24,6 +24,7 @@ time.sleep(2)
 client_t = threading.Thread(target=camera.start_stream)
 client_t.start()
 
+#Stop the camera chat when q is detected on main thread
 while input(colored('\nPress q to stop client execution', 'blue')+'\n')!='q':
     continue
 
