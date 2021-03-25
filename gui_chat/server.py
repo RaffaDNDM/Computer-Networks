@@ -158,9 +158,10 @@ class Server:
                 self.ONLINE_CLIENTS[k].send(final_msg)
 
 def main():
-    #Address of the server
-    IP_ADDRESS = '127.0.0.1'
-    PORT = 8080
+    #Address of the server 
+    #IP_ADDRESS = '127.0.0.1' #Locally
+    IP_ADDRESS = '0.0.0.0' #In docker container
+    PORT = 10000
 
     #Create the server and run it
     with Server(IP_ADDRESS, PORT) as s:

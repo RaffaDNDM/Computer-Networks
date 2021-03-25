@@ -4,10 +4,10 @@ There are also programs developed using some network python libraries.
 
 ### Code
 Implementation of network applications, using Linux socket.
-- [Endianness used in Operating Systems and Network Byte Order.](1_endianness)
+- [Endianness used in Operating Systems and Network Byte Order.](endianness)
   1. Evaluation of endianness of the system.
   2. Convertion of number from Host to Network Byte Order.
-- [Implementation of HTTP protocol using TCP socket.](2_http)
+- [Implementation of HTTP protocol using TCP socket.](http)
   - Web Client
     1. Web Client HTTP/0.9
     2. Web Client HTTP/1.0
@@ -29,8 +29,8 @@ Implementation of network applications, using Linux socket.
     2. Web Server with Transfer-Encoding:chunked header
     3. Web Server with Content-Length header
     5. Web Server that replies with message of client, with additional info about client
-- [Base64 implementation.](3_base64)
-- [Implementation of Ethernet Packets using socket.](4_dll)
+- [Base64 implementation.](base64)
+- [Implementation of Ethernet Packets using socket.](dll)
   1. ARP (Address Resolution Protocol)
   2. Inverse ping
   3. Ping
@@ -41,5 +41,6 @@ Implementation of network applications, using Linux socket.
   8. ICMP Time exceeded message management
   9. Traceroute
   10. ICMP Unreachable destination message management
-- [Chat implementation.](chat)
+- [Camera Sharing chat implementation.](camera_chat)
+- [Chat implementation.](gui_chat)
 - [Screen sharing implementation.](screen_sharing)
