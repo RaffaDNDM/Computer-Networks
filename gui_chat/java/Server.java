@@ -66,11 +66,11 @@ public class Server
                 while (true)
                 {
                     msg = fromClient.readLine();
-                    
+                    final_msg += msg;
+
                     if (msg.compareTo("END")==0)
                         break;
-                    else
-                        final_msg += msg;
+                        
                 }
 
                 System.out.println(final_msg);
