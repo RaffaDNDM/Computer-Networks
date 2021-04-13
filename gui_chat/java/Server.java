@@ -24,7 +24,8 @@ public class Server
 
     public synchronized void removeUser(ClientThread ct)
     {
-        clientsList.add(ct);
+        int index = clientsList.indexOf(ct);
+        clientsList.remove(index);
     }
 
     private class ClientThread extends Thread
@@ -43,6 +44,20 @@ public class Server
                 username = fromClient.readLine();
                 System.out.println(username);
                 registerUser(this);
+
+                for(ClientThread ct : clientsList)
+                    System.out.print(ct+" ");
+
+                System.out.print("\n");
+
+                String online_users = "USERS\n";
+                            
+                for(ClientThread ct : clientsList)
+                {
+                    online_users += (ct.username + ":");
+                }
+
+                broadcast(online_users+"\nEND", false);
             }
             catch(IOException e)
             {}
@@ -50,53 +65,67 @@ public class Server
 
         public void run()
         {
-            while (true)
+            while(true)
             {
-                receiveMsg();
-            }
-        }
-
-        public void receiveMsg()
-        {
-            try
-            {
-                String final_msg = "";
-                String msg = "";
-            
-                while (true)
+                try
                 {
-                    msg = fromClient.readLine();
-                    final_msg += msg;
-
-                    if (msg.compareTo("END")==0)
-                        break;
+                    String final_msg = "";
+                    String msg = "";
+                
+                    while (true)
+                    {
+                        msg = fromClient.readLine();
+                        final_msg += msg;
                         
+                        if (msg.compareTo("END")==0)
+                            break;
+                        else
+                            final_msg += "\n";                        
+                    }
+    
+                    System.out.println(final_msg);
+    
+                    if (final_msg.compareTo("__EXIT__\nEND") == 0)
+                    {
+                        removeUser(this);
+                        
+                        for(ClientThread ct : clientsList)
+                            System.out.print(ct+" ");
+
+                        System.out.print("\n");
+
+                        String online_users = "USERS\n";
+                            
+                        for(ClientThread ct : clientsList)
+                        {
+                            online_users += (ct.username + ":");
+                        }
+
+                        broadcast(online_users+"\nEND", false);
+                    }
+                    else
+                    {
+                        broadcast(final_msg, true);
+                    }
                 }
-
-                System.out.println(final_msg);
-
-                if (final_msg.compareTo("__EXIT__") == 0)
+                catch (IOException e)
                 {
-                    removeUser(this);
-                }
-                else
-                {
-                    broadcast(final_msg);
-                }
-            }
-            catch (IOException e)
-            {
-
-            }
-            
+                    break;
+                }   
+            }   
         }
 
-        public void broadcast(String msg)
+        public void broadcast(String msg, boolean withUsername)
         {
             for (ClientThread ct : clientsList)
             {
-                if (ct!= this)
+                if(withUsername && ct!=this)
+                {
+                    System.out.println("X"+this.username+":"+msg);
                     ct.toClient.println(this.username+":"+msg);
+                }
+                else
+                    ct.toClient.println(msg);
             }
         }
     }

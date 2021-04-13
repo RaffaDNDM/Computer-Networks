@@ -26,6 +26,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Client 
 {
@@ -37,6 +39,7 @@ public class Client
     private JTextArea usersArea;
     private JTextArea msgArea;
     private String username;
+    private final String INSTRUCTION_MSG = "Write the msg!";
 
     public Client (String address, int port, String username)
     {
@@ -94,7 +97,7 @@ public class Client
         constraints.weighty = 0.8;
         constraints.gridx = 1;
         constraints.gridy = 0;
-        usersArea = new JTextArea("me");
+        usersArea = new JTextArea(username);
         
         usersArea.setEditable(false);
         JScrollPane users = new JScrollPane(usersArea, 
@@ -109,7 +112,7 @@ public class Client
         constraints.weighty = 0.2;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        msgArea = new JTextArea("Write the msg!");
+        msgArea = new JTextArea(INSTRUCTION_MSG);
         JScrollPane message = new JScrollPane(msgArea, 
                                                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                                                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
@@ -152,14 +155,25 @@ public class Client
                 toServer.println(msg+"\nEND");
                 firstClick = true;
                 msgArea.selectAll();
-                msgArea.replaceSelection("");
-                chatArea.append(username+": "+msg);
+                msgArea.replaceSelection(INSTRUCTION_MSG);
+                chatArea.append(username+": "+msg+"\n");
             }
         });
 
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
+        f.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent evt) {
+              onExit();
+            }
+        });
+    }
 
+    public void onExit() {
+        running = false;
+        toServer.println("__EXIT__\nEND");
+
+        System.err.println("Exit");
+        System.exit(0);
     }
 
     public void printMsg(String username, String message, boolean me)
@@ -178,13 +192,21 @@ public class Client
 
         public void run()
         {
+            try
+            {
+                sleep(2);
+            }
+            catch(InterruptedException e)
+            {}
+            
             while (running)
             {
                 try
                 {
                     String final_msg = "";
                     String msg = "";
-                
+                    boolean USERS = false;
+
                     while (true)
                     {
                         msg = fromServer.readLine();
@@ -192,11 +214,27 @@ public class Client
                         if (msg.compareTo("END")==0)
                             break;
                         else
-                            final_msg += msg;
+                            final_msg += (msg+"\n");
                     }
 
-                    String line = buffer.readLine();
-                    System.out.println(line);
+                    System.out.println(final_msg);
+
+                    if (final_msg.startsWith("USERS"))
+                    {
+                        final_msg = final_msg.substring(6);
+                        String online_users[] = (final_msg.split("\n")[0]).split(":");
+
+                        usersArea.selectAll();
+                        usersArea.replaceSelection("");        
+
+                        for(String x : online_users)
+                            usersArea.append(x+"\n");
+                    }                    
+                    else
+                    {
+                        System.out.println(final_msg);
+                        chatArea.append(final_msg);
+                    }
                 }
                 catch(IOException e)
                 {
