@@ -20,6 +20,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -35,17 +42,62 @@ public class Client
     private PrintWriter toServer;
     private boolean running = true;
     private boolean firstClick = true;
-    private JTextArea chatArea;
-    private JTextArea usersArea;
+    private JTextPane chatArea;
+    private JTextPane usersArea;
     private JTextArea msgArea;
     private String username;
     private final String INSTRUCTION_MSG = "Write the msg!";
+    //private SimpleAttributeSet chatStyle = new SimpleAttributeSet();
+    //private SimpleAttributeSet usersStyle = new SimpleAttributeSet();
+    private SimpleAttributeSet meChatName = new SimpleAttributeSet();
+    private SimpleAttributeSet otherChatName = new SimpleAttributeSet();
+    private SimpleAttributeSet meChatMsg = new SimpleAttributeSet();
+    private SimpleAttributeSet otherChatMsg = new SimpleAttributeSet();
+    private SimpleAttributeSet meUsers = new SimpleAttributeSet();
+    private SimpleAttributeSet otherUsers = new SimpleAttributeSet();
+
+    //Background color of chat
+    //private final Color BACKGROUND_CHAT = new Color(96,96,96);
+
+    //Background color for on-line users pane
+    //private final Color BACKGROUND_USERS = new Color(32,32,32);
+
+    //Color of chat messages
+    private final Color BACKGROUND_OTHER_NAME = new Color(255,255,255);
+    private final Color BACKGROUND_OTHER_MSG = new Color(0,102,51);
+    private final Color FOREGROUND_OTHER_NAME = new Color(0,51,0);
+    private final Color FOREGROUND_OTHER_MSG = new Color(0,0,0);
+    private final Color BACKGROUND_ME_NAME = new Color(255,255,255);
+    private final Color BACKGROUND_ME_MSG = new Color(0,76,153);
+    private final Color FOREGROUND_ME_NAME = new Color(0,51,102);
+    private final Color FOREGROUND_ME_MSG = new Color(0,0,0);  
+    
+    //Colors of on-line users 
+    private final Color BACKGROUND_OTHER_USERS = new Color(139,0,139);
+    private final Color BACKGROUND_ME_USERS = new Color(153,0,0);
+    private final Color FOREGROUND_OTHER_USERS = new Color(255,255,255);
+    private final Color FOREGROUND_ME_USERS = new Color(255,255,255);
 
     public Client (String address, int port, String username)
     {
         this.username = username;
         createWindow();
-        
+        //StyleConstants.setBackground(chatStyle, BACKGROUND_CHAT);
+        //StyleConstants.setBackground(usersStyle, BACKGROUND_USERS);
+
+        StyleConstants.setForeground(meChatName, FOREGROUND_ME_NAME);
+        StyleConstants.setForeground(otherChatName, FOREGROUND_OTHER_NAME);
+        StyleConstants.setForeground(meChatMsg, FOREGROUND_ME_MSG);
+        StyleConstants.setForeground(otherChatMsg, FOREGROUND_OTHER_MSG);
+        StyleConstants.setForeground(meUsers, FOREGROUND_ME_USERS);
+        StyleConstants.setForeground(otherUsers, FOREGROUND_OTHER_USERS);
+        StyleConstants.setBackground(meChatName, BACKGROUND_ME_NAME);
+        StyleConstants.setBackground(otherChatName, BACKGROUND_OTHER_NAME);
+        StyleConstants.setBackground(meChatMsg, BACKGROUND_ME_MSG);
+        StyleConstants.setBackground(otherChatMsg, BACKGROUND_OTHER_MSG);
+        StyleConstants.setBackground(meUsers, BACKGROUND_ME_USERS);
+        StyleConstants.setBackground(otherUsers, BACKGROUND_OTHER_USERS);
+
         try
         {
             Socket sd = new Socket(address, port);
@@ -80,11 +132,10 @@ public class Client
         constraints.weighty = 0.8;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        chatArea = new JTextArea("");
-
-        //chatArea.append("x\n");
-        
+        chatArea = new JTextPane();
+        //chatArea.setCharacterAttributes(chatStyle, true);
         chatArea.setEditable(false);
+
         JScrollPane chat = new JScrollPane(chatArea, 
                                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
@@ -97,12 +148,14 @@ public class Client
         constraints.weighty = 0.8;
         constraints.gridx = 1;
         constraints.gridy = 0;
-        usersArea = new JTextArea(username);
-        
+        usersArea = new JTextPane();
+        usersArea.setText(username);
+        //usersArea.setCharacterAttributes(usersStyle, true);
         usersArea.setEditable(false);
-        JScrollPane users = new JScrollPane(usersArea, 
+        
+        JScrollPane users = new JScrollPane(usersArea,
                                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                                            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
+                                            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         c.add(users, constraints);
         users.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
@@ -112,7 +165,9 @@ public class Client
         constraints.weighty = 0.2;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        msgArea = new JTextArea(INSTRUCTION_MSG);
+        msgArea = new JTextArea();
+        msgArea.setText(INSTRUCTION_MSG);
+
         JScrollPane message = new JScrollPane(msgArea, 
                                                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                                                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
@@ -154,9 +209,18 @@ public class Client
                 System.out.print(msg);
                 toServer.println(msg+"\nEND");
                 firstClick = true;
+
                 msgArea.selectAll();
                 msgArea.replaceSelection(INSTRUCTION_MSG);
-                chatArea.append(username+": "+msg+"\n");
+                String chat_msg = username+": "+msg+"\n";
+                try
+                {
+                    StyledDocument doc = chatArea.getStyledDocument();
+                    int lineNumber = chatArea.getText().length();
+                    doc.insertString(doc.getLength(), chat_msg, meChatMsg);
+                }
+                catch(BadLocationException exception)
+                {}
             }
         });
 
@@ -217,23 +281,38 @@ public class Client
                             final_msg += (msg+"\n");
                     }
 
-                    System.out.println("V----->"+final_msg);
+                    System.out.println(final_msg);
 
                     if (final_msg.startsWith("USERS"))
                     {
                         final_msg = final_msg.substring(6);
                         String online_users[] = (final_msg.split("\n")[0]).split(":");
 
-                        usersArea.selectAll();
-                        usersArea.replaceSelection("");        
+                        try
+                        {
+                            usersArea.setText("");
+                            StyledDocument doc = usersArea.getStyledDocument();
 
-                        for(String x : online_users)
-                            usersArea.append(x+"\n");
-                    }                    
+                            for(String x : online_users)
+                            {
+                                doc = usersArea.getStyledDocument();
+                                doc.insertString(doc.getLength(), x+"\n", otherUsers);
+                            }
+                        }
+                        catch(BadLocationException exception)
+                        {}    
+                    }
                     else
                     {
+                        try
+                        {
+                            StyledDocument doc = chatArea.getStyledDocument();
+                            doc.insertString(doc.getLength(), final_msg, otherChatMsg);
+                        }
+                        catch(BadLocationException exception)
+                        {}
+
                         System.out.println(final_msg);
-                        chatArea.append(final_msg);
                     }
                 }
                 catch(IOException e)
