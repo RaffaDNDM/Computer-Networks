@@ -92,7 +92,6 @@ public class Server
                         for(ClientThread ct : clientsList)
                             System.out.print(ct+" ");
 
-                        System.out.print("\n");
 
                         String online_users = "USERS\n";
                             
@@ -119,10 +118,10 @@ public class Server
         {
             for (ClientThread ct : clientsList)
             {
-                if(withUsername && ct!=this)
+                if(withUsername)
                 {
-                    System.out.println("X"+this.username+":"+msg);
-                    ct.toClient.println(this.username+":"+msg);
+                    if (ct!=this)
+                        ct.toClient.println(this.username+":"+msg);
                 }
                 else
                     ct.toClient.println(msg);

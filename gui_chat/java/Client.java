@@ -217,7 +217,7 @@ public class Client
                             final_msg += (msg+"\n");
                     }
 
-                    System.out.println(final_msg);
+                    System.out.println("V----->"+final_msg);
 
                     if (final_msg.startsWith("USERS"))
                     {
