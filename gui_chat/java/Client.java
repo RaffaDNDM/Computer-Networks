@@ -16,6 +16,7 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -24,6 +25,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
@@ -55,6 +57,7 @@ public class Client
     private SimpleAttributeSet otherChatMsg = new SimpleAttributeSet();
     private SimpleAttributeSet meUsers = new SimpleAttributeSet();
     private SimpleAttributeSet otherUsers = new SimpleAttributeSet();
+    private SimpleAttributeSet defaultAttribute = new SimpleAttributeSet();
 
     //Background color of chat
     //private final Color BACKGROUND_CHAT = new Color(96,96,96);
@@ -66,17 +69,15 @@ public class Client
     private final Color BACKGROUND_OTHER_NAME = new Color(255,255,255);
     private final Color BACKGROUND_OTHER_MSG = new Color(0,102,51);
     private final Color FOREGROUND_OTHER_NAME = new Color(0,51,0);
-    private final Color FOREGROUND_OTHER_MSG = new Color(0,0,0);
+    private final Color FOREGROUND_OTHER_MSG = new Color(255,255,255);
     private final Color BACKGROUND_ME_NAME = new Color(255,255,255);
     private final Color BACKGROUND_ME_MSG = new Color(0,76,153);
     private final Color FOREGROUND_ME_NAME = new Color(0,51,102);
-    private final Color FOREGROUND_ME_MSG = new Color(0,0,0);  
+    private final Color FOREGROUND_ME_MSG = new Color(255,255,255);  
     
-    //Colors of on-line users 
-    private final Color BACKGROUND_OTHER_USERS = new Color(139,0,139);
-    private final Color BACKGROUND_ME_USERS = new Color(153,0,0);
-    private final Color FOREGROUND_OTHER_USERS = new Color(255,255,255);
-    private final Color FOREGROUND_ME_USERS = new Color(255,255,255);
+    //Colors of on-line users
+    private final Color FOREGROUND_OTHER_USERS = new Color(139,0,139);
+    private final Color FOREGROUND_ME_USERS = new Color(244,70,17);
 
     public Client (String address, int port, String username)
     {
@@ -85,19 +86,23 @@ public class Client
         //StyleConstants.setBackground(chatStyle, BACKGROUND_CHAT);
         //StyleConstants.setBackground(usersStyle, BACKGROUND_USERS);
 
-        StyleConstants.setForeground(meChatName, FOREGROUND_ME_NAME);
-        StyleConstants.setForeground(otherChatName, FOREGROUND_OTHER_NAME);
-        StyleConstants.setForeground(meChatMsg, FOREGROUND_ME_MSG);
-        StyleConstants.setForeground(otherChatMsg, FOREGROUND_OTHER_MSG);
-        StyleConstants.setForeground(meUsers, FOREGROUND_ME_USERS);
-        StyleConstants.setForeground(otherUsers, FOREGROUND_OTHER_USERS);
         StyleConstants.setBackground(meChatName, BACKGROUND_ME_NAME);
-        StyleConstants.setBackground(otherChatName, BACKGROUND_OTHER_NAME);
+        StyleConstants.setForeground(meChatName, FOREGROUND_ME_NAME);
+        StyleConstants.setBold(meChatName, true);
         StyleConstants.setBackground(meChatMsg, BACKGROUND_ME_MSG);
-        StyleConstants.setBackground(otherChatMsg, BACKGROUND_OTHER_MSG);
-        StyleConstants.setBackground(meUsers, BACKGROUND_ME_USERS);
-        StyleConstants.setBackground(otherUsers, BACKGROUND_OTHER_USERS);
+        StyleConstants.setForeground(meChatMsg, FOREGROUND_ME_MSG);
 
+        StyleConstants.setBackground(otherChatName, BACKGROUND_OTHER_NAME);
+        StyleConstants.setForeground(otherChatName, FOREGROUND_OTHER_NAME);
+        StyleConstants.setBold(otherChatName, true);
+        StyleConstants.setBackground(otherChatMsg, BACKGROUND_OTHER_MSG);
+        StyleConstants.setForeground(otherChatMsg, FOREGROUND_OTHER_MSG);
+
+        StyleConstants.setForeground(meUsers, FOREGROUND_ME_USERS);
+        StyleConstants.setBold(meUsers, true);
+        StyleConstants.setForeground(otherUsers, FOREGROUND_OTHER_USERS);
+        StyleConstants.setBold(otherUsers, true);
+        
         try
         {
             Socket sd = new Socket(address, port);
@@ -129,9 +134,27 @@ public class Client
 
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 0.7;
-        constraints.weighty = 0.8;
+        constraints.weighty = 0.02;
         constraints.gridx = 0;
         constraints.gridy = 0;
+        JLabel chatLabel = new JLabel("CHAT");
+        c.add(chatLabel, constraints);
+        chatLabel.setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 0.3;
+        constraints.weighty = 0.02;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        JLabel onlineLabel = new JLabel("ON-LINE");
+        c.add(onlineLabel, constraints);
+        onlineLabel.setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 0.7;
+        constraints.weighty = 0.78;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
         chatArea = new JTextPane();
         //chatArea.setCharacterAttributes(chatStyle, true);
         chatArea.setEditable(false);
@@ -145,9 +168,9 @@ public class Client
 
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 0.3;
-        constraints.weighty = 0.8;
+        constraints.weighty = 0.78;
         constraints.gridx = 1;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         usersArea = new JTextPane();
         usersArea.setText(username);
         //usersArea.setCharacterAttributes(usersStyle, true);
@@ -164,13 +187,13 @@ public class Client
         constraints.weightx = 0.7;
         constraints.weighty = 0.2;
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         msgArea = new JTextArea();
         msgArea.setText(INSTRUCTION_MSG);
 
         JScrollPane message = new JScrollPane(msgArea, 
                                                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                                                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
+                                                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         c.add(message, constraints);
         message.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
@@ -192,7 +215,7 @@ public class Client
         constraints.weightx = 0.3; //Default
         constraints.weighty = 0.2; //Default
         constraints.gridx = 1;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         JPanel panel = new JPanel();
         JButton sendButton = new JButton("Send");
 
@@ -212,12 +235,17 @@ public class Client
 
                 msgArea.selectAll();
                 msgArea.replaceSelection(INSTRUCTION_MSG);
-                String chat_msg = username+": "+msg+"\n";
+                
                 try
                 {
+                    while(msg.endsWith("\n"))
+                        msg = msg.substring(0, msg.length()-1);
+                            
                     StyledDocument doc = chatArea.getStyledDocument();
-                    int lineNumber = chatArea.getText().length();
-                    doc.insertString(doc.getLength(), chat_msg, meChatMsg);
+                    doc.insertString(doc.getLength(), " "+username+" ", meChatName);
+                    doc.insertString(doc.getLength(), "\n", defaultAttribute);
+                    doc.insertString(doc.getLength(), " "+msg+" ", meChatMsg);
+                    doc.insertString(doc.getLength(), "\n", defaultAttribute);
                 }
                 catch(BadLocationException exception)
                 {}
@@ -240,10 +268,7 @@ public class Client
         System.exit(0);
     }
 
-    public void printMsg(String username, String message, boolean me)
-    {
-
-    }
+    //public void printMsg(String username, String message, boolean me){}
 
     private class FromServerThread extends Thread
     {   
@@ -281,7 +306,7 @@ public class Client
                             final_msg += (msg+"\n");
                     }
 
-                    System.out.println(final_msg);
+                    //System.out.println(final_msg);
 
                     if (final_msg.startsWith("USERS"))
                     {
@@ -296,7 +321,15 @@ public class Client
                             for(String x : online_users)
                             {
                                 doc = usersArea.getStyledDocument();
-                                doc.insertString(doc.getLength(), x+"\n", otherUsers);
+
+                                if (x.compareTo(username) == 0)
+                                {
+                                    doc.insertString(doc.getLength(), x+"\n", meUsers);
+                                }
+                                else
+                                {
+                                    doc.insertString(doc.getLength(), x+"\n", otherUsers);
+                                }
                             }
                         }
                         catch(BadLocationException exception)
@@ -307,7 +340,15 @@ public class Client
                         try
                         {
                             StyledDocument doc = chatArea.getStyledDocument();
-                            doc.insertString(doc.getLength(), final_msg, otherChatMsg);
+                            
+                            while(final_msg.endsWith("\n"))
+                                final_msg = final_msg.substring(0, final_msg.length()-1);
+                            
+                            String msg_parts[] = final_msg.split(":");
+                            doc.insertString(doc.getLength(), " "+msg_parts[0]+" ", otherChatName);
+                            doc.insertString(doc.getLength(), "\n", defaultAttribute);
+                            doc.insertString(doc.getLength(), " "+msg_parts[1]+" ", otherChatMsg);
+                            doc.insertString(doc.getLength(), "\n", defaultAttribute);
                         }
                         catch(BadLocationException exception)
                         {}
