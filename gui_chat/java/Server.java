@@ -17,9 +17,42 @@ public class Server
         clientsList = new ArrayList<>();
     }
 
-    public synchronized void registerUser(ClientThread ct)
+    private boolean isUserAlreadyConnected(String username)
     {
-        clientsList.add(ct);
+        for(ClientThread ct : clientsList)
+        {
+            if(ct.username.compareTo(username)==0)
+                return true;
+        }
+
+        return false;
+    }
+
+    public synchronized void registerUser(ClientThread ct)
+    {   
+        while (true)
+        {
+            try
+            {
+                String username = ct.fromClient.readLine();
+
+                if (username.length()<5 || isUserAlreadyConnected(username))
+                {
+                    ct.toClient.println("NO");
+                }
+                else
+                {
+                    ct.toClient.println("OK");
+                    ct.username = username;
+                    clientsList.add(ct);
+                    return;
+                }
+            }
+            catch(IOException e)
+            {
+                return;
+            }
+        }
     }
 
     public synchronized void removeUser(ClientThread ct)
@@ -40,9 +73,6 @@ public class Server
             {
                 fromClient = new BufferedReader(new InputStreamReader(sd.getInputStream()));
                 toClient = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sd.getOutputStream())), true);
-
-                username = fromClient.readLine();
-                System.out.println(username);
                 registerUser(this);
 
                 for(ClientThread ct : clientsList)
@@ -60,7 +90,9 @@ public class Server
                 broadcast(online_users+"\nEND", false);
             }
             catch(IOException e)
-            {}
+            {
+                return;
+            }
         }
 
         public void run()

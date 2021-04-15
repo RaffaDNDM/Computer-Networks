@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -44,10 +45,11 @@ public class Client
     private PrintWriter toServer;
     private boolean running = true;
     private boolean firstClick = true;
+    private boolean firstClickUser = true;
     private JTextPane chatArea;
     private JTextPane usersArea;
     private JTextArea msgArea;
-    private String username;
+    private String username = "";
     private final String INSTRUCTION_MSG = "Write the msg!";
     //private SimpleAttributeSet chatStyle = new SimpleAttributeSet();
     //private SimpleAttributeSet usersStyle = new SimpleAttributeSet();
@@ -79,13 +81,119 @@ public class Client
     private final Color FOREGROUND_OTHER_USERS = new Color(139,0,139);
     private final Color FOREGROUND_ME_USERS = new Color(244,70,17);
 
-    public Client (String address, int port, String username)
-    {
-        this.username = username;
-        createWindow();
-        //StyleConstants.setBackground(chatStyle, BACKGROUND_CHAT);
-        //StyleConstants.setBackground(usersStyle, BACKGROUND_USERS);
+    public Client (String address, int port)
+    {   
+        try
+        {
+            Socket sd = new Socket(address, port);
+            fromServer = new BufferedReader(new InputStreamReader(sd.getInputStream()));
+            toServer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sd.getOutputStream())), true);
+            usernameWindow(this);
 
+            while(this.username.compareTo("")==0)
+            {
+                System.out.print("");
+            }
+            
+            System.out.println("HERE");
+            chatWindow();
+            FromServerThread updateChat = new FromServerThread(fromServer);
+            updateChat.start();
+        }
+        catch(UnknownHostException e1)
+        {
+            System.out.println("Unknown host");
+        }
+        catch(IOException e)
+        {}
+    }
+
+    public void usernameWindow(Client ct)
+    {
+        String usernameMsg = "";
+        JFrame window = new JFrame("Login");
+        window.setMinimumSize(new Dimension(300,130));
+
+        Container c = window.getContentPane();
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        c.setLayout(layout);
+
+        JPanel userPanel = new JPanel();
+        JLabel userLabel = new JLabel("Username: ");
+        JTextField userField = new JTextField(20);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        userPanel.add(userLabel);
+        userPanel.add(userField);
+        c.add(userPanel, constraints);
+       
+        userField.addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent me)
+            {
+                if (firstClickUser)
+                {
+                    firstClickUser = false;
+                    userField.selectAll();
+                    userField.replaceSelection("");
+                }
+            }
+        });
+
+        JButton submit = new JButton("Username");
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        c.add(submit, constraints);
+
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //your actions
+                String usernameMsg = userField.getText();
+            
+                while(usernameMsg.endsWith("\n"))
+                    usernameMsg = usernameMsg.substring(0, usernameMsg.length()-1);
+        
+                toServer.println(usernameMsg);
+                firstClickUser = true;
+
+                userField.selectAll();
+                userField.replaceSelection("Username");
+                System.out.println(usernameMsg);
+                
+                try
+                {
+                    String response = fromServer.readLine();
+                    
+                    if (response.compareTo("OK")==0)
+                    {
+                        System.out.println("OK");
+                        setUsername(usernameMsg);
+                        window.dispose();
+                    }
+                    else
+                    {
+                        System.out.println("NO");
+                        userField.selectAll();
+                        userField.replaceSelection("Try another username");
+                    }
+                }
+                catch(IOException exception)
+                {}
+            }
+        });
+
+        window.setVisible(true);
+    }
+
+    public void setUsername(String usernameMsg)
+    {
+        this.username = usernameMsg;
+    }
+
+    public void chatWindow()
+    {
         StyleConstants.setBackground(meChatName, BACKGROUND_ME_NAME);
         StyleConstants.setForeground(meChatName, FOREGROUND_ME_NAME);
         StyleConstants.setBold(meChatName, true);
@@ -102,28 +210,8 @@ public class Client
         StyleConstants.setBold(meUsers, true);
         StyleConstants.setForeground(otherUsers, FOREGROUND_OTHER_USERS);
         StyleConstants.setBold(otherUsers, true);
-        
-        try
-        {
-            Socket sd = new Socket(address, port);
-            fromServer = new BufferedReader(new InputStreamReader(sd.getInputStream()));
-            toServer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sd.getOutputStream())), true);
-            toServer.println(username);
 
-            FromServerThread updateChat = new FromServerThread(fromServer);
-            updateChat.start();
-        }
-        catch(UnknownHostException e1)
-        {
-            System.out.println("Unknown host");
-        }
-        catch(IOException e)
-        {}
-    }
-
-    public void createWindow()
-    {
-        JFrame f = new JFrame();
+        JFrame f = new JFrame("Multi-client chat");
         Container c = f.getContentPane();
         f.setMinimumSize(new Dimension(600,700));
 
@@ -162,7 +250,6 @@ public class Client
         JScrollPane chat = new JScrollPane(chatArea, 
                                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
-        layout.setConstraints(chat, constraints);
         c.add(chat, constraints);
         chat.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
@@ -369,6 +456,6 @@ public class Client
         String serverAddress = "127.0.0.1";
         int port = 8080;
 
-        Client c = new Client(serverAddress, port, args[0]);
+        Client c = new Client(serverAddress, port);
     }
 }
